@@ -38,5 +38,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            chmod +x ~/app/test.sh
-            ~/app/test.sh
+            chmod +x ~/app/front.sh
+            ~/app/front.sh
