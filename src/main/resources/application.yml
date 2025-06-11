@@ -1,0 +1,12 @@
+server:
+  port: 10360
+spring:
+  application:
+    name: front
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10372/eureka/
+  instance:
+    prefer-ip-address: true
