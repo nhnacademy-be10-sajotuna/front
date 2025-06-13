@@ -12,8 +12,12 @@ public class IndexController {
     private final TestAdapter testAdapter;
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("testMessage", testAdapter.test());
+    public String home() {
         return "index";
+    }
+    @GetMapping("/account")
+    public String index(Model model) {
+        model.addAttribute("user", testAdapter.getUser(24L));
+        return "account";
     }
 }
