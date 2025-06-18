@@ -1,5 +1,6 @@
 package shop.nhnteam04.front.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,8 +21,8 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginRequestUser loginRequestUser, Model model) {
-        loginService.login(loginRequestUser);
+    public String login(@Valid @ModelAttribute LoginRequestUser loginRequestUser, HttpServletResponse httpServletResponse, Model model) {
+        loginService.login(loginRequestUser, httpServletResponse);
         return "redirect:/";
     }
 }
