@@ -1,10 +1,10 @@
-package shop.nhnteam04.front;
+package shop.nhnteam04.front.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import shop.nhnteam04.front.TestAdapter;
 
 @Controller
 @RequiredArgsConstructor
