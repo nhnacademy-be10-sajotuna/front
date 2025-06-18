@@ -1,6 +1,7 @@
 package shop.nhnteam04.front.accountFeignClient;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,4 +12,7 @@ import shop.nhnteam04.front.user.response.LoginResponse;
 public interface AccountFeignClient {
     @PostMapping("/api/users/login")
     public LoginResponse login(@RequestBody LoginRequestUser loginRequestUser);
+
+    @GetMapping("/api/users/me")
+    public void me();
 }
