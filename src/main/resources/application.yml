@@ -7,6 +7,12 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://s1.java21.net:10372/eureka/
+      defaultZone: http://localhost:10372/eureka/
   instance:
     prefer-ip-address: true
+
+logging:
+  level:
+    com.netflix.discovery: off
+    com.netflix.eureka: off
+    org.springframework.cloud.netflix.eureka: off

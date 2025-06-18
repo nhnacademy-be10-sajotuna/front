@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 public class ResponseUser {
     private long id;
 
-    private long policyId;
-
     private String name;
     private String email;
     private String phoneNumber;
