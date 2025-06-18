@@ -25,4 +25,10 @@ public class LoginController {
         loginService.login(loginRequestUser, httpServletResponse);
         return "redirect:/";
     }
+
+    @GetMapping("/users/me")
+    public String me() {
+        loginService.me();
+        return "redirect:/";
+    }
 }

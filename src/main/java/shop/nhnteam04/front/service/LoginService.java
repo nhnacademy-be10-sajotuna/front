@@ -30,6 +30,10 @@ public class LoginService {
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
     }
 
+    public void me() {
+        accountFeignClient.me();
+    }
+
     private ResponseCookie getResponseCookie(String tokenName, String token, Long tokenExpires) {
         ResponseCookie accessTokenCookie = ResponseCookie.from(tokenName, token)
                 .httpOnly(true)
