@@ -1,5 +1,6 @@
 package shop.nhnteam04.front.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ public class LoginController {
     }
 
     @GetMapping("/users/me")
-    public String me() {
-        loginService.me();
+    public String me(HttpServletRequest request, Model model) {
+        loginService.me(request);
         return "redirect:/";
     }
 }

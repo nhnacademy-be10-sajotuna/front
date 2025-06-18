@@ -1,5 +1,6 @@
 package shop.nhnteam04.front.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +31,9 @@ public class LoginService {
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
     }
 
-    public void me() {
-        accountFeignClient.me();
+    public void me(HttpServletRequest request) {
+        String cookieHeader = request.getHeader(HttpHeaders.COOKIE);
+        accountFeignClient.me(cookieHeader);
     }
 
     private ResponseCookie getResponseCookie(String tokenName, String token, Long tokenExpires) {
