@@ -11,6 +11,7 @@ import shop.nhnteam04.front.feign.account.AccountFeignClient;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
 import shop.nhnteam04.front.user.response.LoginResponse;
 import org.springframework.beans.factory.annotation.Value;
+import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +39,8 @@ public class LoginService {
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
     }
 
-    public void me() {
-        accountFeignClient.me();
+    public ResponseUserWithPolicy me() {
+        return accountFeignClient.me();
     }
 
     private ResponseCookie getResponseCookie(String tokenName, String token, Long tokenExpires) {

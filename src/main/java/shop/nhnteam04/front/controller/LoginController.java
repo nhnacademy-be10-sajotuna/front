@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import shop.nhnteam04.front.service.LoginService;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
+import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,8 +29,9 @@ public class LoginController {
     }
 
     @GetMapping("/users/me")
-    public String me() {
-        loginService.me();
-        return "redirect:/";
+    public String me(Model model) {
+        ResponseUserWithPolicy responseUserWithPolicy = loginService.me();
+        model.addAttribute("user", responseUserWithPolicy);
+        return "me";
     }
 }
