@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.feign.account.AccountFeignClient;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
 import shop.nhnteam04.front.user.response.LoginResponse;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,12 @@ public class LoginService {
     private final AccountFeignClient accountFeignClient;
     private static final Long ACCESS_TOKEN_EXPIRES = 1800 * 1000L;
     private static final Long REFRESH_TOKEN_EXPIRES = 24 * 60 * 60 * 1000L;
+
+    @Value("${cookie.domain:}")
+    private String cookieDomain;
+    @Value("${cookie.secure:false}")
+    private boolean cookieSecure;
+
 
     public void login(LoginRequestUser loginRequestUser, HttpServletResponse response) {
        LoginResponse loginResponse = accountFeignClient.login(loginRequestUser);
@@ -38,9 +45,9 @@ public class LoginService {
     private ResponseCookie getResponseCookie(String tokenName, String token, Long tokenExpires) {
         ResponseCookie accessTokenCookie = ResponseCookie.from(tokenName, token)
                 .httpOnly(true)
-                .secure(true)
+                .secure(cookieSecure)
                 .path("/")
-                .domain("nhn-team04.shop")
+                .domain(cookieDomain)
                 .maxAge(tokenExpires)
                 .sameSite("Lax")
                 .build();

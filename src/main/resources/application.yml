@@ -1,18 +1,5 @@
-server:
-  port: ${PORT:10360}
 spring:
   application:
     name: front
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:10372/eureka/
-  instance:
-    prefer-ip-address: true
-
-logging:
-  level:
-    com.netflix.discovery: off
-    com.netflix.eureka: off
-    org.springframework.cloud.netflix.eureka: off
+  profiles:
+    active: prod
