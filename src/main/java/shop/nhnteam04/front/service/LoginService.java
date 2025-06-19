@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
-import shop.nhnteam04.front.accountFeignClient.AccountFeignClient;
+import shop.nhnteam04.front.feign.account.AccountFeignClient;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
 import shop.nhnteam04.front.user.response.LoginResponse;
 
@@ -31,9 +31,8 @@ public class LoginService {
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
     }
 
-    public void me(HttpServletRequest request) {
-        String cookieHeader = request.getHeader(HttpHeaders.COOKIE);
-        accountFeignClient.me(cookieHeader);
+    public void me() {
+        accountFeignClient.me();
     }
 
     private ResponseCookie getResponseCookie(String tokenName, String token, Long tokenExpires) {

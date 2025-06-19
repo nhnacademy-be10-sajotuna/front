@@ -28,8 +28,8 @@ public class LoginController {
     }
 
     @GetMapping("/users/me")
-    public String me(HttpServletRequest request, Model model) {
-        loginService.me(request);
+    public String me() {
+        loginService.me();
         return "redirect:/";
     }
 }
