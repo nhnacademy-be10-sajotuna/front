@@ -11,8 +11,12 @@ public class TokenHeaderInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = getTokenFromCookie(request, "access_token");
+        String refreshToken = getTokenFromCookie(request, "refresh_token");
         if (accessToken != null) {
-            TokenHolder.set(accessToken);
+            TokenHolder.setAccessToken(accessToken);
+        }
+        if (refreshToken != null) {
+            TokenHolder.setRefreshToken(refreshToken);
         }
         return true;
     }
