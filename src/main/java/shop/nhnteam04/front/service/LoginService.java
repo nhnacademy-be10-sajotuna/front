@@ -10,30 +10,23 @@ import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.feign.account.AccountFeignClient;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
 import shop.nhnteam04.front.user.response.LoginResponse;
-import org.springframework.beans.factory.annotation.Value;
 import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class LoginService {
+
     private final AccountFeignClient accountFeignClient;
-    private static final Long ACCESS_TOKEN_EXPIRES = 1800 * 1000L;
-    private static final Long REFRESH_TOKEN_EXPIRES = 24 * 60 * 60 * 1000L;
-
-    @Value("${cookie.domain:}")
-    private String cookieDomain;
-    @Value("${cookie.secure:false}")
-    private boolean cookieSecure;
-
+    private final CookieService cookieService;
 
     public void login(LoginRequestUser loginRequestUser, HttpServletResponse response) {
        LoginResponse loginResponse = accountFeignClient.login(loginRequestUser);
        log.info("login response: {}", loginResponse);
 
-        ResponseCookie accessTokenCookie = getResponseCookie("access_token", loginResponse.getAccessToken(), ACCESS_TOKEN_EXPIRES);
+        ResponseCookie accessTokenCookie = cookieService.getAccessTokenCookie(loginResponse.getAccessToken());
 
-        ResponseCookie refreshTokenCookie = getResponseCookie("refresh_token", loginResponse.getRefreshToken(), REFRESH_TOKEN_EXPIRES);
+        ResponseCookie refreshTokenCookie = cookieService.getRefreshTokenCookie(loginResponse.getRefreshToken());
 
         response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
@@ -43,15 +36,4 @@ public class LoginService {
         return accountFeignClient.me();
     }
 
-    private ResponseCookie getResponseCookie(String tokenName, String token, Long tokenExpires) {
-        ResponseCookie accessTokenCookie = ResponseCookie.from(tokenName, token)
-                .httpOnly(true)
-                .secure(cookieSecure)
-                .path("/")
-                .domain(cookieDomain)
-                .maxAge(tokenExpires)
-                .sameSite("Lax")
-                .build();
-        return accessTokenCookie;
-    }
 }
