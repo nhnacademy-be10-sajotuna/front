@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import shop.nhnteam04.front.service.LoginService;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
 import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
@@ -29,8 +30,8 @@ public class LoginController {
     }
 
     @GetMapping("/users/me")
-    public String me(Model model) {
-        ResponseUserWithPolicy responseUserWithPolicy = loginService.me();
+    public String me(@RequestHeader("X-User-Id")long userId, Model model) {
+        ResponseUserWithPolicy responseUserWithPolicy = loginService.me(userId);
         model.addAttribute("user", responseUserWithPolicy);
         return "me";
     }

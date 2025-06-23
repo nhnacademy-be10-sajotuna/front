@@ -32,8 +32,8 @@ public class LoginService {
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
     }
 
-    public ResponseUserWithPolicy me() {
-        return accountFeignClient.me();
+    public ResponseUserWithPolicy me(long userId) {
+        return accountFeignClient.me(userId);
     }
 
 }
