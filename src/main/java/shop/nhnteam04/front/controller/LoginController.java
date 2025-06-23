@@ -26,7 +26,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginRequestUser loginRequestUser, HttpServletResponse httpServletResponse, Model model) {
         loginService.login(loginRequestUser, httpServletResponse);
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/users/me")

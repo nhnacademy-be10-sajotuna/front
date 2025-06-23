@@ -40,10 +40,6 @@ public class TokenController {
         } catch (Exception e) {
             return "/login";
         }
-
-        String originalUrl = request.getHeader("Referer");
-        if (originalUrl == null) originalUrl = "/"; // 기본 홈으로
-
-        return "redirect:" + originalUrl;
+        return "redirect:/";
     }
 }
