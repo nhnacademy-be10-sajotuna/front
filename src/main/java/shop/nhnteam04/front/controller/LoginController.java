@@ -31,6 +31,13 @@ public class LoginController {
         return "redirect:/";
     }
 
+    @GetMapping("/users/me")
+    public String me(@RequestHeader(name = "X-User-Id") Long userId, Model model) {
+        ResponseUserWithPolicy responseUserWithPolicy = loginService.me(userId);
+        model.addAttribute("user", responseUserWithPolicy);
+        return "me";
+    }
+
     @GetMapping("/register")
     public String registerForm() {
         return "register";

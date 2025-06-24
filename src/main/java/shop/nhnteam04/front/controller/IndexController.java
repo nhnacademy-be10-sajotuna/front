@@ -29,8 +29,5 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/users/me")
-    public String me() {
-        return "me";
-    }
+
 }
