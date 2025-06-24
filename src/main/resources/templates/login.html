@@ -1,20 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8">
     <title>로그인</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa, #dbe9f4); /* ✅ 부드러운 밝은 그라디언트 */
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         .login-container {
             background-color: white;
             padding: 3rem 2rem;
@@ -25,7 +15,6 @@
             text-align: center;
         }
 
-        /* 🏷️ 북팡문고 로고 */
         .logo {
             display: block;
             font-size: 2rem;
@@ -44,12 +33,12 @@
             margin-bottom: 1.2rem;
             display: flex;
             flex-direction: column;
-            align-items: center; /* input을 중앙 정렬 */
+            align-items: center;
         }
 
         .input-group label {
             width: 80%;
-            text-align: left; /* ✅ 왼쪽 정렬로 수정 */
+            text-align: left;
             margin-bottom: 0.3rem;
             font-weight: 600;
             color: #555;
@@ -62,7 +51,6 @@
             border: 1px solid #ccc;
             font-size: 1rem;
         }
-
 
         .login-button {
             margin-top: 1.2rem;
@@ -97,34 +85,36 @@
         }
     </style>
 </head>
-<body>
-<div class="login-container">
-    <!-- 🏷️ 북팡문고 로고 -->
-    <a th:href="@{/}" class="logo">북팡문고</a>
 
-    <h2>로그인</h2>
-    <form th:action="@{/login}" method="post">
-        <div class="input-group">
-            <label for="email">이메일</label>
-            <input type="text" id="email" name="email" required />
+<body>
+<section layout:fragment="content">
+    <div class="login-container">
+        <a th:href="@{/}" class="logo">북팡문고</a>
+        <h2>로그인</h2>
+        <form th:action="@{/login}" method="post">
+            <div class="input-group">
+                <label for="email">이메일</label>
+                <input type="text" id="email" name="email" required />
+            </div>
+            <div class="input-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+            <button type="submit" class="login-button">로그인</button>
+        </form>
+        <div class="register-link">
+            계정이 없으신가요? <a th:href="@{/register}">회원가입</a>
         </div>
-        <div class="input-group">
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" required />
-        </div>
-        <button type="submit" class="login-button">로그인</button>
-    </form>
-    <div class="register-link">
-        계정이 없으신가요? <a th:href="@{/register}">회원가입</a>
     </div>
-</div>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
-    if (errorMsg) {
-        alert(errorMsg);
-    }
-    /*]]>*/
-</script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
+        if (errorMsg) {
+            alert(errorMsg);
+        }
+        /*]]>*/
+    </script>
+</section>
 </body>
 </html>
