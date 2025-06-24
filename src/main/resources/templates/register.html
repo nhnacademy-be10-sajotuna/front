@@ -1,27 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8">
     <title>회원가입</title>
     <style>
-        html {
-            min-height: 100%;
-            background: linear-gradient(135deg, #f5f7fa, #dbe9f4);
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 2rem 0 4rem; /* 아래 여백 추가 */
-            box-sizing: border-box;
-            min-height: 100%;
-            height: auto;
-        }
-
-
         .register-container {
             background-color: white;
             padding: 3rem 2rem;
@@ -103,51 +86,54 @@
     </style>
 </head>
 <body>
-<div class="register-container">
-    <a th:href="@{/'/'}" class="logo">북팡문고</a>
+<section layout:fragment="content">
+    <div class="register-container">
+        <a th:href="@{/}" class="logo">북팡문고</a>
 
-    <h2>회원가입</h2>
-    <form th:action="@{/register}" method="post">
-        <div class="input-group">
-            <label for="name">이름</label>
-            <input type="text" id="name" name="name" required />
-        </div>
-        <div class="input-group">
-            <label for="email">이메일</label>
-            <input type="email" id="email" name="email" required />
-        </div>
-        <div class="input-group">
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" required />
-        </div>
-        <div class="input-group">
-            <label for="birthDate">생일</label>
-            <input type="date" id="birthDate" name="birthDate" required />
-        </div>
+        <h2>회원가입</h2>
+        <form th:action="@{/register}" method="post">
+            <div class="input-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" required />
+            </div>
+            <div class="input-group">
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email" required />
+            </div>
+            <div class="input-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+            <div class="input-group">
+                <label for="birthDate">생일</label>
+                <input type="date" id="birthDate" name="birthDate" required />
+            </div>
 
-        <div class="input-group">
-            <label for="phoneNumber">전화번호</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" placeholder="000-0000-0000"
-                   pattern="\d{3}-\d{4}-\d{4}" required />
-        </div>
+            <div class="input-group">
+                <label for="phoneNumber">전화번호</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" placeholder="000-0000-0000"
+                       pattern="\d{3}-\d{4}-\d{4}" required />
+            </div>
 
-        <div class="input-group">
-            <label for="address">주소</label>
-            <input type="text" id="address" name="address" />
+            <div class="input-group">
+                <label for="address">주소</label>
+                <input type="text" id="address" name="address" />
+            </div>
+            <button type="submit" class="register-button">회원가입</button>
+        </form>
+        <div class="login-link">
+            이미 계정이 있으신가요? <a th:href="@{/login}">로그인</a>
         </div>
-        <button type="submit" class="register-button">회원가입</button>
-    </form>
-    <div class="login-link">
-        이미 계정이 있으신가요? <a th:href="@{/login}">로그인</a>
     </div>
-</div>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
-    if (errorMsg) {
-        alert(errorMsg);
-    }
-    /*]]>*/
-</script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
+        if (errorMsg) {
+            alert(errorMsg);
+        }
+        /*]]>*/
+    </script>
+</section>
 </body>
 </html>
