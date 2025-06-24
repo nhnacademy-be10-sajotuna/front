@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.nhnteam04.front.address.dto.AddressForm;
 import shop.nhnteam04.front.address.request.RequestAddress;
 import shop.nhnteam04.front.service.LoginService;
@@ -34,9 +35,14 @@ public class AddressController {
     }
 
     @PostMapping("/address")
-    public String createAddress(@ModelAttribute("user") ResponseUserWithPolicy user, @Valid @ModelAttribute AddressForm address) {
-        addressService.createAddress(user.getId(), address);
-        return "redirect:/address";
+    public String createAddress(@ModelAttribute("user") ResponseUserWithPolicy user, @Valid @ModelAttribute AddressForm address, RedirectAttributes redirectAttributes) {
+        try {
+            addressService.createAddress(user.getId(), address);
+            return "redirect:/address";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/address";
+        }
     }
 
     @PostMapping("/address/{addressId}")

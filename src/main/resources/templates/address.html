@@ -95,6 +95,14 @@
             <button type="submit" class="add-button">주소 추가</button>
         </form>
     </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
+        if (errorMsg) {
+            alert(errorMsg);
+        }
+        /*]]>*/
+    </script>
 </section>
 </body>
 </html>
