@@ -9,6 +9,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.feign.account.AccountFeignClient;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
+import shop.nhnteam04.front.user.request.RegisterRequestUser;
 import shop.nhnteam04.front.user.response.LoginResponse;
 import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
 
@@ -35,8 +36,23 @@ public class LoginService {
         return accountFeignClient.me(userId);
     }
 
-    public void logout(long userId, HttpServletResponse response) {
+    public void logout(Long userId, HttpServletResponse response) {
         accountFeignClient.logout(userId);
+
+        ResponseCookie accessDelete = cookieService.deleteAccessTokenCookie();
+        ResponseCookie refreshDelete = cookieService.deleteRefreshTokenCookie();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, accessDelete.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshDelete.toString());
+    }
+
+    public void register(RegisterRequestUser registerRequestUser) {
+        accountFeignClient.createUser(registerRequestUser);
+    }
+
+    public void withdraw(Long userId, HttpServletResponse response) {
+        accountFeignClient.deleteUser(userId);
+
         ResponseCookie accessDelete = cookieService.deleteAccessTokenCookie();
         ResponseCookie refreshDelete = cookieService.deleteRefreshTokenCookie();
 

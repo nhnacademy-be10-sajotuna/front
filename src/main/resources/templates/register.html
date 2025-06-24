@@ -121,13 +121,13 @@
             <input type="password" id="password" name="password" required />
         </div>
         <div class="input-group">
-            <label for="birthdate">생일</label>
-            <input type="date" id="birthdate" name="birthdate" required />
+            <label for="birthDate">생일</label>
+            <input type="date" id="birthDate" name="birthDate" required />
         </div>
 
         <div class="input-group">
-            <label for="phone">전화번호</label>
-            <input type="text" id="phone" name="phone" placeholder="000-0000-0000"
+            <label for="phoneNumber">전화번호</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" placeholder="000-0000-0000"
                    pattern="\d{3}-\d{4}-\d{4}" required />
         </div>
 
@@ -141,5 +141,13 @@
         이미 계정이 있으신가요? <a th:href="@{/login}">로그인</a>
     </div>
 </div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
+    if (errorMsg) {
+        alert(errorMsg);
+    }
+    /*]]>*/
+</script>
 </body>
 </html>
