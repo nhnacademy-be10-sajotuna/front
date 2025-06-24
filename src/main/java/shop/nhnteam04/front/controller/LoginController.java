@@ -17,7 +17,9 @@ import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
+
     private final LoginService loginService;
+
     @GetMapping("/login")
     public String loginForm() {
         return "login";
@@ -30,9 +32,20 @@ public class LoginController {
     }
 
     @GetMapping("/users/me")
-    public String me(@RequestHeader("X-User-Id")long userId, Model model) {
+    public String me(@RequestHeader(name = "X-User-Id") Long userId, Model model) {
         ResponseUserWithPolicy responseUserWithPolicy = loginService.me(userId);
         model.addAttribute("user", responseUserWithPolicy);
         return "me";
+    }
+
+    @GetMapping("/register")
+    public String registerForm() {
+        return "register";
+    }
+
+    @PostMapping("/logout")
+    public String logout(@RequestHeader(name = "X-User-Id") Long userId ,HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        loginService.logout(userId, httpServletResponse);
+        return "redirect:/";
     }
 }

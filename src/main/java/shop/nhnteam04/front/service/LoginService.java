@@ -25,7 +25,6 @@ public class LoginService {
        log.info("login response: {}", loginResponse);
 
         ResponseCookie accessTokenCookie = cookieService.getAccessTokenCookie(loginResponse.getAccessToken());
-
         ResponseCookie refreshTokenCookie = cookieService.getRefreshTokenCookie(loginResponse.getRefreshToken());
 
         response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
@@ -36,4 +35,12 @@ public class LoginService {
         return accountFeignClient.me(userId);
     }
 
+    public void logout(long userId, HttpServletResponse response) {
+        accountFeignClient.logout(userId);
+        ResponseCookie accessDelete = cookieService.deleteAccessTokenCookie();
+        ResponseCookie refreshDelete = cookieService.deleteRefreshTokenCookie();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, accessDelete.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshDelete.toString());
+    }
 }

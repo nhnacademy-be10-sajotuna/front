@@ -13,8 +13,11 @@ public interface AccountFeignClient {
     public LoginResponse login(@RequestBody LoginRequestUser loginRequestUser);
 
     @GetMapping("/api/users/me")
-    public ResponseUserWithPolicy me(@RequestHeader("X-User-Id") long userId);
+    public ResponseUserWithPolicy me(@RequestHeader("X-User-Id") Long userId);
 
     @PostMapping("/api/token/refresh")
     public ResponseAccessToken refreshToken(@RequestHeader("AuthorizationRefresh") String token);
+
+    @PostMapping("/api/users/logout")
+    public void logout(@RequestHeader("X-User-Id") Long userId);
 }
