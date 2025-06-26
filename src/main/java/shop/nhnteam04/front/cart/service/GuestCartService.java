@@ -2,7 +2,7 @@ package shop.nhnteam04.front.cart.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import shop.nhnteam04.front.cart.dto.GuestCartResponse;
+import shop.nhnteam04.front.cart.dto.CartResponse;
 import shop.nhnteam04.front.cart.feign.GuestCartFeignClient;
 
 @Service
@@ -12,7 +12,7 @@ public class GuestCartService {
 
     // 자동으로 쿠키(JSESSIONID)를 요청 헤더에 넣어서 보냄
     // 장바구니 조회(비회원 장바구니 조회 - 모든 아이템 조회)
-    public GuestCartResponse getGuestCart(){
+    public CartResponse getGuestCart(){
         return guestCartFeignClient.getGuestCart();
     }
 

@@ -4,113 +4,91 @@
     <meta charset="UTF-8">
     <title>장바구니</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-    }
-
-    .cart-container {
-      display: flex;
-      justify-content: space-between;
-      max-width: 1000px;
-      margin: auto;
-      gap: 40px;
-    }
-
-    .cart-items {
-      flex: 2;
-    }
-
-    .cart-summary {
-      flex: 1;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 20px;
-      background-color: #fafafa;
-    }
-
     .cart-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #eee;
-      padding: 15px 0;
-    }
-
-    .cart-item-name {
-      font-weight: bold;
-    }
-
-    .quantity {
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    .price {
-      font-weight: bold;
-    }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 10px 0;
-      font-size: 1rem;
-    }
-
-    .summary-row.total {
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
-    .order-button {
-      margin-top: 20px;
-      width: 100%;
       padding: 12px;
-      font-size: 1rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+      border-bottom: 1px solid #ccc;
     }
 
-    .order-button:hover {
-      background-color: #0056b3;
+    .cart-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cart-right {
+      text-align: right;
+    }
+
+    .cart-image {
+      width: 80px;
+      height: auto;
+    }
+
+    .cart-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .price-original {
+      text-decoration: line-through;
+      color: gray;
+      font-size: 14px;
+    }
+
+    .price-selling {
+      font-size: 16px;
+      font-weight: bold;
+      color: #e60023;
+    }
+
+    .summary {
+      margin-top: 24px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: right;
     }
   </style>
 </head>
 <body>
-<div class="cart-container">
-  <!-- 장바구니 리스트 -->
-  <div class="cart-items">
-    <h2>장바구니</h2>
-    <div th:each="item : ${cart.items}" class="cart-item">
+<div th:if="${#lists.isEmpty(cart.items)}">
+  <p>장바구니가 비어있습니다.</p>
+</div>
+
+<div th:if="${!#lists.isEmpty(cart.items)}">
+  <div th:each="item : ${cart.items}" class="cart-item">
+    <div class="cart-left">
+      <img th:src="${item.imageUrl}" alt="책 이미지" class="cart-image"/>
       <div>
-        <div class="cart-item-name" th:text="${item.bookName}">책 제목</div>
-        <div class="quantity" th:text="'수량: ' + ${item.quantity}">수량</div>
+        <div class="cart-title" th:text="${item.title}">책 제목</div>
+        <div class="price-selling" th:text="${#numbers.formatDecimal(item.sellingPrice, 0, 'COMMA', 0, 'POINT')} + '원'">11,000원</div>
+        <div class="price-original" th:text="${#numbers.formatDecimal(item.originalPrice, 0, 'COMMA', 0, 'POINT')} + '원'">13,000원</div>
       </div>
-      <div class="price" th:text="${item.price} + '원'">가격</div>
+    </div>
+
+    <div class="cart-right">
+      <div>수량: <span th:text="${item.quantity}">1</span></div>
+      <div>
+        합계:
+        <span th:text="${#numbers.formatDecimal(item.sellingPrice * item.quantity, 0, 'COMMA', 0, 'POINT')} + '원'">
+                    22,000원
+                </span>
+      </div>
     </div>
   </div>
 
-  <!-- 결제 정보 -->
-  <div class="cart-summary">
-    <h3>결제 정보</h3>
-    <div class="summary-row">
-      <span>배송비</span>
-      <span th:text="${cart.deliveryFee} + '원'">배송비</span>
-    </div>
-    <div class="summary-row total">
-      <span>결제 예정 금액</span>
-      <span th:text="${cart.totalPrice} + '원'">총합</span>
-    </div>
-    <div class="summary-row">
-      <span>적립 예정 포인트</span>
-      <span th:text="${cart.rewardPoint} + 'P'">포인트</span>
-    </div>
-    <form th:action="@{/orders}" method="post">
-      <button type="submit" class="order-button">주문하기</button>
-    </form>
+  <!-- 총합 표시 -->
+  <div class="summary">
+    총합:
+    <span th:text="${
+            #numbers.formatDecimal(
+                cart.items.stream().mapToDouble(i -> i.sellingPrice * i.quantity).sum(),
+                0, 'COMMA', 0, 'POINT')
+        } + '원'">
+            0원
+        </span>
   </div>
 </div>
 </body>

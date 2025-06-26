@@ -9,8 +9,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Configuration
 public class FeignConfig {
+
     @Bean
-    public RequestInterceptor requestInterceptor() {
+    public RequestInterceptor cartRequestInterceptor() {
         return requestTemplate -> {
             ServletRequestAttributes attributes =
                     (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

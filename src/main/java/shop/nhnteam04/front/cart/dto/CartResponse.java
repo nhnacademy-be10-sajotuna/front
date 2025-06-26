@@ -1,8 +1,11 @@
 package shop.nhnteam04.front.cart.dto;
 
+import lombok.Data;
+
 import java.util.List;
 
-public interface CartResponse {
-    List<? extends CartItemResponse> getItems();
-    String Id();
+@Data
+public class CartResponse {
+    private String cartId;
+    private List<CartItemResponse> items;
 }
