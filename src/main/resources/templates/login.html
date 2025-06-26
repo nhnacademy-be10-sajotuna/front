@@ -51,6 +51,12 @@
             border: 1px solid #ccc;
             font-size: 1rem;
         }
+        .payco-btn {
+            margin-top: 1.2rem;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+        }
 
         .login-button {
             margin-top: 1.2rem;
@@ -102,6 +108,9 @@
             </div>
             <button type="submit" class="login-button">로그인</button>
         </form>
+        <a href="http://test.com:10374/account-api/oauth2/authorization/payco">
+            <img src="/payco/paycoBtn.png" alt="페이코 로그인" class="payco-btn">
+        </a>
         <div class="register-link">
             계정이 없으신가요? <a th:href="@{/register}">회원가입</a>
         </div>
