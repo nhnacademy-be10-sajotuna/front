@@ -35,4 +35,23 @@ public class CookieService {
                 .sameSite("Lax")
                 .build();
     }
+
+    public ResponseCookie deleteAccessTokenCookie() {
+        return deleteCookie("access_token");
+    }
+
+    public ResponseCookie deleteRefreshTokenCookie() {
+        return deleteCookie("refresh_token");
+    }
+
+    private ResponseCookie deleteCookie(String tokenName) {
+        return ResponseCookie.from(tokenName, "")
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .path("/")
+                .domain(cookieDomain)
+                .maxAge(0) // 💡 쿠키 즉시 삭제
+                .sameSite("Lax")
+                .build();
+    }
 }

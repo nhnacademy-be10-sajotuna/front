@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>내 주소 목록</title>
+    <style>
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        .address-card {
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .address-card strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        .delete-form {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.3rem;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+        .add-form {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .add-form input {
+            margin-bottom: 1rem;
+            padding: 0.7rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            box-sizing: border-box;
+        }
+        .add-button {
+            background-color: #5c9ded;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .add-button:hover {
+            background-color: #417fde;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <h2>내 주소 목록</h2>
+        <div th:each="address : ${addressList}" class="address-card">
+            <strong th:text="'별칭: ' + ${address.nickName}">별칭</strong>
+            <div th:text="'주소: ' + ${address.streetAddress}">주소</div>
+
+            <form th:action="@{'/address/' + ${address.id}}" method="post" class="delete-form"
+                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit" class="delete-button">삭제</button>
+            </form>
+        </div>
+
+        <form th:action="@{/address}" method="post" class="add-form">
+            <input type="text" name="nickName" placeholder="주소 별칭" required/>
+            <input type="text" name="streetAddress" placeholder="주소" required/>
+            <button type="submit" class="add-button">주소 추가</button>
+        </form>
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
+        if (errorMsg) {
+            alert(errorMsg);
+        }
+        /*]]>*/
+    </script>
+</section>
+</body>
+</html>

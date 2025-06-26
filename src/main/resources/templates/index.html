@@ -1,1 +1,79 @@
-<h1>Front home</h1>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>홈</title>
+    <style>
+        .home-container {
+            padding: 6rem 2rem;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* 🏷️ 로고 스타일 */
+        .logo {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 2.5rem;
+            display: inline-block;
+        }
+
+        .search-form {
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 700px; /* ✅ 더 넓게 */
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.2rem 3rem 1.2rem 3.5rem;
+            font-size: 1.4rem;
+            border: 1px solid #ccc;
+            border-radius: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 1.2rem;
+            transform: translateY(-50%);
+            font-size: 1.4rem;
+            color: #888;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="home-container">
+        <!-- 🏷️ 로고 -->
+        <a th:href="@{/}" class="logo">북팡문고</a>
+
+        <!-- 🔍 검색창 -->
+        <form th:action="@{/search}" method="get" class="search-form">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" name="keyword" class="search-input"/>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>
