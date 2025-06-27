@@ -141,7 +141,11 @@
             <a th:href="@{/address}">주소 관리</a>
         </div>
 
-        <form th:action="@{/withdraw}" method="post" onsubmit="return confirm('정말로 회원 탈퇴하시겠습니까?');">
+        <div class="address-link" style="margin-top: 1rem;">
+            <a th:href="@{/users/me/edit}">회원 정보 수정</a>
+        </div>
+
+        <form th:action="@{/users/me/withdraw}" method="post" onsubmit="return confirm('정말로 회원 탈퇴하시겠습니까?');">
             <input type="hidden" name="_method" value="delete" />
             <button type="submit" class="withdraw-button">회원 탈퇴</button>
         </form>

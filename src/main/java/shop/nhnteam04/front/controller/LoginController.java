@@ -57,17 +57,4 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @GetMapping("/users/me")
-    public String me(@RequestHeader(name = "X-User-Id") Long userId, Model model) {
-        ResponseUserWithPolicy responseUserWithPolicy = loginService.me(userId);
-        model.addAttribute("user", responseUserWithPolicy);
-        return "me";
-    }
-
-    @PostMapping("/withdraw")
-    public String withdraw(@RequestHeader(name = "X-User-Id") Long userId, HttpServletResponse httpServletResponse) {
-        loginService.withdraw(userId, httpServletResponse);
-        return "redirect:/login";
-    }
-
 }

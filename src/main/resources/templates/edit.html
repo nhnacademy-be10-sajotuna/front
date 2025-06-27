@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>회원정보 수정</title>
+    <style>
+        .edit-container {
+            background-color: white;
+            padding: 3rem 2rem;
+            border-radius: 1.2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-group label {
+            width: 80%;
+            text-align: left;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 80%;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .edit-button {
+            margin-top: 1.2rem;
+            width: 100%;
+            padding: 0.9rem;
+            background-color: #5c9ded;
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-button:hover {
+            background-color: #417fde;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="edit-container">
+        <a th:href="@{/}" class="logo">북팡문고</a>
+
+        <h2>회원정보 수정</h2>
+        <form th:action="@{/users/me/edit}" method="post">
+            <div class="input-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" th:value="${user.name}" required />
+            </div>
+            <div class="input-group">
+                <label for="password">새 비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="변경할 비밀번호 입력" />
+            </div>
+            <div class="input-group">
+                <label for="birthDate">생일</label>
+                <input type="date" id="birthDate" name="birthDate" th:value="${user.birthDate}" required />
+            </div>
+            <div class="input-group">
+                <label for="phoneNumber">전화번호</label>
+                <input type="text" id="phoneNumber" name="phoneNumber"
+                       placeholder="000-0000-0000"
+                       pattern="\d{3}-\d{4}-\d{4}" th:value="${user.phoneNumber}" required />
+            </div>
+
+            <div style="display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.2rem;">
+                <button type="submit" class="edit-button" style="flex: 1;">정보 수정</button>
+                <a th:href="@{/users/me}" class="edit-button" style="flex: 1; text-align: center; line-height: 2.5rem; text-decoration: none;">취소</a>
+            </div>
+
+        </form>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
+        if (errorMsg) {
+            alert(errorMsg);
+        }
+        /*]]>*/
+    </script>
+</section>
+</body>
+</html>

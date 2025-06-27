@@ -4,6 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.address.request.RequestAddress;
 import shop.nhnteam04.front.address.response.ResponseAddress;
+import shop.nhnteam04.front.user.request.EditRequestUser;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
 import shop.nhnteam04.front.user.request.RegisterRequestUser;
 import shop.nhnteam04.front.user.response.LoginResponse;
@@ -28,6 +29,9 @@ public interface AccountFeignClient {
 
     @PostMapping("/api/users")
     public void createUser(@RequestBody RegisterRequestUser registerRequestUser);
+
+    @PutMapping("/api/users/me")
+    public void updateUser(@RequestHeader("X-User-Id") Long userId, @RequestBody EditRequestUser user);
 
     @DeleteMapping("/api/users/me")
     public void deleteUser(@RequestHeader("X-User-Id") Long userId);
