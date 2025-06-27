@@ -20,9 +20,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @GetMapping("/login")
-    public String loginForm(@RequestParam(value = "errorMessage", required = false) String errorMessage,
-                            Model model) {
-        model.addAttribute("errorMessage", errorMessage);
+    public String loginForm() {
         return "login";
     }
 
@@ -38,9 +36,7 @@ public class LoginController {
     }
 
     @GetMapping("/register")
-    public String registerForm(@RequestParam(value = "errorMessage", required = false) String errorMessage,
-                               Model model) {
-        model.addAttribute("errorMessage", errorMessage);
+    public String registerForm() {
         return "register";
     }
 
