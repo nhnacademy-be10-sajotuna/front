@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.feign.account.AccountFeignClient;
+import shop.nhnteam04.front.user.request.EditRequestUser;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
 import shop.nhnteam04.front.user.request.RegisterRequestUser;
 import shop.nhnteam04.front.user.response.LoginResponse;
@@ -48,6 +49,10 @@ public class LoginService {
 
     public void register(RegisterRequestUser registerRequestUser) {
         accountFeignClient.createUser(registerRequestUser);
+    }
+
+    public void updateUser(Long userId, EditRequestUser editRequestUser) {
+        accountFeignClient.updateUser(userId, editRequestUser);
     }
 
     public void withdraw(Long userId, HttpServletResponse response) {
