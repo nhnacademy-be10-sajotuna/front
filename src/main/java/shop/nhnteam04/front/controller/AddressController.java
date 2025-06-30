@@ -24,7 +24,7 @@ public class AddressController {
 
     @ModelAttribute("user")
     public ResponseUserWithPolicy user(@RequestHeader("X-User-Id")Long userId) {
-        return loginService.me(userId);
+        return loginService.detail(userId);
     }
 
     @GetMapping("/address")

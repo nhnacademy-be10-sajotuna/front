@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import shop.nhnteam04.front.TestAdapter;
 import shop.nhnteam04.front.service.LoginService;
+import shop.nhnteam04.front.user.response.ResponseUser;
 import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
 
 @Controller
@@ -19,8 +20,8 @@ public class IndexController {
     @ModelAttribute
     public void addUserToModel(@RequestHeader(name = "X-User-Id", required = false)Long userId ,Model model) {
         if (userId != null) {
-            ResponseUserWithPolicy responseUserWithPolicy = loginService.me(userId);
-            model.addAttribute("user", responseUserWithPolicy);
+            ResponseUser responseUser = loginService.me(userId);
+            model.addAttribute("user", responseUser);
         }
     }
 

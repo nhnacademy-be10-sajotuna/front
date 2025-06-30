@@ -9,6 +9,7 @@ import shop.nhnteam04.front.user.request.LoginRequestUser;
 import shop.nhnteam04.front.user.request.RegisterRequestUser;
 import shop.nhnteam04.front.user.response.LoginResponse;
 import shop.nhnteam04.front.user.response.ResponseAccessToken;
+import shop.nhnteam04.front.user.response.ResponseUser;
 import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
 
 import java.util.List;
@@ -19,7 +20,10 @@ public interface AccountFeignClient {
     public LoginResponse login(@RequestBody LoginRequestUser loginRequestUser);
 
     @GetMapping("/api/users/me")
-    public ResponseUserWithPolicy me(@RequestHeader("X-User-Id") Long userId);
+    public ResponseUser me(@RequestHeader("X-User-Id") Long userId);
+
+    @GetMapping("/api/users/detail")
+    public ResponseUserWithPolicy detail(@RequestHeader("X-User-Id") Long userId);
 
     @PostMapping("/api/token/refresh")
     public ResponseAccessToken refreshToken(@RequestHeader("AuthorizationRefresh") String token);

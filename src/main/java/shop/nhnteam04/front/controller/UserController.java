@@ -2,6 +2,8 @@ package shop.nhnteam04.front.controller;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.service.LoginService;
 import shop.nhnteam04.front.user.request.EditRequestUser;
+import shop.nhnteam04.front.user.response.ResponseUser;
 import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
 
 @Controller
@@ -18,15 +21,17 @@ public class UserController {
     private final LoginService loginService;
 
     @ModelAttribute
-    public void addUserToModel(@RequestHeader(name = "X-User-Id")Long userId ,Model model) {
-        if (userId != null) {
-            ResponseUserWithPolicy responseUserWithPolicy = loginService.me(userId);
-            model.addAttribute("user", responseUserWithPolicy);
+    public void addUserToModel(@RequestHeader(name = "X-User-Id")Long userId ,Model model, HttpServletRequest request) {
+        if (userId != null && !request.getRequestURI().contains("/users/me/detail")) {
+            ResponseUser responseUser = loginService.me(userId);
+            model.addAttribute("user", responseUser);
         }
     }
 
-    @GetMapping
-    public String me() {
+    @GetMapping("/detail")
+    public String me(@RequestHeader(name = "X-User-Id")Long userId ,Model model) {
+        ResponseUserWithPolicy responseUserWithPolicy = loginService.detail(userId);
+        model.addAttribute("user", responseUserWithPolicy);
         return "me";
     }
 

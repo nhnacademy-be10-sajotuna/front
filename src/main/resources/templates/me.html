@@ -132,9 +132,10 @@
 
         <div class="grade-box">
             <strong>등급 정책</strong>
-            <p>최소 금액: <span th:text="${user.userGradePolicyDto.minAmount}">0</span>원</p>
-            <p>최대 금액: <span th:text="${user.userGradePolicyDto.maxAmount}">100000</span>원</p>
-            <p>적립률: <span th:text="${user.userGradePolicyDto.pointEarningRate * 100}">1.0</span>%</p>
+            <p>등급: <span th:text="${user.userGradePolicyDto.grade}">GENERAL</span></p>
+            <p>최소 금액: <span th:text="${user.userGradePolicyDto.minTotalOrderPrice}">0</span>원</p>
+            <p>최대 금액: <span th:text="${user.userGradePolicyDto.maxTotalOrderPrice}">100000</span>원</p>
+            <p>적립률: <span th:text="${user.userGradePolicyDto.pointRate}">1</span>%</p>
         </div>
 
         <div class="address-link">

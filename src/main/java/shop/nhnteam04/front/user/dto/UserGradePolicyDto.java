@@ -8,7 +8,15 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 public class UserGradePolicyDto {
-    private int minAmount;
-    private int maxAmount;
-    private BigDecimal pointEarningRate;
+    private Grade grade;
+    private int minTotalOrderPrice;
+    private int maxTotalOrderPrice;
+    private int pointRate;
+
+    public enum Grade {
+        GENERAL,
+        ROYAL,
+        GOLD,
+        PLATINUM
+    }
 }
