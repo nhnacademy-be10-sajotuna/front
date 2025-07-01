@@ -12,6 +12,7 @@ import shop.nhnteam04.front.user.request.EditRequestUser;
 import shop.nhnteam04.front.user.request.LoginRequestUser;
 import shop.nhnteam04.front.user.request.RegisterRequestUser;
 import shop.nhnteam04.front.user.response.LoginResponse;
+import shop.nhnteam04.front.user.response.ResponseUser;
 import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
 
 @Service
@@ -33,8 +34,12 @@ public class LoginService {
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
     }
 
-    public ResponseUserWithPolicy me(long userId) {
+    public ResponseUser me(long userId) {
         return accountFeignClient.me(userId);
+    }
+
+    public ResponseUserWithPolicy detail(long userId) {
+        return accountFeignClient.detail(userId);
     }
 
     public void logout(Long userId, HttpServletResponse response) {

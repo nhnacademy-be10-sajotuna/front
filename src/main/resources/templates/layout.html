@@ -72,7 +72,7 @@
             <!-- 로그인 상태일 때 -->
             <span th:if="${user != null}">
                 <span th:text="${user.name} + '님 환영합니다!'"></span>
-                <a th:href="@{/users/me}">내 정보</a>
+                <a th:href="@{/users/me/detail}">내 정보</a>
                 <form th:action="@{/logout}" method="post" style="display: inline;">
                     <button type="submit" style="background: none; border: none; color: #007bff; cursor: pointer; font-size: 1rem; padding: 0; margin-left: 1rem;">
                         로그아웃

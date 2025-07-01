@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 public class CookieService {
 
 
-    private static final Long ACCESS_TOKEN_EXPIRES = 1800 * 1000L;
-    private static final Long REFRESH_TOKEN_EXPIRES = 24 * 60 * 60 * 1000L;
+    private static final Long ACCESS_TOKEN_EXPIRES = 1800L;
+    private static final Long REFRESH_TOKEN_EXPIRES = 24 * 60 * 60L;
 
     @Value("${cookie.domain:}")
     private String cookieDomain;
