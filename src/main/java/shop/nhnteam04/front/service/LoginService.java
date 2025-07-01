@@ -27,9 +27,12 @@ public class LoginService {
 
         ResponseCookie accessTokenCookie = cookieService.getAccessTokenCookie(loginResponse.getAccessToken());
         ResponseCookie refreshTokenCookie = cookieService.getRefreshTokenCookie(loginResponse.getRefreshToken());
+        ResponseCookie guestCartIdCookie = cookieService.deleteGuestCartIdCookie();
 
         response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, guestCartIdCookie.toString());
+
     }
 
     public ResponseUserWithPolicy me(long userId) {

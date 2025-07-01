@@ -1,95 +1,402 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>장바구니</title>
-  <style>
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      border-bottom: 1px solid #ccc;
-    }
+    <style>
+        .container {
+            display: flex;
+            max-width: 1280px;
+            margin: 0 auto;
+            gap: 24px;
+        }
 
-    .cart-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+        .cart-list {
+            flex: 1.2;
+            background: white;
+            padding: 24px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            min-width: 0;
+        }
 
-    .cart-right {
-      text-align: right;
-    }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+        }
 
-    .cart-image {
-      width: 80px;
-      height: auto;
-    }
+        .cart-left {
+            display: flex;
+            gap: 16px;
+        }
 
-    .cart-title {
-      font-size: 18px;
-      font-weight: bold;
-    }
+        .cart-image {
+            width: 100px;
+            height: auto;
+            border: 1px solid #ddd;
+        }
 
-    .price-original {
-      text-decoration: line-through;
-      color: gray;
-      font-size: 14px;
-    }
+        .cart-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
 
-    .price-selling {
-      font-size: 16px;
-      font-weight: bold;
-      color: #e60023;
-    }
+        .price-original {
+            text-decoration: line-through;
+            color: #888;
+            font-size: 14px;
+        }
 
-    .summary {
-      margin-top: 24px;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: right;
-    }
-  </style>
+        .price-selling {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e60023;
+        }
+
+        .cart-right {
+            text-align: right;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .summary {
+            width: 300px;
+            padding: 24px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            height: fit-content;
+            margin-left: auto;
+        }
+
+        .summary h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            font-size: 15px;
+        }
+
+        .summary-row.total {
+            font-weight: bold;
+            color: #e60023;
+            font-size: 17px;
+        }
+
+        .quantity-controls {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            user-select: none;
+            width: 110px;
+            height: 34px;
+            background: white;
+        }
+
+        .quantity-controls button {
+            border: none;
+            background-color: #f0f0f0;
+            color: #555;
+            font-weight: bold;
+            font-size: 20px;
+            width: 34px;
+            height: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quantity-controls button:hover {
+            background-color: #e60023;
+            color: white;
+        }
+
+        .quantity-controls input[type="number"] {
+            border: none;
+            text-align: center;
+            width: 40px;
+            font-size: 16px;
+            outline: none;
+            -moz-appearance: textfield;
+        }
+
+        /* 숫자 input 화살표 제거 (크롬/파이어폭스) */
+        .quantity-controls input[type=number]::-webkit-inner-spin-button,
+        .quantity-controls input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .quantity-controls input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .order-btn {
+            width: 100%;
+            padding: 12px 0;
+            background-color: #e60023;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 24px;
+        }
+
+        .order-btn:hover {
+            background-color: #b8001a;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            border: none;
+            background: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            color: #e60023;
+        }
+        .cart-item {
+            position: relative;
+        }
+
+        .cart-item {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+            background-color: #fff;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            overflow: hidden;
+            padding-right: 40px; /* 엑스버튼 공간 확보 */
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border: none;
+            background: none;
+            font-size: 22px;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 2;
+        }
+        .empty-cart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px; /* 원하는 높이 지정 */
+            font-size: 18px;
+            color: #555;
+            background: white;
+            border-radius: 8px;
+        }
+
+
+
+    </style>
 </head>
-<body>
-<div th:if="${#lists.isEmpty(cart.items)}">
-  <p>장바구니가 비어있습니다.</p>
-</div>
 
-<div th:if="${!#lists.isEmpty(cart.items)}">
-  <div th:each="item : ${cart.items}" class="cart-item">
-    <div class="cart-left">
-      <img th:src="${item.imageUrl}" alt="책 이미지" class="cart-image"/>
-      <div>
-        <div class="cart-title" th:text="${item.title}">책 제목</div>
-        <div class="price-selling" th:text="${#numbers.formatDecimal(item.sellingPrice, 0, 'COMMA', 0, 'POINT')} + '원'">11,000원</div>
-        <div class="price-original" th:text="${#numbers.formatDecimal(item.originalPrice, 0, 'COMMA', 0, 'POINT')} + '원'">13,000원</div>
-      </div>
+<section layout:fragment="content">
+    <div th:if="${#lists.isEmpty(cart.items)}" class="empty-cart">
+        <p>장바구니가 비어있습니다.</p>
     </div>
 
-    <div class="cart-right">
-      <div>수량: <span th:text="${item.quantity}">1</span></div>
-      <div>
-        합계:
-        <span th:text="${#numbers.formatDecimal(item.sellingPrice * item.quantity, 0, 'COMMA', 0, 'POINT')} + '원'">
-                    22,000원
-                </span>
-      </div>
-    </div>
-  </div>
+<div th:if="${!#lists.isEmpty(cart.items)}" class="container">
 
-  <!-- 총합 표시 -->
-  <div class="summary">
-    총합:
-    <span th:text="${
-            #numbers.formatDecimal(
-                cart.items.stream().mapToDouble(i -> i.sellingPrice * i.quantity).sum(),
-                0, 'COMMA', 0, 'POINT')
-        } + '원'">
-            0원
-        </span>
-  </div>
+    <!-- 장바구니 리스트 전체 감싸는 박스 -->
+    <div class="cart-list">
+        <!-- 장바구니 아이템 반복 -->
+        <div th:each="item : ${cart.items}" class="cart-item">
+
+
+            <div class="cart-left">
+                <input type="checkbox" class="item-checkbox" checked onchange="updateSummary()" />
+                <img th:src="${item.imageUrl}" class="cart-image"/>
+                <div>
+                    <div class="cart-title" th:text="${item.title}">책 제목</div>
+                    <div class="price-selling"
+                         th:text="|${#numbers.formatDecimal(item.sellingPrice, 0, 'COMMA', 0, 'POINT')}원|">11,000원</div>
+                    <div class="price-original"
+                         th:text="|${#numbers.formatDecimal(item.originalPrice, 0, 'COMMA', 0, 'POINT')}원|">13,000원</div>
+                </div>
+            </div>
+
+            <form th:action="@{/cart/delete}" method="post" class="cart-right"
+                  th:attr="data-original-price=${item.originalPrice},
+               data-selling-price=${item.sellingPrice},
+               data-book-id=${item.bookId},
+               data-cart-item-id=${item.cartItemId}">
+                <input type="hidden" name="bookId" th:value="${item.bookId}" />
+                <input type="hidden" name="cartItemId" th:value="${item.cartItemId}" />
+
+                <button type="submit" class="delete-btn">×</button>
+
+                <div class="quantity-controls">
+                    <button type="button" onclick="decreaseQuantity(this)">-</button>
+                    <input type="number" min="1" th:value="${item.quantity}" oninput="updateTotal(this)">
+                    <button type="button" onclick="increaseQuantity(this)">+</button>
+                </div>
+
+                <div>
+                    합계:
+                    <span class="item-total">11,000원</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
-</body>
+
+    <!-- 요약 박스 -->
+    <div class="summary" id="summary">
+        <h3>주문 요약</h3>
+        <div class="summary-row">
+            <span>상품금액</span>
+            <span id="productTotal">0원</span>
+        </div>
+        <div class="summary-row">
+            <span>배송비</span>
+            <span id="shippingFee">0원</span>
+        </div>
+        <div class="summary-row">
+            <span>상품할인</span>
+            <span id="discountTotal">0원</span>
+        </div>
+        <div class="summary-row total">
+            <span>결제 예정금액</span>
+            <span id="payAmount">0원</span>
+        </div>
+        <button class="order-btn">주문하기</button>
+    </div>
+
+<script>
+    function increaseQuantity(btn) {
+        const input = btn.previousElementSibling;
+        input.value = parseInt(input.value) + 1;
+        updateTotal(input);
+    }
+
+    function decreaseQuantity(btn) {
+        const input = btn.nextElementSibling;
+        const value = parseInt(input.value);
+        if (value > 1) {
+            input.value = value - 1;
+            updateTotal(input);
+        }
+    }
+
+    function updateTotal(input) {
+        // 수량 체크 1 이상
+        if(input.value === '' || input.value < 1) input.value = 1;
+
+        const quantity = parseInt(input.value);
+        const cartRight = input.closest(".cart-right");
+        console.log(cartRight);
+        const originalPrice = parseInt(cartRight.getAttribute('data-original-price'));
+        const sellingPrice = parseInt(cartRight.getAttribute('data-selling-price'));
+        const totalElement = cartRight.querySelector(".item-total");
+
+        const total = sellingPrice * quantity;
+        totalElement.innerText = total.toLocaleString() + "원";
+
+        updateSummary();
+    }
+
+    function updateSummary() {
+        const cartItems = document.querySelectorAll(".cart-item");
+        let productTotal = 0;
+        let discountTotal = 0;
+        let payAmount = 0;
+
+        cartItems.forEach(item => {
+            const isChecked = item.querySelector('.item-checkbox')?.checked;
+            if (!isChecked) return;
+
+            const cartRight = item.querySelector(".cart-right");
+            const originalPrice = parseInt(cartRight.getAttribute('data-original-price'));
+            const sellingPrice = parseInt(cartRight.getAttribute('data-selling-price'));
+            const quantity = parseInt(cartRight.querySelector('input[type=number]').value);
+
+            productTotal += originalPrice * quantity;
+            discountTotal += (originalPrice - sellingPrice) * quantity;
+            payAmount += sellingPrice * quantity;
+        });
+
+        // 배송비 계산 (회원 여부는 여기서 판단해야 함, 지금은 무조건 회원이라고 가정)
+        const isMember = true;  // 실제 구현 시 서버에서 가져오거나 로그인 상태 확인 필요
+
+        let shippingFee = 0;
+        if (payAmount > 0) {
+            shippingFee = 5000;
+            if (isMember && payAmount >= 30000) {
+                shippingFee = 0;
+            }
+        }
+
+
+        // 결제 예정 금액에 배송비 더하기
+        const finalPayAmount = payAmount + shippingFee;
+
+        document.getElementById("productTotal").innerText = productTotal.toLocaleString() + "원";
+        document.getElementById("discountTotal").innerText = "-" + discountTotal.toLocaleString() + "원";
+        document.getElementById("shippingFee").innerText = "+" + shippingFee.toLocaleString() + "원";
+        document.getElementById("payAmount").innerText = finalPayAmount.toLocaleString() + "원";
+    }
+
+    // 초기 요약값 세팅
+    window.onload = function() {
+        updateSummary();
+        document.querySelectorAll('.cart-right input[type=number]').forEach(input => {
+            updateTotal(input);
+        });
+    };
+
+    function deleteCartItem(button) {
+        if (!confirm("정말 이 상품을 장바구니에서 삭제하시겠습니까?")) {
+            return;
+        }
+
+
+
+        const cartRight = button.closest('.cart-right');
+
+        const bookId = cartRight.getAttribute('data-book-id');
+        const cartItemId = cartRight.getAttribute('data-cart-item-id');
+        // userId는 백엔드에서 헤더로 넣는다고 가정
+        const url = new URL("/cart", window.location.origin);
+        if (bookId) url.searchParams.append("bookId", bookId);
+        if (cartItemId) url.searchParams.append("cartItemId", cartItemId);
+
+
+    }
+</script>
+</section>
 </html>

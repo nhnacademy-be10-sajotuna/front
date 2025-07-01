@@ -10,7 +10,7 @@ public class CookieService {
 
     private static final Long ACCESS_TOKEN_EXPIRES = 1800 * 1000L;
     private static final Long REFRESH_TOKEN_EXPIRES = 24 * 60 * 60 * 1000L;
-
+    private static final Long GUEST_CART_EXPIRES = 3600 * 1000L * 2;
     @Value("${cookie.domain:}")
     private String cookieDomain;
     @Value("${cookie.secure:false}")
@@ -22,6 +22,10 @@ public class CookieService {
 
     public ResponseCookie getRefreshTokenCookie(String token) {
         return getResponseCookie("refresh_token", token, REFRESH_TOKEN_EXPIRES);
+    }
+
+    public ResponseCookie getGuestCartIdCookie(String cartId) {
+        return getResponseCookie("guestCartId", cartId, GUEST_CART_EXPIRES);
     }
 
 
@@ -42,6 +46,10 @@ public class CookieService {
 
     public ResponseCookie deleteRefreshTokenCookie() {
         return deleteCookie("refresh_token");
+    }
+
+    public ResponseCookie deleteGuestCartIdCookie() {
+        return deleteCookie("guestCartId");
     }
 
     private ResponseCookie deleteCookie(String tokenName) {

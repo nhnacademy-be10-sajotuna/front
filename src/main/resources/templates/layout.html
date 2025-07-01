@@ -73,6 +73,7 @@
             <span th:if="${user != null}">
                 <span th:text="${user.name} + '님 환영합니다!'"></span>
                 <a th:href="@{/users/me}">내 정보</a>
+                <a th:href="@{/cart}">장바구니</a>
                 <form th:action="@{/logout}" method="post" style="display: inline;">
                     <button type="submit" style="background: none; border: none; color: #007bff; cursor: pointer; font-size: 1rem; padding: 0; margin-left: 1rem;">
                         로그아웃
@@ -84,6 +85,7 @@
             <span th:if="${user == null}">
                 <a th:href="@{/login}" style="margin-right: 1rem;">로그인</a>
                 <a th:href="@{/register}">회원가입</a>
+                <a th:href="@{/cart}">장바구니</a>
             </span>
         </nav>
     </div>
