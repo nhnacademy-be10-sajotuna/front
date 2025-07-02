@@ -12,13 +12,13 @@
         <form id="payment-form">
             <div>주문자 정보</div>
             <input type="text" name="ordererName" placeholder="이름" required/><br>
-            <input type="number" name="ordererPhoneNumber" placeholder="연락처" required/><br>
+            <input name="ordererPhoneNumber" placeholder="예) 010-1234-5678" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" required/><br>
             <input type="email" name="ordererEmail" placeholder="이메일" required/><br>
 
             <div style="margin-top: 20px">수령인 정보</div>
-            <input type="text" name="ordererEmail" placeholder="이름" required/><br>
-            <input type="number" name="ordererEmail" placeholder="연락처" required/><br>
-            <input type="email" name="ordererEmail" placeholder="이메일" required/><br>
+            <input type="text" name="recipientName" placeholder="이름" required/><br>
+            <input name="recipientPhoneNumber" placeholder="예) 010-1234-5678" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" required/><br>
+            <input type="email" name="recipientEmail" placeholder="이메일" required/><br>
 
             <div style="margin-top: 20px">배송지</div>
             <input type="text" name="recipientAddress" id="UserAdd1" placeholder="주소" readonly required>
@@ -26,7 +26,7 @@
             <input type="text" name="recipientAddress2" id="UserAdd2" placeholder="상세주소"><br>
 
             <div style="margin-top: 20px">배송 희망 날짜</div>
-            <input type="datetime-local" name="expectedDeliveryDate" placeholder="배송날짜" required/>
+            <input type="datetime-local" name="expectedDeliveryDate" required/>
 
             <hr/>
 
@@ -78,7 +78,7 @@
                 }).open();
             }
 
-            // 토스 결제
+            // 토스 결제 api
             const form = document.getElementById('payment-form');
             const clientKey = "test_ck_yZqmkKeP8gWj1B0QjXRB8bQRxB9l";
             const tossPayments = TossPayments(clientKey);
@@ -89,6 +89,7 @@
 
                 // input에 입력된 데이터들을 가져옴
                 const data = new FormData(form);
+                const formattedTime = formatTime(data.get('expectedDeliveryDate'));
 
                 const body = {
                     ordererName: data.get('ordererName'),
@@ -98,7 +99,7 @@
                     recipientPhoneNumber: data.get('recipientPhoneNumber'),
                     recipientEmail: data.get('recipientEmail'),
                     recipientAddress: data.get('recipientAddress'),
-                    expectedDeliveryDate: data.get('expectedDeliveryDate')
+                    expectedDeliveryDate: formattedTime
                 }
                 // TODO: 주문 저장하는 코드
 
@@ -108,7 +109,7 @@
                         currency: "KRW",
                         value: 9000,
                     },
-                    orderId: "cJvNjaxUJyQ8Mq7B9Mw",
+                    orderId: "RhzuzaEPdA9ADe5",
                     orderName: "책",
                     successUrl: window.location.origin + "/payment/success",
                     failUrl: window.location.origin + "/payment/fail",
@@ -122,6 +123,20 @@
                 });
             })
 
+            // yyyyMMddHHmmss 포맷 함수
+            function formatTime(datetimeLocalValue){
+                const dt = new Date(datetimeLocalValue);
+                const pad2 = num => String(num).padStart(2, '0');
+
+                const year   = dt.getFullYear();
+                const month  = pad2(dt.getMonth() + 1);
+                const day    = pad2(dt.getDate());
+                const hour   = pad2(dt.getHours());
+                const minute = pad2(dt.getMinutes());
+                const second = pad2(dt.getSeconds());  // 만약 seconds가 포함되지 않은 input이라면 항상 "00"이 됩니다.
+
+                return `${year}${month}${day}${hour}${minute}${second}`;
+            }
         </script>
     </body>
 </html>
