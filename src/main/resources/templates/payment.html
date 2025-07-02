@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
     <head>
         <meta charset="utf-8" />
         <title>결제 창</title>
@@ -9,44 +9,36 @@
     </head>
     <body>
     <!-- 결제하기 버튼 -->
-        <form>
+        <form id="payment-form">
             <div>주문자 정보</div>
-            <input placeholder="이름" />
-            <br/>
-            <input placeholder="연락처" />
-            <br/>
-            <input type="email" placeholder="이메일" />
-            <br/>
-            <br/>
-            <div>수령인 정보</div>
-            <input placeholder="이름" />
-            <br/>
-            <input placeholder="연락처" />
-            <br/>
-            <input type="email" placeholder="이메일" />
+            <input type="text" placeholder="이름" required/><br>
+            <input type="number" placeholder="연락처" required/><br>
+            <input type="email" placeholder="이메일" required/><br>
 
-            <br/>
-            <br/>
+            <div style="margin-top: 20px">수령인 정보</div>
+            <input type="text" placeholder="이름" required/><br>
+            <input type="number" placeholder="연락처" required/><br>
+            <input type="email" placeholder="이메일" required/><br>
 
-            <input type="text" name="zipp_code" id="ZippCode" placeholder="우편번호" readonly>
-            <input type="button" id="zipp_btn" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-            <input type="text" name="user_add1" id="UserAdd1" placeholder="주소" readonly><br>
-            <input type="text" name="user_add2" id="UserAdd2" placeholder="상세주소">
+            <div style="margin-top: 20px">배송지</div>
+            <input type="text" name="user_add1" id="UserAdd1" placeholder="주소" readonly required>
+            <input type="button" id="zipp_btn" onclick="execDaumPostcode()" value="주소 찾기"><br>
+            <input type="text" name="user_add2" id="UserAdd2" placeholder="상세주소"><br>
 
-            <br/>
-            <input type="datetime-local" placeholder="배송날짜" />
+            <div style="margin-top: 20px">배송 희망 날짜</div>
+            <input type="datetime-local" placeholder="배송날짜" required/>
+
+            <hr/>
+
+            <div>
+                <div>상품 금액: 10000원</div>
+                <div>할인: -1000원</div>
+                <br/>
+                <div>총 결제금액: 9000원</div>
+            </div>
+
+            <button class="button" type="submit" style="margin-top: 20px">결제하기</button>
         </form>
-
-        <hr/>
-
-        <div>
-            <div>상품 금액: 10000원</div>
-            <div>할인: -1000원</div>
-            <br/>
-            <div>총 결제금액: 9000원</div>
-        </div>
-
-        <button class="button" style="margin-top: 30px" onclick="requestPayment()">결제하기</button>
 
         <script type="text/javascript">
             // chrome에서는 정상적으로 주소창 화면이 나오는데 safari에서는 안 나온다. 이유를 모르겠다
@@ -79,7 +71,6 @@
                         }
 
                         // 선택된 우편번호와 주소 정보를 input 박스에 넣는다.
-                        document.getElementById('ZippCode').value = data.zonecode;
                         document.getElementById("UserAdd1").value = addr;
                         document.getElementById("UserAdd1").value += extraAddr;
                         document.getElementById("UserAdd2").focus(); // 우편번호 + 주소 입력이 완료되었음으로 상세주소로 포커스 이동
@@ -87,15 +78,16 @@
                 }).open();
             }
 
+            // 토스 결제
+            const form = document.getElementById('payment-form');
             const clientKey = "test_ck_yZqmkKeP8gWj1B0QjXRB8bQRxB9l";
             const tossPayments = TossPayments(clientKey);
-
             const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
 
-            // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
-            // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
-            async function requestPayment() {
-                await payment.requestPayment({
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                payment.requestPayment({
                     method: "CARD",
                     amount: {
                         currency: "KRW",
@@ -113,7 +105,8 @@
                         useAppCardOnly: false,
                     },
                 });
-            }
+            })
+
         </script>
     </body>
 </html>
