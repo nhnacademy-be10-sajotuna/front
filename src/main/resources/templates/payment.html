@@ -11,22 +11,22 @@
     <!-- 결제하기 버튼 -->
         <form id="payment-form">
             <div>주문자 정보</div>
-            <input type="text" placeholder="이름" required/><br>
-            <input type="number" placeholder="연락처" required/><br>
-            <input type="email" placeholder="이메일" required/><br>
+            <input type="text" name="ordererName" placeholder="이름" required/><br>
+            <input type="number" name="ordererPhoneNumber" placeholder="연락처" required/><br>
+            <input type="email" name="ordererEmail" placeholder="이메일" required/><br>
 
             <div style="margin-top: 20px">수령인 정보</div>
-            <input type="text" placeholder="이름" required/><br>
-            <input type="number" placeholder="연락처" required/><br>
-            <input type="email" placeholder="이메일" required/><br>
+            <input type="text" name="ordererEmail" placeholder="이름" required/><br>
+            <input type="number" name="ordererEmail" placeholder="연락처" required/><br>
+            <input type="email" name="ordererEmail" placeholder="이메일" required/><br>
 
             <div style="margin-top: 20px">배송지</div>
-            <input type="text" name="user_add1" id="UserAdd1" placeholder="주소" readonly required>
+            <input type="text" name="recipientAddress" id="UserAdd1" placeholder="주소" readonly required>
             <input type="button" id="zipp_btn" onclick="execDaumPostcode()" value="주소 찾기"><br>
-            <input type="text" name="user_add2" id="UserAdd2" placeholder="상세주소"><br>
+            <input type="text" name="recipientAddress2" id="UserAdd2" placeholder="상세주소"><br>
 
             <div style="margin-top: 20px">배송 희망 날짜</div>
-            <input type="datetime-local" placeholder="배송날짜" required/>
+            <input type="datetime-local" name="expectedDeliveryDate" placeholder="배송날짜" required/>
 
             <hr/>
 
@@ -86,6 +86,21 @@
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
+
+                // input에 입력된 데이터들을 가져옴
+                const data = new FormData(form);
+
+                const body = {
+                    ordererName: data.get('ordererName'),
+                    ordererPhoneNumber: data.get('ordererPhoneNumber'),
+                    ordererEmail: data.get('ordererEmail'),
+                    recipientName: data.get('recipientName'),
+                    recipientPhoneNumber: data.get('recipientPhoneNumber'),
+                    recipientEmail: data.get('recipientEmail'),
+                    recipientAddress: data.get('recipientAddress'),
+                    expectedDeliveryDate: data.get('expectedDeliveryDate')
+                }
+                // TODO: 주문 저장하는 코드
 
                 payment.requestPayment({
                     method: "CARD",
