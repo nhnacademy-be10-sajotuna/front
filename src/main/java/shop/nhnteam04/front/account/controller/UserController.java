@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String edit(@AuthenticationPrincipal SecurityUser user, BindingResult bindingResult, @ModelAttribute EditRequestUser editRequestUser) {
+    public String edit(@AuthenticationPrincipal SecurityUser user, @Valid @ModelAttribute EditRequestUser editRequestUser, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
                 throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
