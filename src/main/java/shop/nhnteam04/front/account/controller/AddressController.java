@@ -17,19 +17,20 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/address")
 public class AddressController {
 
     private final LoginService loginService;
     private final AddressService addressService;
 
-    @GetMapping("/address")
+    @GetMapping
     public String address(@AuthenticationPrincipal SecurityUser user, Model model) {
        List<AddressForm> addressForms = addressService.getAddresses(user.getId());
        model.addAttribute("addressList", addressForms);
        return "address";
     }
 
-    @PostMapping("/address")
+    @PostMapping
     public String createAddress(@AuthenticationPrincipal SecurityUser user, @Valid @ModelAttribute AddressForm address, RedirectAttributes redirectAttributes) {
         try {
             addressService.createAddress(user.getId(), address);
@@ -40,7 +41,7 @@ public class AddressController {
         }
     }
 
-    @PostMapping("/address/{addressId}")
+    @PostMapping("/{addressId}")
     public String deleteAddress(@AuthenticationPrincipal SecurityUser user, @PathVariable Long addressId, Model model) {
         addressService.deleteAddress(user.getId(), addressId);
         return "redirect:/address";
