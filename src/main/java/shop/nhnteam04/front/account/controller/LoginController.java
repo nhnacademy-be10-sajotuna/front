@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import shop.nhnteam04.front.account.service.LoginService;
@@ -26,8 +27,11 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginRequestUser loginRequestUser, HttpServletResponse httpServletResponse) {
+    public String login(@Valid @ModelAttribute LoginRequestUser loginRequestUser, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
         try {
+            if (bindingResult.hasErrors()) {
+                throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            }
             loginService.login(loginRequestUser, httpServletResponse);
             return "redirect:/";
         } catch (Exception e) {
@@ -42,8 +46,11 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute RegisterRequestUser registerRequestUser) {
+    public String register(@Valid @ModelAttribute RegisterRequestUser registerRequestUser, BindingResult bindingResult) {
         try {
+            if (bindingResult.hasErrors()) {
+                throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            }
             loginService.register(registerRequestUser);
             return "redirect:/login";
         } catch (Exception e) {
