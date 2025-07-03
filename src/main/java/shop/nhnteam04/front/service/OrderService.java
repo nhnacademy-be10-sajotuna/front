@@ -3,6 +3,8 @@ package shop.nhnteam04.front.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.feign.order.OrderFeignClient;
+import shop.nhnteam04.front.order.orders.request.CreateOrderRequest;
+import shop.nhnteam04.front.order.orders.response.OrderResponse;
 import shop.nhnteam04.front.order.payment.PaymentConfirmRequest;
 import shop.nhnteam04.front.order.payment.PaymentResponse;
 
@@ -15,5 +17,15 @@ public class OrderService {
     // 결제 승인 요청
     public PaymentResponse confirmPayment(PaymentConfirmRequest request) {
         return orderFeignClient.confirmPayment(request);
+    }
+
+    // 사용 가능한 포인트 가져옴
+    public Integer getAvailablePoint(Long userId) {
+        return orderFeignClient.getAvailablePoint(userId);
+    }
+
+    // 상품 주문 생성
+    public OrderResponse createOrder(Long userId, CreateOrderRequest request){
+        return orderFeignClient.createOrder(userId, request);
     }
 }

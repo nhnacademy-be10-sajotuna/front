@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import shop.nhnteam04.front.order.orders.request.CreateOrderRequest;
+import shop.nhnteam04.front.order.orders.response.OrderResponse;
 import shop.nhnteam04.front.order.payment.PaymentConfirmRequest;
 import shop.nhnteam04.front.order.payment.PaymentMethod;
-import shop.nhnteam04.front.order.payment.PaymentResponse;
 import shop.nhnteam04.front.service.OrderService;
 
 @Slf4j
@@ -18,13 +22,26 @@ public class OrderController {
     private final OrderService orderService;
 
     // 결제 창
-    @GetMapping("/payment")
-    public String registerForm() {
-        return "payment";
+    @GetMapping("/order/payment")
+    public ModelAndView userOrderForm(@RequestHeader(value = "X-User-Id", required = false) Long userId) {
+        //int point = orderService.getAvailablePoint(userId);
+
+        ModelAndView mav = new ModelAndView("payment");
+
+        //mav.addObject("point", point);
+        mav.addObject("userId", userId);
+
+        return mav;
+    }
+
+    // 주문 생성
+    @PostMapping("/order/payment")
+    public OrderResponse createOrder(@RequestHeader(value = "X-User-Id", required = false) Long userId, CreateOrderRequest request){
+        return orderService.createOrder(userId, request);
     }
 
     // 토스 결제 완료
-    @GetMapping("/payment/success")
+    @GetMapping("/order/payment/success")
     public String paymentSuccess(@RequestParam("orderId") String orderId,
             @RequestParam("paymentKey") String paymentKey,
             @RequestParam("amount") int amount
@@ -42,7 +59,8 @@ public class OrderController {
         return "payment-success";
     }
 
-    @GetMapping("/payment/fail")
+    // 결제 실패
+    @GetMapping("/order/payment/fail")
     public String paymentFail() {
         return "payment-fail";
     }

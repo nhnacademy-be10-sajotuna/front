@@ -9,23 +9,22 @@ import shop.nhnteam04.front.order.orders.response.OrderResponse;
 import shop.nhnteam04.front.order.orders.response.PackageResponse;
 import shop.nhnteam04.front.order.payment.PaymentConfirmRequest;
 import shop.nhnteam04.front.order.payment.PaymentResponse;
+import shop.nhnteam04.front.order.point.PointHistoryResponse;
 
 import java.util.List;
 
 @FeignClient(name= "order-api")
 public interface OrderFeignClient {
 
+    // orders
     @GetMapping("/api/orders/{order-id}")
     OrderDetailResponse getOrder(@PathVariable("order-id") String orderId);
 
     @GetMapping("/api/orders/guest/{order-number}")
     OrderDetailResponse getGuestOrder(@PathVariable("order-number") String orderNumber);
 
-    @PostMapping("/api/orders/user")
-    OrderResponse createUserOrder(@RequestHeader("X-User-Id") Long userId, @RequestBody CreateOrderRequest request);
-
-    @PostMapping("/api/orders/guest")
-    OrderResponse createGuestOrder(@RequestBody CreateOrderRequest request);
+    @PostMapping("/api/orders")
+    OrderResponse createOrder(@RequestHeader(value = "X-User-Id", required = false) Long userId, @RequestBody CreateOrderRequest request);
 
     @PutMapping("/api/orders/returned/{order-id}")
     void returnedOrder(@PathVariable("order-id") Long orderId, @RequestHeader("X-User-Id") Long userId);
@@ -40,6 +39,17 @@ public interface OrderFeignClient {
     void updatePackage(@PathVariable("package-id") Long packageId, @RequestBody PackageRequest request);
 
 
+    // payment
     @PostMapping("/api/payments/confirm")
     PaymentResponse confirmPayment(@RequestBody PaymentConfirmRequest request);
+
+    // point
+    @GetMapping("/api/points")
+    List<PointHistoryResponse> getPointsByUserId(@RequestHeader("X-User-Id") Long userId);
+
+    @GetMapping("/api/points/available")
+    Integer getAvailablePoint(@RequestHeader("X-User-Id") Long userId);
+
+
+
 }
