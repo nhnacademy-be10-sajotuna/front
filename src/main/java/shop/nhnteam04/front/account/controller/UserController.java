@@ -5,10 +5,12 @@ import java.nio.charset.StandardCharsets;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.account.service.LoginService;
 import shop.nhnteam04.front.account.user.dto.SecurityUser;
@@ -36,8 +38,11 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String edit(@AuthenticationPrincipal SecurityUser user, @ModelAttribute EditRequestUser editRequestUser) {
+    public String edit(@AuthenticationPrincipal SecurityUser user, @Valid @ModelAttribute EditRequestUser editRequestUser, BindingResult bindingResult) {
         try {
+            if (bindingResult.hasErrors()) {
+                throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            }
             loginService.updateUser(user.getId(), editRequestUser);
             return "redirect:/users/me/detail";
         } catch (Exception e) {
