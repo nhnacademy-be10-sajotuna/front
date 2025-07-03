@@ -1,10 +1,9 @@
 package shop.nhnteam04.front.order.payment;
 
-import lombok.Builder;
-import lombok.Setter;
+import lombok.*;
 
 @Builder
-@Setter
+@Getter
 public class PaymentConfirmRequest {
     private PaymentMethod paymentMethod;
 

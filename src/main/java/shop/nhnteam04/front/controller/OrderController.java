@@ -3,10 +3,7 @@ package shop.nhnteam04.front.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import shop.nhnteam04.front.order.orders.request.CreateOrderRequest;
 import shop.nhnteam04.front.order.orders.response.OrderResponse;
@@ -24,11 +21,16 @@ public class OrderController {
     // 결제 창
     @GetMapping("/order/payment")
     public ModelAndView userOrderForm(@RequestHeader(value = "X-User-Id", required = false) Long userId) {
-        //int point = orderService.getAvailablePoint(userId);
-
         ModelAndView mav = new ModelAndView("payment");
 
-        //mav.addObject("point", point);
+        // TODO: 회원의 사용 가능 포인트 조회
+        /*
+        if(userId != null) {
+            //int point = orderService.getAvailablePoint(userId);
+            //mav.addObject("point", point);
+        }
+        */
+
         mav.addObject("userId", userId);
 
         return mav;
@@ -36,7 +38,7 @@ public class OrderController {
 
     // 주문 생성
     @PostMapping("/order/payment")
-    public OrderResponse createOrder(@RequestHeader(value = "X-User-Id", required = false) Long userId, CreateOrderRequest request){
+    public OrderResponse createOrder(@RequestHeader(value = "X-User-Id", required = false) Long userId, @RequestBody CreateOrderRequest request){
         return orderService.createOrder(userId, request);
     }
 
@@ -54,6 +56,7 @@ public class OrderController {
 
         log.info("PaymentConfirmRequest: {}", request);
 
+        // TODO: 결제 승인
         //PaymentResponse response = orderService.confirmPayment(request);
 
         return "payment-success";
