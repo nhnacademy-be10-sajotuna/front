@@ -1,16 +1,13 @@
 package shop.nhnteam04.front.feign;
 
-import feign.FeignException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
-import io.micrometer.core.instrument.util.IOUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.http.HttpStatus;
-import shop.nhnteam04.front.exception.ApiClientException;
+import shop.nhnteam04.front.account.exception.ApiClientException;
 
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Component
 public class FeignErrorDecoder implements ErrorDecoder {

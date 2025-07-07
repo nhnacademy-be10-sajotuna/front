@@ -2,19 +2,20 @@ package shop.nhnteam04.front.feign.account;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
-import shop.nhnteam04.front.address.request.RequestAddress;
-import shop.nhnteam04.front.address.response.ResponseAddress;
-import shop.nhnteam04.front.user.request.EditRequestUser;
-import shop.nhnteam04.front.user.request.LoginRequestUser;
-import shop.nhnteam04.front.user.request.RegisterRequestUser;
-import shop.nhnteam04.front.user.response.LoginResponse;
-import shop.nhnteam04.front.user.response.ResponseAccessToken;
-import shop.nhnteam04.front.user.response.ResponseUser;
-import shop.nhnteam04.front.user.response.ResponseUserWithPolicy;
+import shop.nhnteam04.front.account.address.request.RequestAddress;
+import shop.nhnteam04.front.account.address.response.ResponseAddress;
+import shop.nhnteam04.front.account.user.request.EditRequestUser;
+import shop.nhnteam04.front.account.user.request.LoginRequestUser;
+import shop.nhnteam04.front.account.user.request.RegisterRequestUser;
+import shop.nhnteam04.front.account.user.request.RequestOauth2;
+import shop.nhnteam04.front.account.user.response.LoginResponse;
+import shop.nhnteam04.front.account.user.response.ResponseAccessToken;
+import shop.nhnteam04.front.account.user.response.ResponseUser;
+import shop.nhnteam04.front.account.user.response.ResponseUserWithPolicy;
 
 import java.util.List;
 
-@FeignClient(name= "account-api")
+@FeignClient(name= "gateway/account-api")
 public interface AccountFeignClient {
     @PostMapping("/api/users/login")
     public LoginResponse login(@RequestBody LoginRequestUser loginRequestUser);
@@ -48,4 +49,8 @@ public interface AccountFeignClient {
 
     @DeleteMapping("/api/address/{addressId}")
     public void deleteAddress(@RequestHeader("X-User-Id") Long userId, @PathVariable("addressId") Long addressId);
+
+    @PostMapping("/api/users/oauth2/{outId}")
+    public LoginResponse findByOutId(@PathVariable("outId") String outId, @RequestBody RequestOauth2 requestOauth2);
+
 }
