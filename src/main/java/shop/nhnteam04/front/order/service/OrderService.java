@@ -1,12 +1,12 @@
-package shop.nhnteam04.front.service;
+package shop.nhnteam04.front.order.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.feign.order.OrderFeignClient;
-import shop.nhnteam04.front.order.orders.request.CreateOrderRequest;
-import shop.nhnteam04.front.order.orders.response.OrderResponse;
-import shop.nhnteam04.front.order.payment.PaymentConfirmRequest;
-import shop.nhnteam04.front.order.payment.PaymentResponse;
+import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
+import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
+import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
+import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
 
 @Service
 @RequiredArgsConstructor

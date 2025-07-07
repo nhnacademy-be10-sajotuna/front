@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.order.payment;
+package shop.nhnteam04.front.order.dto.payment;
 
 import lombok.*;
 

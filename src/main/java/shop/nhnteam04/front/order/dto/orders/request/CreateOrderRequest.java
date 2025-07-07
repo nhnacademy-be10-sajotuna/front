@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.order.orders.request;
+package shop.nhnteam04.front.order.dto.orders.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;

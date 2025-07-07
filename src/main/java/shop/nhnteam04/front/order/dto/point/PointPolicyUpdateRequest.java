@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.order.point;
+package shop.nhnteam04.front.order.dto.point;
 
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;

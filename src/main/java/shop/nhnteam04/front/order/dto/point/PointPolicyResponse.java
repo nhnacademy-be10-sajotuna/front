@@ -1,9 +1,9 @@
-package shop.nhnteam04.front.order.point;
+package shop.nhnteam04.front.order.dto.point;
 
 import lombok.Builder;
 import lombok.Getter;
-import shop.nhnteam04.front.order.point.domain.CalculationMode;
-import shop.nhnteam04.front.order.point.domain.PointPolicyType;
+import shop.nhnteam04.front.order.dto.point.type.CalculationMode;
+import shop.nhnteam04.front.order.dto.point.type.PointPolicyType;
 
 @Builder
 @Getter

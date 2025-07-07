@@ -121,7 +121,7 @@
 
                 // 주문 저장
                 // TODO: 제대로 되는지 확인 필요
-                /*const userId = data.get('userId')
+                const userId = data.get('userId')
 
                 let res;
                 const headers = {
@@ -133,7 +133,7 @@
                 }
 
                 try {
-                    res = await fetch('/order/payment', {
+                    res = await fetch('/api/orders', {
                         method: 'POST',
                         headers: headers,
                         body: JSON.stringify(body)
@@ -147,7 +147,7 @@
                     return alert(`주문 생성 실패: ${err.error || res.statusText}`);
                 }
                 const { orderNumber, finalPrice } = await res.json();
-                */
+
 
                 // 토스 결제
                 payment.requestPayment({

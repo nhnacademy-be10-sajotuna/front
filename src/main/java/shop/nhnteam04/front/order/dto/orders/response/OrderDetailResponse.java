@@ -1,7 +1,7 @@
-package shop.nhnteam04.front.order.orders.response;
+package shop.nhnteam04.front.order.dto.orders.response;
 
 import lombok.*;
-import shop.nhnteam04.front.order.payment.PaymentMethod;
+import shop.nhnteam04.front.order.dto.payment.PaymentMethod;
 
 import java.time.LocalDateTime;
 import java.util.List;

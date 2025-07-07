@@ -2,14 +2,14 @@ package shop.nhnteam04.front.feign.order;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
-import shop.nhnteam04.front.order.orders.request.CreateOrderRequest;
-import shop.nhnteam04.front.order.orders.request.PackageRequest;
-import shop.nhnteam04.front.order.orders.response.OrderDetailResponse;
-import shop.nhnteam04.front.order.orders.response.OrderResponse;
-import shop.nhnteam04.front.order.orders.response.PackageResponse;
-import shop.nhnteam04.front.order.payment.PaymentConfirmRequest;
-import shop.nhnteam04.front.order.payment.PaymentResponse;
-import shop.nhnteam04.front.order.point.PointHistoryResponse;
+import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
+import shop.nhnteam04.front.order.dto.orders.request.PackageRequest;
+import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
+import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
+import shop.nhnteam04.front.order.dto.orders.response.PackageResponse;
+import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
+import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
+import shop.nhnteam04.front.order.dto.point.PointHistoryResponse;
 
 import java.util.List;
 

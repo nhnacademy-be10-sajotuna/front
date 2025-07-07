@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.order.orders.response;
+package shop.nhnteam04.front.order.dto.orders.response;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,8 @@
-package shop.nhnteam04.front.order.point;
+package shop.nhnteam04.front.order.dto.point;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import shop.nhnteam04.front.order.point.domain.Grade;
+import shop.nhnteam04.front.order.dto.point.type.Grade;
 
 @AllArgsConstructor
 @Getter

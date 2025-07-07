@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.order.orders.request;
+package shop.nhnteam04.front.order.dto.orders.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

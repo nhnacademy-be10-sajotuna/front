@@ -1,8 +1,8 @@
-package shop.nhnteam04.front.order.point;
+package shop.nhnteam04.front.order.dto.point;
 
 import lombok.Builder;
 import lombok.Getter;
-import shop.nhnteam04.front.order.point.domain.PointHistoryType;
+import shop.nhnteam04.front.order.dto.point.type.PointHistoryType;
 
 import java.time.LocalDateTime;
 

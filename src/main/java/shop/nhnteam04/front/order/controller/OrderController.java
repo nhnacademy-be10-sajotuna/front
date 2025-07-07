@@ -1,15 +1,15 @@
-package shop.nhnteam04.front.controller;
+package shop.nhnteam04.front.order.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import shop.nhnteam04.front.order.orders.request.CreateOrderRequest;
-import shop.nhnteam04.front.order.orders.response.OrderResponse;
-import shop.nhnteam04.front.order.payment.PaymentConfirmRequest;
-import shop.nhnteam04.front.order.payment.PaymentMethod;
-import shop.nhnteam04.front.service.OrderService;
+import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
+import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
+import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
+import shop.nhnteam04.front.order.dto.payment.PaymentMethod;
+import shop.nhnteam04.front.order.service.OrderService;
 
 @Slf4j
 @Controller
