@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <title>결제 창</title>
+    <!-- 토스페이먼츠 결제창 SDK 추가 -->
+    <script src="https://js.tosspayments.com/v2/standard"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+
+<body>
+<!-- 결제하기 버튼 -->
+    <button id="payment-request-button" class="btn primary w-100" onclick="tossPayment()">결제하기</button>
+    <span th:text="${orderId}"></span>
+    <span th:text="${amount}"></span>
+
+    <script type="text/javascript">
+        // chrome에서는 정상적으로 주소창 화면이 나오는데 safari에서는 안 나온다. 이유를 모르겠다
+        function tossPayment() {
+            const clientKey = "test_ck_yZqmkKeP8gWj1B0QjXRB8bQRxB9l";
+            const tossPayments = TossPayments(clientKey);
+            const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
+
+            // 토스 결제
+            payment.requestPayment({
+                method: "CARD",
+                amount: {
+                    currency: "KRW",
+                    value: 10000,
+                },
+                orderId: "dasdwedfsdfaf",
+                orderName: "책",
+                successUrl: window.location.origin + "/payment/success",
+                failUrl: window.location.origin + "/payment/fail",
+                customerName: "",
+                card: {
+                    useEscrow: false,
+                    flowMode: "DEFAULT",
+                    useCardPoint: false,
+                    useAppCardOnly: false,
+                },
+            });
+        }
+    </script>
+</body>
+</html>
