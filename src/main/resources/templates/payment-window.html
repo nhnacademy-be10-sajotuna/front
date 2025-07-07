@@ -11,9 +11,11 @@
 
 <body>
 <!-- 결제하기 버튼 -->
-    <button id="payment-request-button" class="btn primary w-100" onclick="tossPayment()">결제하기</button>
     <span th:text="${orderId}"></span>
-    <span th:text="${amount}"></span>
+    <br>
+    <div>총 결제 금액: <span th:text="${amount}"></span></div>
+    <br>
+    <button id="payment-request-button" class="btn primary w-100" onclick="tossPayment()">결제하기</button>
 
     <script type="text/javascript">
         // chrome에서는 정상적으로 주소창 화면이 나오는데 safari에서는 안 나온다. 이유를 모르겠다

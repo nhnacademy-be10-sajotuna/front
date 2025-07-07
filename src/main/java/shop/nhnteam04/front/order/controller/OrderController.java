@@ -45,7 +45,6 @@ public class OrderController {
     // 주문 상세 정보
     @GetMapping("/detail")
     public ModelAndView OrderDetail(@RequestParam("orderId") long orderId) {
-        // TODO: html 만들기
         ModelAndView mav = new ModelAndView("order-detail");
 
         OrderDetailResponse response = orderService.getOrder(orderId);
