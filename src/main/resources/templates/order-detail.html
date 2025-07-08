@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <title>주문 조회 상세</title>
+</head>
+<body>
+    <div><strong>주문 조회 상세</strong></div>
+    <span th:text="${orderDetail.getOrderNumber()}"></span>
+    <span th:text="${orderDetail.getOrderCreatedAt()}"></span>
+    <span th:text="${orderDetail.getPaymentAmount()}"></span>
+</body>
+</html>

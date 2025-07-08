@@ -1,70 +1,75 @@
 package shop.nhnteam04.front.order.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
-import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
-import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
-import shop.nhnteam04.front.order.dto.payment.PaymentMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.order.service.OrderService;
+import shop.nhnteam04.front.order.service.PaymentService;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/order")
 public class OrderController {
-
     private final OrderService orderService;
+    private final PaymentService paymentService;
 
-    // 결제 창
-    @GetMapping("/order/payment")
-    public ModelAndView userOrderForm(@RequestHeader(value = "X-User-Id", required = false) Long userId) {
-        ModelAndView mav = new ModelAndView("payment");
+    // 주문서 작성
+    @GetMapping
+    public ModelAndView orderForm(@AuthenticationPrincipal SecurityUser user){
+        ModelAndView mav = new ModelAndView("order-window");
+
+        // TODO: 장바구니에 있는 상품들 가져오기
 
         // TODO: 회원의 사용 가능 포인트 조회
-        /*
-        if(userId != null) {
-            //int point = orderService.getAvailablePoint(userId);
-            //mav.addObject("point", point);
+        if(user != null) {
+            int point = paymentService.getAvailablePoint(user.getId());
+            mav.addObject("point", point);
+            mav.addObject("userId", user.getId());
         }
-        */
-
-        mav.addObject("userId", userId);
 
         return mav;
     }
 
-    // 주문 생성
-    @PostMapping("/order/payment")
-    public OrderResponse createOrder(@RequestHeader(value = "X-User-Id", required = false) Long userId, @RequestBody CreateOrderRequest request){
-        return orderService.createOrder(userId, request);
+    @PostMapping
+    public String order(HttpServletRequest req, RedirectAttributes re){
+        String userId = req.getParameter("userId");
+        String ordererName = req.getParameter("ordererName");
+        String expectedDeliveryDate = orderService.convertTime(req.getParameter("expectedDeliveryDate"));
+
+        /*
+        CreateOrderRequest request = CreateOrderRequest.builder()
+                .ordererName(ordererName)
+                .build();
+
+        OrderResponse orderResponse = orderService.createOrder(userId, request);
+
+        re.addAttribute("orderNumber", orderResponse.getOrderNumber());
+        re.addAttribute("finalPrice", orderResponse.getFinalPrice());
+        */
+
+        re.addAttribute("orderNumber", "wdawdrfsedfcdsw");
+
+        return "redirect:/payment";
     }
 
-    // 토스 결제 완료
-    @GetMapping("/order/payment/success")
-    public String paymentSuccess(@RequestParam("orderId") String orderId,
-            @RequestParam("paymentKey") String paymentKey,
-            @RequestParam("amount") int amount
-    ) {
-        PaymentConfirmRequest request = PaymentConfirmRequest.builder()
-                .paymentMethod(PaymentMethod.TOSS)
-                .orderNumber(orderId)
-                .paymentKey(paymentKey)
-                .amount(amount).build();
-
-        log.info("PaymentConfirmRequest: {}", request);
-
-        // TODO: 결제 승인
-        //PaymentResponse response = orderService.confirmPayment(request);
-
-        return "payment-success";
+    // 주문 취소
+    @PostMapping("/cancel")
+    public String cancelOrder(@RequestParam("orderId") long orderId) {
+        return "redirect:/order/my-list";
     }
 
-    // 결제 실패
-    @GetMapping("/order/payment/fail")
-    public String paymentFail() {
-        return "payment-fail";
+    // 주문 반품
+    @PostMapping("/return")
+    public String returnOrder(@AuthenticationPrincipal SecurityUser user,
+                              @RequestParam("orderId") long orderId) {
+        return "redirect:/order/my-list";
     }
+
 }

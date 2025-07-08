@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      lang="ko">
+    lang="ko">
     <head>
         <meta charset="utf-8" />
-        <title>결제 창</title>
+        <title>주문 창</title>
         <!-- 토스페이먼츠 결제창 SDK 추가 -->
         <script src="https://js.tosspayments.com/v2/standard"></script>
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     </head>
     <body>
     <!-- 결제하기 버튼 -->
-        <form id="payment-form">
+        <form id="payment-form" method="post" action="/order">
             <div><strong>주문자 정보</strong></div>
             <input type="text" name="ordererName" placeholder="이름" required/><br>
             <input name="ordererPhoneNumber" placeholder="예) 010-1234-5678" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" required/><br>
@@ -37,7 +37,7 @@
             <br><hr/><br>
 
             <!-- 쿠폰, 포인트 -->
-            <input th:value="${userId}" name="userId" readonly/>
+            <input th:value="${userId}" name="userId" readonly type="hidden"/>
             <div th:if="${userId}">
                 <div><strong>쿠폰, 포인트</strong></div>
                 <a>사용 가능 포인트: 1000원</a><br>
@@ -53,7 +53,7 @@
                 <div>총 결제금액: 9000원</div>
             </div>
 
-            <button class="button" type="submit" style="margin-top: 20px">결제하기</button>
+            <button class="button" type="submit" style="margin-top: 20px">주문하기</button>
         </form>
 
         <script type="text/javascript">
@@ -91,98 +91,6 @@
                         document.getElementById("UserAdd1").value += extraAddr;
                     }
                 }).open();
-            }
-
-            // 토스 결제 api
-            const form = document.getElementById('payment-form');
-            const clientKey = "test_ck_yZqmkKeP8gWj1B0QjXRB8bQRxB9l";
-            const tossPayments = TossPayments(clientKey);
-            const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
-
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                // input에 입력된 데이터들을 가져옴
-                const data = new FormData(form);
-                const formattedTime = formatTime(data.get('expectedDeliveryDate'));
-
-                const body = {
-                    ordererName: data.get('ordererName'),
-                    ordererPhoneNumber: data.get('ordererPhoneNumber'),
-                    ordererEmail: data.get('ordererEmail'),
-                    recipientName: data.get('recipientName'),
-                    recipientPhoneNumber: data.get('recipientPhoneNumber'),
-                    recipientEmail: data.get('recipientEmail'),
-                    recipientAddress: data.get('recipientAddress'),
-                    expectedDeliveryDate: formattedTime,
-                    usedPoint: data.get('usedPoint'),
-                    orderCouponId: null,
-                }
-
-                // 주문 저장
-                // TODO: 제대로 되는지 확인 필요
-                const userId = data.get('userId')
-
-                let res;
-                const headers = {
-                    'content-type': 'application/json',
-                };
-
-                if(userId){
-                    headers['X-User-Id'] = userId;
-                }
-
-                try {
-                    res = await fetch('/api/orders', {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify(body)
-                    });
-                } catch (err) {
-                    return alert('서버 통신에 실패했습니다.');
-                }
-
-                if (!res.ok) {
-                    const err = await res.json();
-                    return alert(`주문 생성 실패: ${err.error || res.statusText}`);
-                }
-                const { orderNumber, finalPrice } = await res.json();
-
-
-                // 토스 결제
-                payment.requestPayment({
-                    method: "CARD",
-                    amount: {
-                        currency: "KRW",
-                        value: finalPrice,
-                    },
-                    orderId: orderNumber,
-                    orderName: "책",
-                    successUrl: window.location.origin + "/payment/success",
-                    failUrl: window.location.origin + "/payment/fail",
-                    customerName: "",
-                    card: {
-                        useEscrow: false,
-                        flowMode: "DEFAULT",
-                        useCardPoint: false,
-                        useAppCardOnly: false,
-                    },
-                });
-            })
-
-            // yyyyMMddHHmmss 포맷 함수
-            function formatTime(datetimeLocalValue){
-                const dt = new Date(datetimeLocalValue);
-                const pad2 = num => String(num).padStart(2, '0');
-
-                const year   = dt.getFullYear();
-                const month  = pad2(dt.getMonth() + 1);
-                const day    = pad2(dt.getDate());
-                const hour   = pad2(dt.getHours());
-                const minute = pad2(dt.getMinutes());
-                const second = pad2(dt.getSeconds());  // 만약 seconds가 포함되지 않은 input이라면 항상 "00"이 됩니다.
-
-                return `${year}${month}${day}${hour}${minute}${second}`;
             }
         </script>
     </body>
