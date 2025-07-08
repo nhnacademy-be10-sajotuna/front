@@ -245,7 +245,7 @@
             <div class="content-body">
                 <div class="point-summary">
                     <h3>현재 보유 포인트</h3>
-                    <p>0 P</p>
+                    <p th:text="${availablePoint} + ' P'">0 P</p>
                 </div>
 
                 <div th:if="${pointHistory != null and #lists.size(pointHistory) > 0}">
@@ -254,7 +254,6 @@
                             <tr>
                                 <th>날짜</th>
                                 <th>내용</th>
-                                <th>구분</th>
                                 <th>포인트</th>
                             </tr>
                         </thead>
@@ -262,7 +261,6 @@
                             <tr th:each="point : ${pointHistory}">
                                 <td th:text="${#temporals.format(point.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 12:00</td>
                                 <td th:text="${point.description}">주문 적립</td>
-                                <td th:text="${point.type}">EARNED</td>
                                 <td th:class="${point.type.name() == 'EARNED'} ? 'point-earned' : 'point-used'">
                                     <span th:if="${point.type.name() == 'EARNED'}" th:text="'+' + ${point.amount}">+100</span>
                                     <span th:if="${point.type.name() == 'REDEEMED'}" th:text="'-' + ${point.amount}">-100</span>

@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.order.dto.point.PointHistoryResponse;
-import shop.nhnteam04.front.point.adapter.PointFeignClient;
+import shop.nhnteam04.front.feign.point.PointFeignClient;
 
 
 @Service
@@ -19,5 +19,12 @@ public class PointService {
             throw new IllegalArgumentException("Invalid user ID");
         }
         return pointFeignClient.getPointHistory(userId, pageable);
+    }
+
+    public Integer getAvailablePoint(Long userId) {
+        if (userId == null || userId < 0) {
+            throw new IllegalArgumentException("Invalid user ID");
+        }
+        return pointFeignClient.getAvailablePoint(userId);
     }
 }

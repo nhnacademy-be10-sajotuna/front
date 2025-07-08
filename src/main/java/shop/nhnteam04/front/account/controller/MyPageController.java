@@ -17,6 +17,8 @@ import shop.nhnteam04.front.account.service.LoginService;
 import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.account.user.request.EditRequestUser;
 import shop.nhnteam04.front.account.user.response.ResponseUserWithPolicy;
+import shop.nhnteam04.front.coupon.dto.response.UserCouponDetailResponse;
+import shop.nhnteam04.front.coupon.service.CouponService;
 import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
 import shop.nhnteam04.front.order.dto.point.PointHistoryResponse;
@@ -36,6 +38,7 @@ public class MyPageController {
     private final PointService pointService;
     private final LoginService loginService;
     private final AddressService addressService;
+    private final CouponService couponService;
 
     // 유저 주문 내역
     @GetMapping("/orders")
@@ -64,7 +67,9 @@ public class MyPageController {
         ModelAndView mav = new ModelAndView("mypage/point-history");
         
         Page<PointHistoryResponse> pointHistoryPage = pointService.getPointHistory(user.getId(), pageable);
+        int availablePoint = pointService.getAvailablePoint(user.getId());
         mav.addObject("pointHistory", pointHistoryPage.getContent());
+        mav.addObject("availablePoint", availablePoint);
         
         // 페이징 정보 추가
         mav.addObject("currentPage", pointHistoryPage.getNumber());
@@ -86,8 +91,8 @@ public class MyPageController {
         ModelAndView mav = new ModelAndView("mypage/coupons");
         
         // TODO: 쿠폰 서비스 구현 필요
-        // List<CouponResponse> myCoupons = couponService.getUserCoupons(user.getId());
-        // mav.addObject("coupons", myCoupons);
+         List<UserCouponDetailResponse> myCoupons = couponService.getUserCoupons(user.getId());
+         mav.addObject("coupons", myCoupons);
         
         return mav;
     }
