@@ -15,7 +15,7 @@ import shop.nhnteam04.front.account.user.response.ResponseUserWithPolicy;
 
 import java.util.List;
 
-@FeignClient(name= "gateway/account-api")
+@FeignClient(name = "gateway/account-api")
 public interface AccountFeignClient {
     @PostMapping("/api/users/login")
     public LoginResponse login(@RequestBody LoginRequestUser loginRequestUser);

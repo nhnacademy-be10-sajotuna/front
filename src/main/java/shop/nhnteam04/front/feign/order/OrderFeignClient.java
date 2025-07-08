@@ -16,7 +16,7 @@ import shop.nhnteam04.front.order.dto.point.PointHistoryResponse;
 
 import java.util.List;
 
-@FeignClient(name= "order-api")
+@FeignClient(name = "gateway/order-api")
 public interface OrderFeignClient {
 
     // orders
@@ -63,5 +63,7 @@ public interface OrderFeignClient {
     Integer getAvailablePoint(@RequestHeader("X-User-Id") Long userId);
 
 
-
+    // review
+    @GetMapping("/api/orders/product/review-eligible/{userId}/{isbn}")
+    boolean isEligibleForReview(@PathVariable Long userId, @PathVariable String isbn);
 }
