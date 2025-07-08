@@ -20,6 +20,9 @@ import java.util.List;
 public interface OrderFeignClient {
 
     // orders
+    @GetMapping("/api/orders/info/{order-number}")
+    OrderInfoResponse getOrderInfo(@PathVariable("order-number") String orderNumber);
+
     @GetMapping("/api/orders/{order-id}")
     OrderDetailResponse getOrder(@PathVariable("order-id") Long orderId);
 

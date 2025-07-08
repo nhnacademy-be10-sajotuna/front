@@ -20,6 +20,13 @@ public class OrderService {
 
     private final OrderFeignClient orderFeignClient;
 
+    public OrderInfoResponse getOrderInfo(String orderNumber) {
+        if(orderNumber == null) {
+            throw new IllegalArgumentException();
+        }
+        return orderFeignClient.getOrderInfo(orderNumber);
+    }
+
     // 회원의 주문내역 조회
     public List<OrderInfoResponse> getUserOrders(Long userId, Pageable pageable){
         if(userId < 0){

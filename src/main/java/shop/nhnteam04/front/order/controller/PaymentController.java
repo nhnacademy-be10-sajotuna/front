@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
 import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
 import shop.nhnteam04.front.order.dto.payment.PaymentMethod;
 import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
+import shop.nhnteam04.front.order.service.OrderService;
 import shop.nhnteam04.front.order.service.PaymentService;
 
 @Slf4j
@@ -16,15 +18,18 @@ import shop.nhnteam04.front.order.service.PaymentService;
 @RequestMapping("/payment")
 public class PaymentController {
 
+    private final OrderService orderService;
     private final PaymentService paymentService;
 
     // 결제 창
     @GetMapping
-    public ModelAndView paymentPage(@RequestParam String orderNumber, @RequestParam String finalPrice) {
+    public ModelAndView paymentPage(@RequestParam String orderNumber) {
         ModelAndView mav = new ModelAndView("payment-window");
 
+        OrderInfoResponse response = orderService.getOrderInfo(orderNumber);
+
         mav.addObject("orderId", orderNumber);
-        mav.addObject("amount", finalPrice);
+        mav.addObject("amount", response.getFinalPrice());
 
         return mav;
     }
