@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>리뷰 수정</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/review.css}">
+</head>
+<body>
+<section layout:fragment="content">
+  <div class="review-container review-form-container">
+    <h2>리뷰 수정</h2>
+    <form th:action="@{|/reviews/${review.id}/edit|}" th:object="${reviewUpdateRequest}" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="isbn" th:value="${isbn}"/>
+      <input type="hidden" name="oldFilePath" th:value="${review.filePath}" />
+
+      <div th:replace="~{fragments/form_fields :: reviewForm}"></div>
+
+      <div class="current-image-group">
+        <label>기존 사진</label>
+        <div th:if="${review.filePath != null}">
+          <img th:src="@{|/images/${review.filePath}|}" alt="기존 리뷰 이미지"/>
+        </div>
+        <span th:if="${review.filePath == null}">첨부된 사진이 없습니다.</span>
+      </div>
+      <div class="form-actions">
+        <a th:href="@{|/reviews?isbn=${isbn}|}" class="action-button btn-cancel full-width">목록으로</a>
+        <button type="submit" class="action-button btn-primary full-width">리뷰 수정</button>
+      </div>
+      <div th:if="${#fields.hasErrors('*')}" class="error-message">
+        <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+      </div>
+      <div th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></div>
+    </form>
+  </div>
+</section>
+</body>
+</html>

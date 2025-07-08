@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>리뷰 작성</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/review.css}">
+</head>
+<body>
+<section layout:fragment="content">
+  <div class="review-container review-form-container">
+    <h2>리뷰 작성</h2>
+    <form th:action="@{/reviews/create}" th:object="${reviewCreateRequest}" method="post" enctype="multipart/form-data">
+      <input type="hidden" th:field="*{isbn}" />
+
+      <div th:replace="~{fragments/form_fields :: reviewForm}"></div>
+
+      <div class="form-actions">
+        <a th:href="@{/reviews(isbn=${isbn})}" class="action-button btn-cancel full-width">목록으로</a>
+        <button type="submit" class="action-button btn-primary full-width">리뷰 등록</button>
+      </div>
+    </form>
+  </div>
+</section>
+</body>
+</html>

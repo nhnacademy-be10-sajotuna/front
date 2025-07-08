@@ -1,0 +1,179 @@
+/* =================================================================
+   공통 컨테이너 및 기본 스타일
+================================================================= */
+.review-container {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    width: 100%;
+}
+
+.review-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+/* 메시지 박스 */
+.message, .error-message {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.message {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* =================================================================
+   폼 스타일 (리뷰 작성 & 수정)
+================================================================= */
+.review-form-container {
+    max-width: 550px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-group select,
+.form-group textarea,
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    font-family: inherit;
+    box-sizing: border-box; /* 패딩과 테두리가 너비에 포함되도록 설정 */
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* 기존 이미지 (수정 페이지) */
+.current-image-group {
+    margin-bottom: 1.5rem;
+}
+
+.current-image-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.current-image-group img {
+    max-width: 120px;
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+}
+
+/* =================================================================
+   목록 스타일
+================================================================= */
+.review-list-container {
+    max-width: 900px;
+}
+
+.review-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+.review-table th, .review-table td {
+    padding: 0.9rem;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.review-table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.review-table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.review-image-thumbnail {
+    max-width: 100px;
+    border-radius: 0.5rem;
+}
+
+/* =================================================================
+   버튼 및 링크 스타일
+================================================================= */
+.form-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.list-actions-footer {
+    text-align: right;
+    margin-top: 1.5rem;
+}
+
+.action-button, .button-link {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.5rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.action-button.full-width {
+    width: 100%;
+}
+
+/* 주요 액션 버튼 (등록, 작성 등) */
+.btn-primary {
+    background-color: #5c9ded;
+}
+.btn-primary:hover {
+    background-color: #417fde;
+}
+
+/* 보조 액션 버튼 (수정 등) */
+.btn-secondary {
+    background-color: #007bff;
+}
+.btn-secondary:hover {
+    background-color: #0069d9;
+}
+
+/* 취소/목록 버튼 */
+.btn-cancel {
+    background-color: #6c757d;
+}
+.btn-cancel:hover {
+    background-color: #5a6268;
+}

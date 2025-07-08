@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="reviewForm">
+
+    <style>
+        .star-rating-input { display: flex; flex-direction: row-reverse; justify-content: flex-end; font-size: 2rem; }
+        .star-rating-input input[type="radio"] { display: none; }
+        .star-rating-input label { color: #ddd; cursor: pointer; transition: color 0.2s; }
+        .star-rating-input label:hover,
+        .star-rating-input label:hover ~ label { color: #f8ce0b; }
+        .star-rating-input input[type="radio"]:checked ~ label { color: #f8ce0b; }
+        .rating-container { display: flex; align-items: center; gap: 15px; }
+        .rating-text { font-size: 1.1rem; font-weight: bold; color: #333; min-width: 80px; }
+    </style>
+
+    <div class="form-group">
+        <label>평점</label>
+        <div class="rating-container">
+            <div class="star-rating-input">
+                <input type="radio" id="rate5" th:field="*{rating}" value="5" required><label for="rate5">⭐</label>
+                <input type="radio" id="rate4" th:field="*{rating}" value="4" required><label for="rate4">⭐</label>
+                <input type="radio" id="rate3" th:field="*{rating}" value="3" required><label for="rate3">⭐</label>
+                <input type="radio" id="rate2" th:field="*{rating}" value="2" required><label for="rate2">⭐</label>
+                <input type="radio" id="rate1" th:field="*{rating}" value="1" required><label for="rate1">⭐</label>
+            </div>
+            <span id="rating-display" class="rating-text"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content">리뷰 내용</label>
+        <textarea id="content" th:field="*{content}" required></textarea>
+    </div>
+    <div>
+        <label for="reviewImage">리뷰 내용 사진 첨부 (선택)</label>
+        <input type="file" id="reviewImage" name="reviewImage" accept="image/*">
+    </div>
+
+    <script>
+        document.getElementById('reviewImage').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.type.startsWith('image/')) {
+                    alert('이미지 파일이 맞습니다.');
+                } else {
+                    alert('이미지 파일이 아닙니다. 이미지 파일만 선택해주세요.');
+                    event.target.value = ''; // 선택 초기화
+                }
+            }
+        });
+    </script>
+
+    <script th:inline="javascript">
+        // 중복 실행을 막기 위한 플래그
+        if (typeof window.starRatingInitialized === 'undefined') {
+            window.starRatingInitialized = true;
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const ratingContainer = document.querySelector('.rating-container');
+                if (ratingContainer) {
+                    const ratingInputs = ratingContainer.querySelectorAll('.star-rating-input input[type="radio"]');
+                    const ratingDisplay = ratingContainer.querySelector('#rating-display');
+
+                    const updateRatingDisplay = () => {
+                        const checkedInput = ratingContainer.querySelector('input[type="radio"]:checked');
+                        if (checkedInput) {
+                            ratingDisplay.textContent = `( ${checkedInput.value}점 )`;
+                        } else {
+                            ratingDisplay.textContent = '( 점수 선택 )';
+                        }
+                    };
+
+                    ratingInputs.forEach(input => {
+                        input.addEventListener('change', updateRatingDisplay);
+                    });
+
+                    updateRatingDisplay();
+                }
+            });
+        }
+    </script>
+</div>
+</html>
