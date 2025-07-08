@@ -71,7 +71,7 @@ public class PaymentController {
     public ModelAndView paymentSuccess(@RequestParam("orderNumber") String orderNumber,
                                        @RequestParam("amount") int amount,
                                        @RequestParam("paymentKey") String paymentKey) {
-        ModelAndView mav = new ModelAndView("payment/toss-payment-success");
+        ModelAndView mav = new ModelAndView("payment/payment-success");
 
         PaymentConfirmRequest request = PaymentConfirmRequest.builder()
                 .paymentMethod(PaymentMethod.TOSS)
