@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
     <title>주문 완료</title>
 </head>
 
 <body>
     <h2>주문이 완료되었습니다.</h2>
 
-    <div><span th:text="${orderId}"></span></div>
-    <div><span th:text="${amount}"></span></div><br>
+    <span th:text="${orderId}"></span>
+    <span th:text="${amount}"></span><br>
 
     <button onclick="location.href='/'">완료</button>
 </body>

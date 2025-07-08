@@ -15,7 +15,15 @@
     <br>
     <div>총 결제 금액: <span th:text="${amount}"></span></div>
     <br>
-    <button id="payment-request-button" class="btn primary w-100" onclick="tossPayment()">결제하기</button>
+
+    <form method="post" action="/payment">
+        <input type="hidden" name="orderId" th:value="${orderId}">
+        <input type="hidden" name="amount" th:value="${amount}">
+
+        <button class="btn primary w-100" type="submit">일반 결제하기</button>
+    </form>
+
+    <button class="btn primary w-100" onclick="tossPayment()">토스 결제하기</button>
 
     <script type="text/javascript">
         // chrome에서는 정상적으로 주소창 화면이 나오는데 safari에서는 안 나온다. 이유를 모르겠다
@@ -33,7 +41,7 @@
                 },
                 orderId: "dasdwedfsdfaf",
                 orderName: "책",
-                successUrl: window.location.origin + "/payment/success",
+                successUrl: window.location.origin + "/payment/toss/success",
                 failUrl: window.location.origin + "/payment/fail",
                 customerName: "",
                 card: {
