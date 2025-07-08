@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,8 +26,11 @@ public class OrderProductRequest {
     @PositiveOrZero
     private int amount;
 
-    //TODO: 상품 쿠폰 추가
+    private Long bookCouponId;
 
     @NotNull
     private Boolean packagingRequest;
+
+    // 카테고리 ID 목록 (선택적)
+    private Set<Long> categoryIds;
 }

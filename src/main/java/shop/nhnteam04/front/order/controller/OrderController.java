@@ -59,6 +59,8 @@ public class OrderController {
     public ModelAndView orderForm(@AuthenticationPrincipal SecurityUser user){
         ModelAndView mav = new ModelAndView("order-window");
 
+        // TODO: 장바구니에 있는 상품들 가져오기
+
         // TODO: 회원의 사용 가능 포인트 조회
         if(user != null) {
             int point = paymentService.getAvailablePoint(user.getId());
@@ -80,7 +82,7 @@ public class OrderController {
                 .ordererName(ordererName)
                 .build();
 
-        OrderResponse orderResponse = orderService.createOrder(null, request);
+        OrderResponse orderResponse = orderService.createOrder(userId, request);
 
         re.addAttribute("orderNumber", orderResponse.getOrderNumber());
         re.addAttribute("finalPrice", orderResponse.getFinalPrice());
