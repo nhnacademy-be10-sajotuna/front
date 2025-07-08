@@ -1,253 +1,253 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
-<head>
-    <title>마이페이지</title>
-    <style>
-        /* layout.html의 main 스타일 오버라이드 */
-        main {
-            padding: 0 !important;
-            background: linear-gradient(135deg, #f5f7fa, #dbe9f4) !important;
-            display: block !important;
-            justify-content: unset !important;
-            align-items: unset !important;
-        }
-        
-        .mypage-container {
-            display: flex;
-            gap: 0;
-            min-height: 100vh;
-            width: 100%;
-        }
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--      layout:decorate="~{layout}">-->
+<!--<head>-->
+<!--    <title>마이페이지</title>-->
+<!--    <style>-->
+<!--        /* layout.html의 main 스타일 오버라이드 */-->
+<!--        main {-->
+<!--            padding: 0 !important;-->
+<!--            background: linear-gradient(135deg, #f5f7fa, #dbe9f4) !important;-->
+<!--            display: block !important;-->
+<!--            justify-content: unset !important;-->
+<!--            align-items: unset !important;-->
+<!--        }-->
+<!--        -->
+<!--        .mypage-container {-->
+<!--            display: flex;-->
+<!--            gap: 0;-->
+<!--            min-height: 100vh;-->
+<!--            width: 100%;-->
+<!--        }-->
 
-        .sidebar {
-            width: 250px;
-            background-color: #fff;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            height: calc(100vh - 60px);
-            position: fixed;
-            left: 0;
-            top: 60px;
-            overflow-y: auto;
-        }
+<!--        .sidebar {-->
+<!--            width: 250px;-->
+<!--            background-color: #fff;-->
+<!--            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);-->
+<!--            padding: 2rem;-->
+<!--            height: calc(100vh - 60px);-->
+<!--            position: fixed;-->
+<!--            left: 0;-->
+<!--            top: 60px;-->
+<!--            overflow-y: auto;-->
+<!--        }-->
 
-        .sidebar h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #5c9ded;
-            padding-bottom: 0.5rem;
-        }
+<!--        .sidebar h3 {-->
+<!--            color: #333;-->
+<!--            margin-bottom: 1.5rem;-->
+<!--            border-bottom: 2px solid #5c9ded;-->
+<!--            padding-bottom: 0.5rem;-->
+<!--        }-->
 
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+<!--        .sidebar-menu {-->
+<!--            list-style: none;-->
+<!--            padding: 0;-->
+<!--            margin: 0;-->
+<!--        }-->
 
-        .sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
+<!--        .sidebar-menu li {-->
+<!--            margin-bottom: 0.5rem;-->
+<!--        }-->
 
-        .sidebar-menu a {
-            display: block;
-            padding: 0.8rem 1rem;
-            color: #666;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
+<!--        .sidebar-menu a {-->
+<!--            display: block;-->
+<!--            padding: 0.8rem 1rem;-->
+<!--            color: #666;-->
+<!--            text-decoration: none;-->
+<!--            border-radius: 0.5rem;-->
+<!--            transition: all 0.3s ease;-->
+<!--        }-->
 
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background-color: #5c9ded;
-            color: white;
-        }
+<!--        .sidebar-menu a:hover,-->
+<!--        .sidebar-menu a.active {-->
+<!--            background-color: #5c9ded;-->
+<!--            color: white;-->
+<!--        }-->
 
-        .content-area {
-            flex: 1;
-            background-color: #fff;
-            padding: 2rem;
-            margin-left: 250px;
-            margin-top: 60px;
-            min-height: calc(100vh - 60px);
-            width: calc(100% - 250px);
-        }
+<!--        .content-area {-->
+<!--            flex: 1;-->
+<!--            background-color: #fff;-->
+<!--            padding: 2rem;-->
+<!--            margin-left: 250px;-->
+<!--            margin-top: 60px;-->
+<!--            min-height: calc(100vh - 60px);-->
+<!--            width: calc(100% - 250px);-->
+<!--        }-->
 
-        .content-area h2 {
-            color: #333;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid #5c9ded;
-            padding-bottom: 0.5rem;
-        }
+<!--        .content-area h2 {-->
+<!--            color: #333;-->
+<!--            margin-bottom: 2rem;-->
+<!--            border-bottom: 2px solid #5c9ded;-->
+<!--            padding-bottom: 0.5rem;-->
+<!--        }-->
 
-        .profile-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
+<!--        .profile-info {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: 1fr 1fr;-->
+<!--            gap: 2rem;-->
+<!--            margin-bottom: 2rem;-->
+<!--        }-->
 
-        .info-group {
-            margin-bottom: 1rem;
-        }
+<!--        .info-group {-->
+<!--            margin-bottom: 1rem;-->
+<!--        }-->
 
-        .info-group strong {
-            display: block;
-            font-size: 0.9rem;
-            color: #777;
-            margin-bottom: 0.3rem;
-        }
+<!--        .info-group strong {-->
+<!--            display: block;-->
+<!--            font-size: 0.9rem;-->
+<!--            color: #777;-->
+<!--            margin-bottom: 0.3rem;-->
+<!--        }-->
 
-        .info-group span {
-            font-size: 1.1rem;
-            color: #333;
-        }
+<!--        .info-group span {-->
+<!--            font-size: 1.1rem;-->
+<!--            color: #333;-->
+<!--        }-->
 
-        .grade-box {
-            grid-column: 1 / -1;
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background-color: #f0f8ff;
-            border-left: 5px solid #5c9ded;
-            border-radius: 0.5rem;
-        }
+<!--        .grade-box {-->
+<!--            grid-column: 1 / -1;-->
+<!--            margin-top: 1.5rem;-->
+<!--            padding: 1.5rem;-->
+<!--            background-color: #f0f8ff;-->
+<!--            border-left: 5px solid #5c9ded;-->
+<!--            border-radius: 0.5rem;-->
+<!--        }-->
 
-        .grade-box p {
-            margin: 0.4rem 0;
-            color: #444;
-            font-size: 0.95rem;
-        }
+<!--        .grade-box p {-->
+<!--            margin: 0.4rem 0;-->
+<!--            color: #444;-->
+<!--            font-size: 0.95rem;-->
+<!--        }-->
 
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
+<!--        .action-buttons {-->
+<!--            display: flex;-->
+<!--            gap: 1rem;-->
+<!--            margin-top: 2rem;-->
+<!--        }-->
 
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
+<!--        .btn {-->
+<!--            padding: 0.8rem 1.5rem;-->
+<!--            border: none;-->
+<!--            border-radius: 0.5rem;-->
+<!--            cursor: pointer;-->
+<!--            font-weight: bold;-->
+<!--            transition: background-color 0.3s ease;-->
+<!--            text-decoration: none;-->
+<!--            display: inline-block;-->
+<!--            text-align: center;-->
+<!--        }-->
 
-        .btn-primary {
-            background-color: #5c9ded;
-            color: white;
-        }
+<!--        .btn-primary {-->
+<!--            background-color: #5c9ded;-->
+<!--            color: white;-->
+<!--        }-->
 
-        .btn-primary:hover {
-            background-color: #417fde;
-        }
+<!--        .btn-primary:hover {-->
+<!--            background-color: #417fde;-->
+<!--        }-->
 
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-        }
+<!--        .btn-danger {-->
+<!--            background-color: #dc3545;-->
+<!--            color: white;-->
+<!--        }-->
 
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
+<!--        .btn-danger:hover {-->
+<!--            background-color: #c82333;-->
+<!--        }-->
 
-        @media (max-width: 768px) {
-            .mypage-container {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            
-            .sidebar {
-                width: 100%;
-                order: 2;
-            }
-            
-            .content-area {
-                order: 1;
-            }
-            
-            .profile-info {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-<section layout:fragment="content">
-    <div class="mypage-container">
-        <div class="sidebar">
-            <h3>마이페이지</h3>
-            <ul class="sidebar-menu">
-                <li><a href="/my-page" class="active">회원 정보</a></li>
-                <li><a href="/my-page/order-list">주문 내역</a></li>
-                <li><a href="/my-page/address">주소 관리</a></li>
-                <li><a href="/my-page/point-history">포인트 내역</a></li>
-                <li><a href="/my-page/coupons">내 쿠폰</a></li>
-            </ul>
-        </div>
+<!--        @media (max-width: 768px) {-->
+<!--            .mypage-container {-->
+<!--                flex-direction: column;-->
+<!--                padding: 1rem;-->
+<!--            }-->
+<!--            -->
+<!--            .sidebar {-->
+<!--                width: 100%;-->
+<!--                order: 2;-->
+<!--            }-->
+<!--            -->
+<!--            .content-area {-->
+<!--                order: 1;-->
+<!--            }-->
+<!--            -->
+<!--            .profile-info {-->
+<!--                grid-template-columns: 1fr;-->
+<!--            }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<section layout:fragment="content">-->
+<!--    <div class="mypage-container">-->
+<!--        <div class="sidebar">-->
+<!--            <h3>마이페이지</h3>-->
+<!--            <ul class="sidebar-menu">-->
+<!--                <li><a href="/my-page" class="active">회원 정보</a></li>-->
+<!--                <li><a href="/my-page/order-list">주문 내역</a></li>-->
+<!--                <li><a href="/my-page/address">주소 관리</a></li>-->
+<!--                <li><a href="/my-page/point-history">포인트 내역</a></li>-->
+<!--                <li><a href="/my-page/coupons">내 쿠폰</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
 
-        <div class="content-area">
-            <h2 th:text="${user.name} + ' 님의 정보'">회원 정보</h2>
+<!--        <div class="content-area">-->
+<!--            <h2 th:text="${user.name} + ' 님의 정보'">회원 정보</h2>-->
 
-            <div class="profile-info">
-                <div class="info-group">
-                    <strong>이메일</strong>
-                    <span th:text="${user.email}">qwer12345@naver.com</span>
-                </div>
+<!--            <div class="profile-info">-->
+<!--                <div class="info-group">-->
+<!--                    <strong>이메일</strong>-->
+<!--                    <span th:text="${user.email}">qwer12345@naver.com</span>-->
+<!--                </div>-->
 
-                <div class="info-group">
-                    <strong>전화번호</strong>
-                    <span th:text="${user.phoneNumber}">010-2222-3333</span>
-                </div>
+<!--                <div class="info-group">-->
+<!--                    <strong>전화번호</strong>-->
+<!--                    <span th:text="${user.phoneNumber}">010-2222-3333</span>-->
+<!--                </div>-->
 
-                <div class="info-group">
-                    <strong>생년월일</strong>
-                    <span th:text="${#temporals.format(user.birthDate, 'yyyy-MM-dd')}">1996-06-01</span>
-                </div>
+<!--                <div class="info-group">-->
+<!--                    <strong>생년월일</strong>-->
+<!--                    <span th:text="${#temporals.format(user.birthDate, 'yyyy-MM-dd')}">1996-06-01</span>-->
+<!--                </div>-->
 
-                <div class="info-group">
-                    <strong>가입일</strong>
-                    <span th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">2025-06-17</span>
-                </div>
+<!--                <div class="info-group">-->
+<!--                    <strong>가입일</strong>-->
+<!--                    <span th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">2025-06-17</span>-->
+<!--                </div>-->
 
-                <div class="info-group">
-                    <strong>최근 로그인</strong>
-                    <span th:text="${#temporals.format(user.currentLoginAt, 'yyyy-MM-dd HH:mm')}">2025-06-17</span>
-                </div>
+<!--                <div class="info-group">-->
+<!--                    <strong>최근 로그인</strong>-->
+<!--                    <span th:text="${#temporals.format(user.currentLoginAt, 'yyyy-MM-dd HH:mm')}">2025-06-17</span>-->
+<!--                </div>-->
 
-                <div class="info-group">
-                    <strong>회원 상태</strong>
-                    <span th:text="${user.status}">ACTIVE</span>
-                </div>
+<!--                <div class="info-group">-->
+<!--                    <strong>회원 상태</strong>-->
+<!--                    <span th:text="${user.status}">ACTIVE</span>-->
+<!--                </div>-->
 
-                <div class="info-group">
-                    <strong>인증 방식</strong>
-                    <span th:text="${user.authType}">LOCAL</span>
-                </div>
+<!--                <div class="info-group">-->
+<!--                    <strong>인증 방식</strong>-->
+<!--                    <span th:text="${user.authType}">LOCAL</span>-->
+<!--                </div>-->
 
-                <div class="grade-box">
-                    <strong>등급 정책</strong>
-                    <p>등급: <span th:text="${user.userGradePolicyDto.grade}">GENERAL</span></p>
-                    <p>최소 금액: <span th:text="${user.userGradePolicyDto.minTotalOrderPrice}">0</span>원</p>
-                    <p>최대 금액: <span th:text="${user.userGradePolicyDto.maxTotalOrderPrice}">100000</span>원</p>
-                    <p>적립률: <span th:text="${user.userGradePolicyDto.pointRate}">1</span>%</p>
-                </div>
-            </div>
+<!--                <div class="grade-box">-->
+<!--                    <strong>등급 정책</strong>-->
+<!--                    <p>등급: <span th:text="${user.userGradePolicyDto.grade}">GENERAL</span></p>-->
+<!--                    <p>최소 금액: <span th:text="${user.userGradePolicyDto.minTotalOrderPrice}">0</span>원</p>-->
+<!--                    <p>최대 금액: <span th:text="${user.userGradePolicyDto.maxTotalOrderPrice}">100000</span>원</p>-->
+<!--                    <p>적립률: <span th:text="${user.userGradePolicyDto.pointRate}">1</span>%</p>-->
+<!--                </div>-->
+<!--            </div>-->
 
-            <div class="action-buttons">
-                <a th:href="@{/users/me/edit}" class="btn btn-primary">회원 정보 수정</a>
-                <form th:action="@{/users/me/withdraw}" method="post" onsubmit="return confirm('정말로 회원 탈퇴하시겠습니까?');" style="display: inline;">
-                    <input type="hidden" name="_method" value="delete" />
-                    <button type="submit" class="btn btn-danger">회원 탈퇴</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-</body>
-</html>
+<!--            <div class="action-buttons">-->
+<!--                <a th:href="@{/users/me/edit}" class="btn btn-primary">회원 정보 수정</a>-->
+<!--                <form th:action="@{/users/me/withdraw}" method="post" onsubmit="return confirm('정말로 회원 탈퇴하시겠습니까?');" style="display: inline;">-->
+<!--                    <input type="hidden" name="_method" value="delete" />-->
+<!--                    <button type="submit" class="btn btn-danger">회원 탈퇴</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+<!--</body>-->
+<!--</html>-->
