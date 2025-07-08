@@ -70,8 +70,7 @@ public class PaymentController {
     @GetMapping("/toss/success")
     public ModelAndView paymentSuccess(@RequestParam("orderNumber") String orderNumber,
                                        @RequestParam("amount") int amount,
-                                       @RequestParam("paymentKey") String paymentKey
-    ) {
+                                       @RequestParam("paymentKey") String paymentKey) {
         ModelAndView mav = new ModelAndView("payment/toss-payment-success");
 
         PaymentConfirmRequest request = PaymentConfirmRequest.builder()

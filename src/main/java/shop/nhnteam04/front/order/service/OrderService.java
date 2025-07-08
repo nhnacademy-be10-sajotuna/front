@@ -46,6 +46,9 @@ public class OrderService {
     }
 
     public OrderDetailResponse getGuestOrder(String orderNumber){
+        if(orderNumber == null || orderNumber.trim().isEmpty()){
+            throw new IllegalArgumentException();
+        }
         return orderFeignClient.getGuestOrder(orderNumber);
     }
 

@@ -16,7 +16,7 @@ public class GuestController {
 
     private final OrderService orderService;
 
-    // 비회원 주문 조회 창
+    // 비회원 주문 조회 입력 창
     @GetMapping
     public String guestPage(){
         return "order/guest-page";
