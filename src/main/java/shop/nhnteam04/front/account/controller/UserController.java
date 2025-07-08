@@ -37,19 +37,19 @@ public class UserController {
         return "edit";
     }
 
-    @PostMapping("/edit")
-    public String edit(@AuthenticationPrincipal SecurityUser user, @Valid @ModelAttribute EditRequestUser editRequestUser, BindingResult bindingResult) {
-        try {
-            if (bindingResult.hasErrors()) {
-                throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
-            }
-            loginService.updateUser(user.getId(), editRequestUser);
-            return "redirect:/users/me/detail";
-        } catch (Exception e) {
-            String errorMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
-            return "redirect:/users/me/edit?errorMessage="+errorMessage;
-        }
-    }
+//    @PostMapping("/edit")
+//    public String edit(@AuthenticationPrincipal SecurityUser user, @Valid @ModelAttribute EditRequestUser editRequestUser, BindingResult bindingResult) {
+//        try {
+//            if (bindingResult.hasErrors()) {
+//                throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+//            }
+//            loginService.updateUser(user.getId(), editRequestUser);
+//            return "redirect:/users/me/detail";
+//        } catch (Exception e) {
+//            String errorMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+//            return "redirect:/users/me/edit?errorMessage="+errorMessage;
+//        }
+//    }
 
     @PostMapping("/withdraw")
     public String withdraw(@AuthenticationPrincipal SecurityUser user, HttpServletResponse httpServletResponse) {

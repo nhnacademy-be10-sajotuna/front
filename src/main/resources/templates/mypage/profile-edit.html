@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>회원 정보 수정 - 마이페이지</title>
+    <style>
+        /* layout.html의 main 스타일 오버라이드 */
+        main {
+            padding: 0 !important;
+            display: block !important;
+            justify-content: unset !important;
+            align-items: unset !important;
+        }
+        
+        .mypage-container {
+            display: flex;
+            gap: 0;
+            min-height: calc(100vh - 70px);
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            height: calc(100vh - 70px);
+            position: fixed;
+            left: 0;
+            top: 70px;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #c3cfe2;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: #666;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: #c3cfe2;
+            color: #333;
+        }
+
+        .content-area {
+            flex: 1;
+            background-color: #f8f9fa;
+            padding: 0;
+            margin-left: 250px;
+            min-height: calc(100vh - 70px);
+            width: calc(100% - 250px);
+        }
+
+        .content-header {
+            background-color: #fff;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0;
+        }
+
+        .content-body {
+            padding: 2rem;
+        }
+
+        .content-header h2 {
+            color: #333;
+            margin-bottom: 0;
+            border-bottom: 2px solid #c3cfe2;
+            padding-bottom: 0.5rem;
+        }
+
+        .edit-form {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #c3cfe2;
+            box-shadow: 0 0 0 2px rgba(195, 207, 226, 0.2);
+        }
+
+        .form-group input:disabled {
+            background-color: #f8f9fa;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background-color: #c3cfe2;
+            color: #333;
+        }
+
+        .btn-primary:hover {
+            background-color: #a8b8d1;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .info-note {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #c3cfe2;
+            margin-bottom: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+                top: 0;
+            }
+            
+            .content-area {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="mypage-container">
+        <div class="sidebar">
+            <h3>마이페이지</h3>
+            <ul class="sidebar-menu">
+                <li><a href="/my-page">대시보드</a></li>
+                <li><a href="/my-page/profile" class="active">회원 정보</a></li>
+                <li><a href="/my-page/order-list">주문 내역</a></li>
+                <li><a href="/my-page/address">주소 관리</a></li>
+                <li><a href="/my-page/point-history">포인트 내역</a></li>
+                <li><a href="/my-page/coupons">내 쿠폰</a></li>
+            </ul>
+        </div>
+
+        <div class="content-area">
+            <div class="content-header">
+                <h2>회원 정보 수정</h2>
+            </div>
+
+            <div class="content-body">
+                <div class="info-note">
+                    <strong>안내:</strong> 이메일과 생년월일은 보안상 수정할 수 없습니다. 변경이 필요한 경우 고객센터에 문의해주세요.
+                </div>
+
+                <form class="edit-form" th:action="@{/my-page/profile/edit}" method="post">
+                    <!-- 생년월일을 hidden으로 전송 -->
+                    <input type="hidden" name="birthDate" th:value="${user.birthDate}">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">이름 *</label>
+                            <input type="text" id="name" name="name" th:value="${user.name}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">이메일</label>
+                            <input type="email" id="email" th:value="${user.email}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phoneNumber">전화번호 *</label>
+                            <input type="tel" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="birthDate">생년월일</label>
+                            <input type="date" id="birthDate" th:value="${user.birthDate}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">현재 비밀번호 *</label>
+                        <input type="password" id="password" name="password" placeholder="현재 비밀번호를 입력해주세요" required>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">정보 수정</button>
+                        <a th:href="@{/my-page/profile}" class="btn btn-secondary">취소</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
+        if (errorMsg) {
+            alert(errorMsg);
+        }
+        /*]]>*/
+    </script>
+</section>
+</body>
+</html>

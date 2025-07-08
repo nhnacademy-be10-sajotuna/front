@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-    <title>마이페이지</title>
+    <title>회원 정보 - 마이페이지</title>
     <style>
         /* layout.html의 main 스타일 오버라이드 */
         main {
@@ -157,18 +157,15 @@
         }
 
         @media (max-width: 768px) {
-            .mypage-container {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            
             .sidebar {
                 width: 100%;
-                order: 2;
+                position: relative;
+                height: auto;
             }
             
             .content-area {
-                order: 1;
+                margin-left: 0;
+                width: 100%;
             }
             
             .profile-info {
@@ -183,7 +180,8 @@
         <div class="sidebar">
             <h3>마이페이지</h3>
             <ul class="sidebar-menu">
-                <li><a href="/my-page" class="active">회원 정보</a></li>
+                <li><a href="/my-page">대시보드</a></li>
+                <li><a href="/my-page/profile" class="active">회원 정보</a></li>
                 <li><a href="/my-page/order-list">주문 내역</a></li>
                 <li><a href="/my-page/address">주소 관리</a></li>
                 <li><a href="/my-page/point-history">포인트 내역</a></li>
@@ -192,7 +190,7 @@
         </div>
 
         <div class="content-area">
-            <h2 th:text="${user.name} + ' 님의 정보'">회원 정보</h2>
+            <h2>회원 정보</h2>
 
             <div class="profile-info">
                 <div class="info-group">
@@ -240,8 +238,8 @@
             </div>
 
             <div class="action-buttons">
-                <a th:href="@{/users/me/edit}" class="btn btn-primary">회원 정보 수정</a>
-                <form th:action="@{/users/me/withdraw}" method="post" onsubmit="return confirm('정말로 회원 탈퇴하시겠습니까?');" style="display: inline;">
+                <a th:href="@{/my-page/profile/edit}" class="btn btn-primary">회원 정보 수정</a>
+                <form th:action="@{/withdraw}" method="post" onsubmit="return confirm('정말로 회원 탈퇴하시겠습니까?');" style="display: inline;">
                     <input type="hidden" name="_method" value="delete" />
                     <button type="submit" class="btn btn-danger">회원 탈퇴</button>
                 </form>

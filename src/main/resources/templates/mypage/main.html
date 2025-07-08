@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>마이페이지</title>
+    <style>
+        /* layout.html의 main 스타일 오버라이드 */
+        main {
+            padding: 0 !important;
+            background: linear-gradient(135deg, #f5f7fa, #dbe9f4) !important;
+            display: block !important;
+            justify-content: unset !important;
+            align-items: unset !important;
+        }
+        
+        .mypage-container {
+            display: flex;
+            gap: 0;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            height: calc(100vh - 60px);
+            position: fixed;
+            left: 0;
+            top: 60px;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #5c9ded;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: #666;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: #5c9ded;
+            color: white;
+        }
+
+        .content-area {
+            flex: 1;
+            background-color: #f8f9fa;
+            padding: 2rem;
+            margin-left: 250px;
+            margin-top: 60px;
+            min-height: calc(100vh - 60px);
+            width: calc(100% - 250px);
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .welcome-section h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .quick-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .quick-menu-item {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-menu-item h3 {
+            color: #5c9ded;
+            margin-bottom: 1rem;
+        }
+
+        .quick-menu-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .content-area {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .quick-menu {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="mypage-container">
+        <div class="sidebar">
+            <h3>마이페이지</h3>
+            <ul class="sidebar-menu">
+                <li><a href="/my-page" class="active">대시보드</a></li>
+                <li><a href="/my-page/profile">회원 정보</a></li>
+                <li><a href="/my-page/order-list">주문 내역</a></li>
+                <li><a href="/my-page/address">주소 관리</a></li>
+                <li><a href="/my-page/point-history">포인트 내역</a></li>
+                <li><a href="/my-page/coupons">내 쿠폰</a></li>
+            </ul>
+        </div>
+
+        <div class="content-area">
+            <div class="welcome-section">
+                <h1>안녕하세요!</h1>
+                <p>마이페이지에 오신 것을 환영합니다.</p>
+            </div>
+
+            <div class="quick-menu">
+                <a href="/my-page/profile" class="quick-menu-item">
+                    <h3>회원 정보</h3>
+                    <p>개인정보 및 등급 정보를 확인하고 관리하세요</p>
+                </a>
+
+                <a href="/my-page/order-list" class="quick-menu-item">
+                    <h3>주문 내역</h3>
+                    <p>주문 내역 및 배송 상태를 확인하세요</p>
+                </a>
+
+                <a href="/address" class="quick-menu-item">
+                    <h3>주소 관리</h3>
+                    <p>배송지 주소를 등록하고 관리하세요</p>
+                </a>
+
+                <a href="/my-page/point-history" class="quick-menu-item">
+                    <h3>포인트 내역</h3>
+                    <p>포인트 적립 및 사용 내역을 확인하세요</p>
+                </a>
+
+                <a href="/my-page/coupons" class="quick-menu-item">
+                    <h3>내 쿠폰</h3>
+                    <p>사용 가능한 쿠폰을 확인하고 관리하세요</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
