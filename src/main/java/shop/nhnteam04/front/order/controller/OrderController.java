@@ -14,6 +14,7 @@ import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
 import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
+import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
 import shop.nhnteam04.front.order.service.OrderService;
 import shop.nhnteam04.front.order.service.PaymentService;
 
@@ -54,7 +55,7 @@ public class OrderController {
     }
 
     // 주문서 작성
-    @GetMapping("/order")
+    @GetMapping
     public ModelAndView orderForm(@AuthenticationPrincipal SecurityUser user){
         ModelAndView mav = new ModelAndView("order-window");
 
@@ -68,21 +69,22 @@ public class OrderController {
         return mav;
     }
 
-    @PostMapping("/order")
+    @PostMapping
     public String order(HttpServletRequest req, RedirectAttributes re){
         String userId = req.getParameter("userId");
         String ordererName = req.getParameter("ordererName");
-
-        CreateOrderRequest request = CreateOrderRequest.builder().build();
+        String expectedDeliveryDate = orderService.convertTime(req.getParameter("expectedDeliveryDate"));
 
         /*
+        CreateOrderRequest request = CreateOrderRequest.builder()
+                .ordererName(ordererName)
+                .build();
 
-        OrderResponse orderResponse = orderService.createOrder(userId, );
+        OrderResponse orderResponse = orderService.createOrder(null, request);
+
         re.addAttribute("orderNumber", orderResponse.getOrderNumber());
-        re.addAttribute("finalPrice", orderResponse.getFinalPrice());*/
-
-        re.addAttribute("orderNumber", "dasweefeqq");
-        re.addAttribute("finalPrice", 10000);
+        re.addAttribute("finalPrice", orderResponse.getFinalPrice());
+        */
 
         return "redirect:/payment";
     }

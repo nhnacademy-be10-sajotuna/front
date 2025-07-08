@@ -10,6 +10,8 @@ import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -42,5 +44,16 @@ public class OrderService {
             throw new IllegalArgumentException("Request cannot be null");
         }
         return orderFeignClient.createOrder(userId, request);
+    }
+
+    // localdatetime 형태 변환
+    public String convertTime(String dateTime){
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime ldt = LocalDateTime.parse(dateTime, parser);
+        ldt.withSecond(0);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+        return ldt.format(formatter);
     }
 }

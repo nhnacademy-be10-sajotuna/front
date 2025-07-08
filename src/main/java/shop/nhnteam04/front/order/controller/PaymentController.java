@@ -1,13 +1,10 @@
 package shop.nhnteam04.front.order.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
 import shop.nhnteam04.front.order.dto.payment.PaymentMethod;
 import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
@@ -23,14 +20,11 @@ public class PaymentController {
 
     // 결제 창
     @GetMapping
-    public ModelAndView paymentPage(HttpServletRequest req) {
+    public ModelAndView paymentPage(@RequestParam String orderNumber, @RequestParam String finalPrice) {
         ModelAndView mav = new ModelAndView("payment-window");
 
-        String orderNumber = req.getParameter("orderNumber");
-        int amount = Integer.parseInt(req.getParameter("finalPrice"));
-
         mav.addObject("orderId", orderNumber);
-        mav.addObject("amount", amount);
+        mav.addObject("amount", finalPrice);
 
         return mav;
     }
