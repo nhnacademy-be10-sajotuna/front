@@ -71,21 +71,23 @@
         <nav>
             <!-- 로그인 상태일 때 -->
             <span th:if="${#authentication != null and #authentication.authenticated and #authorization.expression('isAuthenticated()')}">
-    <span th:text="${#authentication.name} + '님 환영합니다!'"></span>
-    <a th:href="@{/users/me/detail}">내 정보</a>
-    <form th:action="@{/logout}" method="post" style="display: inline;">
-        <button type="submit" style="background: none; border: none; color: #007bff; cursor: pointer; font-size: 1rem; padding: 0; margin-left: 1rem;">
-            로그아웃
-        </button>
-    </form>
-</span>
+                <span th:text="${#authentication.name} + '님 환영합니다!'"></span>
+                <span th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <a th:href="@{/admin}">관리자 페이지</a>
+                </span>
+                <a th:href="@{/users/me/detail}">내 정보</a>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" style="background: none; border: none; color: #007bff; cursor: pointer; font-size: 1rem; padding: 0; margin-left: 1rem;">
+                        로그아웃
+                    </button>
+                </form>
+            </span>
 
             <!-- 비로그인 상태일 때 -->
             <span th:unless="${#authentication != null and #authentication.authenticated and #authorization.expression('isAuthenticated()')}">
-    <a th:href="@{/login}" style="margin-right: 1rem;">로그인</a>
-    <a th:href="@{/register}">회원가입</a>
-</span>
-
+                <a th:href="@{/login}" style="margin-right: 1rem;">로그인</a>
+                <a th:href="@{/register}">회원가입</a>
+            </span>
         </nav>
     </div>
 </header>
@@ -94,9 +96,6 @@
 <main layout:fragment="content"
       style="
         flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         overflow-y: auto;
         min-height: 100%;
         padding: 2rem 0;

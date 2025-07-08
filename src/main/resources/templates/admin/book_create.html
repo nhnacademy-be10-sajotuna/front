@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:inline="javascript"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>도서 추가</title>
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.4rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 2rem;
+            padding: 0.8rem 2rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0.4rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .category-select-wrapper {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="form-container">
+        <h2>📚 도서 추가</h2>
+
+        <form th:action="@{/admin/books}" method="post">
+            <!-- 기본 도서 필드들 -->
+            <label>ISBN</label>
+            <input type="text" name="isbn" required />
+
+            <label>제목</label>
+            <input type="text" name="title" required />
+
+            <label>저자</label>
+            <input type="text" name="author" required />
+
+            <label>출판사</label>
+            <input type="text" name="publisher" required />
+
+            <label>출판일</label>
+            <input type="date" name="publicationDate" required />
+
+            <label>페이지 수</label>
+            <input type="number" name="pageCount" min="0" />
+
+            <label>이미지 URL</label>
+            <input type="text" name="imageUrl" />
+
+            <label>설명</label>
+            <textarea name="description" rows="4"></textarea>
+
+            <label>정가</label>
+            <input type="number" name="originalPrice" step="0.01" required />
+
+            <label>판매가</label>
+            <input type="number" name="sellingPrice" step="0.01" required />
+
+            <label>선물 포장 가능 여부</label>
+            <select name="giftWrappingAvailable">
+                <option value="true">가능</option>
+                <option value="false" selected>불가능</option>
+            </select>
+
+            <label>카테고리 선택</label>
+            <div id="category-selects" class="category-select-wrapper"></div>
+            <!-- 선택된 카테고리 ID들 -->
+            <input type="hidden" name="categoryNames" id="categoryNames" />
+
+            <label>태그 (쉼표로 구분)</label>
+            <input type="text" name="tagNames" placeholder="예: Java, Spring, Backend" />
+
+            <button type="submit">도서 등록</button>
+        </form>
+    </div>
+
+    <div id="category-selects"></div>
+    <input type="hidden" id="categoryNames" name="categoryNames" />
+
+    <script>
+        // 모든 카테고리를 Thymeleaf로 JSON 문자열로 주입해서 파싱한 객체
+        const allCategories = /*[[${allCategoriesJson}]]*/ '[]';
+        const categories = JSON.parse(allCategories);
+
+        const container = document.getElementById('category-selects');
+        const hiddenInput = document.getElementById('categoryNames');
+
+        let selectedPath = [];
+
+        function renderCategorySelect(parentId = null, depth = 0) {
+            // depth 이상의 셀렉트가 있으면 모두 제거 (이전 선택 취소 대비)
+            while (container.children.length > depth) {
+                container.removeChild(container.lastChild);
+                selectedPath.pop();
+            }
+            console.log('현재 선택 경로:', selectedPath);
+
+            // 부모 ID에 해당하는 자식 카테고리 필터링
+            const filtered = categories.filter(c => {
+                if (parentId === null) return c.parentId === null;
+                return c.parentId === parentId;
+            });
+
+            if (filtered.length === 0) {
+                // 더 이상 하위 카테고리가 없으면 hidden input에 선택 경로 저장
+                hiddenInput.value = selectedPath.join(',');
+                return; // 종료
+            }
+
+            // 새 select 생성 및 기본 옵션 추가
+            const select = document.createElement('select');
+            select.innerHTML = `<option value="">선택하세요</option>`;
+
+            // 옵션 추가
+            filtered.forEach(c => {
+                const option = document.createElement('option');
+                option.value = c.id;
+                option.textContent = c.name;
+                select.appendChild(option);
+            });
+
+            // 변경 이벤트 처리
+            select.addEventListener('change', () => {
+                const selectedId = select.value ? parseInt(select.value) : null;
+                if (selectedId !== null && !isNaN(selectedId)) {
+                    selectedPath = selectedPath.slice(0, depth);
+                    selectedPath.push(selectedId);
+                    renderCategorySelect(selectedId, depth + 1);
+                } else {
+                    // "선택하세요" 선택 시
+                    selectedPath = selectedPath.slice(0, depth);
+                    hiddenInput.value = selectedPath.join(',');
+
+                    // 자기 자신은 남겨두고, 그 다음 자식 셀렉트들만 제거
+                    while (container.children.length > depth + 1) {
+                        container.removeChild(container.lastChild);
+                    }
+                }
+            });
+
+            container.appendChild(select);
+
+            // 이전에 선택한 값이 있으면, 셀렉트에 선택 처리 후 하위도 렌더링
+            if (selectedPath.length > depth) {
+                select.value = selectedPath[depth];
+                renderCategorySelect(selectedPath[depth], depth + 1);
+            }
+        }
+
+        // 초기 렌더링: 최상위 카테고리부터 시작
+        renderCategorySelect();
+    </script>
+
+</section>
+</body>
+</html>
