@@ -45,6 +45,13 @@ public class OrderService {
         return orderFeignClient.getOrder(orderId);
     }
 
+    public OrderDetailResponse getGuestOrder(String orderNumber){
+        if(orderNumber == null || orderNumber.trim().isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        return orderFeignClient.getGuestOrder(orderNumber);
+    }
+
     // 상품 주문 생성
     public OrderResponse createOrder(Long userId, CreateOrderRequest request){
         if(request == null){

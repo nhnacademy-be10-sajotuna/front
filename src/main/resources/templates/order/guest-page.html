@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <title>비회원 주문 조회</title>
+</head>
+
+<body>
+    <div class="login-container">
+        <a th:href="@{/}" class="logo">북팡문고</a>
+        <h2>비회원 주문 조회</h2>
+        <form th:action="@{/guest}" method="post">
+            <div class="input-group">
+                <label for="orderNumber">주문 번호</label>
+                <input type="text" id="orderNumber" name="orderNumber"
+                       placeholder="주문 번호를 입력해주세요" required />
+            </div>
+            <button type="submit" class="login-button">확인하기</button>
+        </form>
+
+    </div>
+</body>
+</html>
