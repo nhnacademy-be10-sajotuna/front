@@ -17,18 +17,26 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateOrderRequest {
 
+    @NotBlank
     private String ordererName;
 
+    @NotBlank
     private String ordererPhoneNumber;
 
+    @NotBlank
+    @Email
     private String ordererEmail;
 
+    @NotBlank
     private String recipientName;
 
+    @NotBlank
     private String recipientPhoneNumber;
 
+    @Email
     private String recipientEmail;
 
+    @NotBlank
     private String recipientAddress;
 
     @Future
