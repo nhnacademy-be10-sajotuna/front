@@ -30,44 +30,45 @@ public class PaymentController {
 
         OrderInfoResponse response = orderService.getOrderInfo(orderNumber);
 
-        mav.addObject("orderId", orderNumber);
+        mav.addObject("orderNumber", orderNumber);
         mav.addObject("amount", response.getFinalPrice());
 
         return mav;
     }
 
+    // 일반 결제
     @PostMapping
     public String payment(HttpServletRequest req, RedirectAttributes re){
-        String orderId = req.getParameter("orderId");
+        String orderNumber = req.getParameter("orderNumber");
         String amount = req.getParameter("amount");
 
         PaymentConfirmRequest request = PaymentConfirmRequest.builder()
                 .paymentMethod(PaymentMethod.CARD)
-                .orderNumber(orderId)
+                .orderNumber(orderNumber)
                 .amount(Integer.parseInt(amount)).build();
         PaymentResponse response = paymentService.confirmPayment(request);
 
-        re.addAttribute("orderId", orderId);
+        re.addAttribute("orderNumber", orderNumber);
         re.addAttribute("amount", response.getAmount());
 
         return "redirect:/payment/success";
     }
 
-    // 결제 완료
+    // 일반 결제 완료
     @GetMapping("/success")
-    public ModelAndView successPage(@RequestParam("orderId") String orderId,
+    public ModelAndView successPage(@RequestParam("orderNumber") String orderNumber,
                                     @RequestParam("amount") int amount) {
         ModelAndView mav = new ModelAndView("payment/payment-success");
 
-        mav.addObject("orderId", orderId);
+        mav.addObject("orderNumber", orderNumber);
         mav.addObject("amount", amount);
 
         return mav;
     }
 
-    // 토스 결제 성공
+    // 토스 결제 완료
     @GetMapping("/toss/success")
-    public ModelAndView paymentSuccess(@RequestParam("orderId") String orderId,
+    public ModelAndView paymentSuccess(@RequestParam("orderNumber") String orderNumber,
                                        @RequestParam("amount") int amount,
                                        @RequestParam("paymentKey") String paymentKey
     ) {
@@ -75,12 +76,12 @@ public class PaymentController {
 
         PaymentConfirmRequest request = PaymentConfirmRequest.builder()
                 .paymentMethod(PaymentMethod.TOSS)
-                .orderNumber(orderId)
+                .orderNumber(orderNumber)
                 .paymentKey(paymentKey)
                 .amount(amount).build();
         PaymentResponse response = paymentService.confirmPayment(request);
 
-        mav.addObject("orderId", orderId);
+        mav.addObject("orderNumber", orderNumber);
         mav.addObject("amount", response.getAmount());
 
         return mav;

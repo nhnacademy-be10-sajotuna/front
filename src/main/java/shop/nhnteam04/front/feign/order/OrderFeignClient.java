@@ -38,10 +38,9 @@ public interface OrderFeignClient {
     @PutMapping("/api/orders/returned/{order-id}")
     void returnedOrder(@PathVariable("order-id") Long orderId, @RequestHeader("X-User-Id") Long userId);
 
+    // orderPackage
     @GetMapping("api/orders/package")
     List<PackageResponse> getPackages();
-
-
 
     @PostMapping("/api/admin/packages/package")
     PackageResponse createPackage(@RequestBody PackageRequest packageRequest);
