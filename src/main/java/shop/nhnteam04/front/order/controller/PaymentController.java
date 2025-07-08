@@ -24,7 +24,7 @@ public class PaymentController {
     // 결제 창
     @GetMapping
     public ModelAndView paymentPage(@RequestParam String orderNumber) {
-        ModelAndView mav = new ModelAndView("payment-window");
+        ModelAndView mav = new ModelAndView("payment/payment-window");
 
         OrderInfoResponse response = orderService.getOrderInfo(orderNumber);
 
@@ -46,7 +46,7 @@ public class PaymentController {
                 .paymentKey(paymentKey)
                 .amount(amount).build();
 
-        ModelAndView mav = new ModelAndView("payment-success");
+        ModelAndView mav = new ModelAndView("payment/payment-success");
 
         PaymentResponse response = paymentService.confirmPayment(request);
         mav.addObject("response", response);
@@ -57,6 +57,6 @@ public class PaymentController {
     // 결제 실패
     @GetMapping("/fail")
     public String paymentFail() {
-        return "payment-fail";
+        return "payment/payment-fail";
     }
 }

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>비회원 주문 조회 상세</title>
+</head>
+
+<body>
+<div class="login-container">
+    <h2>비회원 주문 조회 상세</h2>
+
+    <span th:text="${orderDetail.getOrderNumber()}"></span>
+    <span th:text="${orderDetail.getOrderCreatedAt()}"></span>
+    <span th:text="${orderDetail.getPaymentAmount()}"></span>
+
+</div>
+</body>
+</html>

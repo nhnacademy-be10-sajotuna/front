@@ -23,7 +23,7 @@ public class OrderController {
     // 주문서 작성
     @GetMapping
     public ModelAndView orderForm(@AuthenticationPrincipal SecurityUser user){
-        ModelAndView mav = new ModelAndView("order-window");
+        ModelAndView mav = new ModelAndView("order/order-window");
 
         // TODO: 장바구니에 있는 상품들 가져오기
 
@@ -71,5 +71,4 @@ public class OrderController {
                               @RequestParam("orderId") long orderId) {
         return "redirect:/order/my-list";
     }
-
 }
