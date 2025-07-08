@@ -7,8 +7,10 @@
 <body>
     <h2>주문이 완료되었습니다.</h2>
 
-    <span th:text="${orderNumber}"></span>
-    <span th:text="${amount}"></span><br>
+    <div class="order-info">
+        <p><strong>주문 번호:</strong> <span th:text="${orderNumber}"></span></p>
+        <p><strong>결제 금액:</strong> <span th:text="${amount}"></span>원</p>
+    </div>
 
     <button onclick="location.href='/'">완료</button>
 </body>

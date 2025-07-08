@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <title>비회원 주문 조회</title>
 </head>
@@ -11,7 +11,8 @@
         <form th:action="@{/guest}" method="post">
             <div class="input-group">
                 <label for="orderNumber">주문 번호</label>
-                <input type="text" id="orderNumber" name="orderNumber" required />
+                <input type="text" id="orderNumber" name="orderNumber"
+                       placeholder="주문 번호를 입력해주세요" required />
             </div>
             <button type="submit" class="login-button">확인하기</button>
         </form>

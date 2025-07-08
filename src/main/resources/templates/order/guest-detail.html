@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <title>비회원 주문 조회 상세</title>
 </head>
@@ -8,19 +8,20 @@
 <div class="login-container">
     <h2>주문 조회 상세</h2>
 
-    <span th:text="${orderDetail.getOrderNumber()}"></span>
-    <span th:text="${orderDetail.getOrderCreatedAt()}"></span>
+    <div><strong>주문 번호:</strong> <span th:text="${orderDetail.getOrderNumber()}"></span></div>
+    <div><strong>주문 날짜:</strong> <span th:text="${#temporals.format(orderDetail.getOrderCreatedAt(), 'yyyy-MM-dd HH:mm')}"></span></div>
 
     <h2>배송 정보</h2>
 
-    <span th:text="${orderDetail.getRecipientName()}"></span>
-    <span th:text="${orderDetail.getRecipientPhoneNumber()}"></span>
-    <span th:text="${orderDetail.getRecipientAddress()}"></span>
+    <div><strong>수령인:</strong> <span th:text="${orderDetail.getRecipientName()}"></span></div>
+    <div><strong>연락처:</strong> <span th:text="${orderDetail.getRecipientPhoneNumber()}"></span></div>
+    <div><strong>이메일:</strong> <span th:text="${orderDetail.getRecipientEmail()}"></span></div>
+    <div><strong>주소:</strong> <span th:text="${orderDetail.getRecipientAddress()}"></span></div>
 
     <h2>결제 정보</h2>
 
-    <span th:text="${orderDetail.getFinalPrice()}"></span>
-    <span th:text="${orderDetail.getPaymentMethod()}"></span>
+    <div><strong>결제 금액:</strong> <span th:text="${orderDetail.getFinalPrice()}"></span></div>
+    <div><strong>결제 방법:</strong> <span th:text="${orderDetail.getPaymentMethod()}"></span></div>
 
 
 </div>
