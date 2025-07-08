@@ -29,7 +29,7 @@ public class GuestController {
         // TODO: orderNumber에 맞는 Order가 없다면 알림과 함께 다시 입력 창으로 간다
 
         re.addAttribute("orderNumber", orderNumber);
-        return "redirect:/order-detail";
+        return "redirect:/guest/order-detail";
     }
 
     // 주문 조회
