@@ -17,8 +17,8 @@
     <br>
 
     <form method="post" action="/payment">
-        <input id="orderNumber" name="orderNumber" th:value="${orderNumber}">
-        <input id="amount" name="amount" th:value="${amount}">
+        <input type="hidden" id="orderNumber" name="orderNumber" th:value="${orderNumber}">
+        <input type="hidden" id="amount" name="amount" th:value="${amount}">
 
         <button class="btn primary w-100" type="submit">일반 결제하기</button>
     </form>
