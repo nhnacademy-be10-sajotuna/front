@@ -182,7 +182,7 @@
 
                     <label>카테고리 선택</label>
                     <div id="category-selects" class="category-select-wrapper"></div>
-                    <input type="hidden" name="categoryNames" id="categoryNames" />
+                    <input type="hidden" name="categories" id="categories" />
 
                     <label>태그 (쉼표로 구분)</label>
                     <input type="text" name="tagNames" placeholder="예: Java, Spring, Backend" />
@@ -192,7 +192,7 @@
             </div>
 
             <div id="category-selects"></div>
-            <input type="hidden" id="categoryNames" name="categoryNames" />
+            <input type="hidden" id="categories" name="categories" />
         </div>
     </div>
 
@@ -202,7 +202,7 @@
         const categories = JSON.parse(allCategories);
 
         const container = document.getElementById('category-selects');
-        const hiddenInput = document.getElementById('categoryNames');
+        const hiddenInput = document.getElementById('categories');
 
         let selectedPath = [];
 
