@@ -68,7 +68,7 @@ public class PaymentController {
 
     // 토스 결제 완료
     @GetMapping("/toss/success")
-    public ModelAndView paymentSuccess(@RequestParam("orderNumber") String orderNumber,
+    public ModelAndView paymentSuccess(@RequestParam("orderId") String orderNumber,
                                        @RequestParam("amount") int amount,
                                        @RequestParam("paymentKey") String paymentKey) {
         ModelAndView mav = new ModelAndView("payment/payment-success");

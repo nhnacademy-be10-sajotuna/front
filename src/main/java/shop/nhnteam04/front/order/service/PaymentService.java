@@ -27,4 +27,12 @@ public class PaymentService {
         }
         return orderFeignClient.getAvailablePoint(userId);
     }
+
+    // 결제 취소 요청
+    public void cancelPayment(Long orderId, String cancelReason){
+        if(orderId == null || cancelReason.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        orderFeignClient.cancelPayment(orderId, cancelReason);
+    }
 }

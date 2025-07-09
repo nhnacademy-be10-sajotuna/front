@@ -60,8 +60,8 @@ public interface OrderFeignClient {
     @PostMapping("/api/payments/confirm")
     PaymentResponse confirmPayment(@RequestBody PaymentConfirmRequest request);
 
-    @PutMapping("/api/payments/cancel/{payment-id}")
-    void cancelPayment(@PathVariable("payment-id") Long paymentId, @RequestParam String cancelReason);
+    @PutMapping("/api/payments/cancel/{order-id}")
+    void cancelPayment(@PathVariable("order-id") Long orderId, @RequestParam String cancelReason);
 
 
 

@@ -62,7 +62,7 @@ public class OrderController {
 
     @GetMapping("/detail/{order-id}")
     public ModelAndView OrderDetail(@PathVariable("order-id") Long orderId) {
-        ModelAndView mav = new ModelAndView("order-detail");
+        ModelAndView mav = new ModelAndView("order/order-detail");
 
         OrderDetailResponse response = orderService.getOrder(orderId);
         mav.addObject("orderDetail", response);
@@ -73,6 +73,8 @@ public class OrderController {
     // 주문 취소
     @PostMapping("/cancel")
     public String cancelOrder(@RequestParam("orderId") long orderId) {
+        paymentService.cancelPayment(orderId, "cancel");
+
         return "redirect:/order/my-list";
     }
 
@@ -80,6 +82,8 @@ public class OrderController {
     @PostMapping("/return")
     public String returnOrder(@AuthenticationPrincipal SecurityUser user,
                               @RequestParam("orderId") long orderId) {
+        paymentService.cancelPayment(orderId, "return");
+
         return "redirect:/order/my-list";
     }
 }
