@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.nhnteam04.front.account.user.dto.SecurityUser;
+import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.service.OrderService;
 import shop.nhnteam04.front.order.service.PaymentService;
 
@@ -57,6 +58,16 @@ public class OrderController {
         re.addAttribute("orderNumber", "wdawdrfsedfcdsw");
 
         return "redirect:/payment";
+    }
+
+    @GetMapping("/detail/{order-id}")
+    public ModelAndView OrderDetail(@PathVariable("order-id") Long orderId) {
+        ModelAndView mav = new ModelAndView("order-detail");
+
+        OrderDetailResponse response = orderService.getOrder(orderId);
+        mav.addObject("orderDetail", response);
+
+        return mav;
     }
 
     // 주문 취소
