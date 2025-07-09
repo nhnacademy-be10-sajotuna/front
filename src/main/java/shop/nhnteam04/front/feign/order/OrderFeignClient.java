@@ -6,10 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
 import shop.nhnteam04.front.order.dto.orders.request.PackageRequest;
-import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
-import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
-import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
-import shop.nhnteam04.front.order.dto.orders.response.PackageResponse;
+import shop.nhnteam04.front.order.dto.orders.response.*;
 import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
 import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
 import shop.nhnteam04.front.order.dto.point.PointHistoryResponse;
@@ -23,10 +20,10 @@ public interface OrderFeignClient {
     @GetMapping("/api/orders/info/{order-number}")
     OrderInfoResponse getOrderInfo(@PathVariable("order-number") String orderNumber);
 
-    @GetMapping("/api/orders/{order-id}")
+    @GetMapping("/api/orders/detail/{order-id}")
     OrderDetailResponse getOrder(@PathVariable("order-id") Long orderId);
 
-    @GetMapping("/api/orders/guest/{order-number}")
+    @GetMapping("/api/orders/detail/guest/{order-number}")
     OrderDetailResponse getGuestOrder(@PathVariable("order-number") String orderNumber);
 
     @GetMapping("/api/orders/user")
@@ -35,8 +32,14 @@ public interface OrderFeignClient {
     @PostMapping("/api/orders")
     OrderResponse createOrder(@RequestHeader(value = "X-User-Id", required = false) Long userId, @RequestBody CreateOrderRequest request);
 
-    @PutMapping("/api/orders/returned/{order-id}")
-    void returnedOrder(@PathVariable("order-id") Long orderId, @RequestHeader("X-User-Id") Long userId);
+    @PutMapping("/api/orders/{order-id}/return")
+    void returnOrder(@PathVariable("order-id") Long orderId, @RequestHeader("X-User-Id") Long userId,
+                     @RequestParam("return-reason") ReturnReason returnReason);
+
+    @PutMapping("/api/orders/{order-id}/cancel")
+    void cancelOrder(@PathVariable("order-id") Long orderId);
+
+
 
     // orderPackage
     @GetMapping("api/orders/package")
@@ -48,10 +51,17 @@ public interface OrderFeignClient {
     @PutMapping("/api/admin/packages/package/{package-id}")
     void updatePackage(@PathVariable("package-id") Long packageId, @RequestBody PackageRequest request);
 
+    @DeleteMapping("/api/admin/packages/package/{package-id}")
+    void deletePackage(@PathVariable("package-id") Long packageId);
+
+
 
     // payment
     @PostMapping("/api/payments/confirm")
     PaymentResponse confirmPayment(@RequestBody PaymentConfirmRequest request);
+
+    @PutMapping("/api/payments/cancel/{payment-id}")
+    void cancelPayment(@PathVariable("payment-id") Long paymentId, @RequestParam String cancelReason);
 
 
 
