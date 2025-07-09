@@ -26,8 +26,8 @@
     <button class="btn primary w-100" onclick="tossPayment()">토스 결제하기</button>
 
     <script type="text/javascript">
-        const orderNumber = document.getElementById('orderNumber').value
-        const orderAmount = document.getElementById('amount').value
+        const num = document.getElementById('orderNumber').value;
+        const price = document.getElementById('amount').value;
 
         function tossPayment() {
             const clientKey = "test_ck_yZqmkKeP8gWj1B0QjXRB8bQRxB9l";
@@ -39,9 +39,9 @@
                 method: "CARD",
                 amount: {
                     currency: "KRW",
-                    value: orderAmount,
+                    value: Number(price),
                 },
-                orderId: orderNumber,
+                orderId: num,
                 orderName: "책",
                 successUrl: window.location.origin + "/payment/toss/success",
                 failUrl: window.location.origin + "/payment/fail",

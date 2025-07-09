@@ -71,6 +71,19 @@
             transition: background-color 0.3s ease;
         }
 
+        .guest-button {
+            margin-top: 1.2rem;
+            width: 100%;
+            padding: 0.9rem;
+            background-color: #bdbdbd;
+            border: none;
+            border-radius: 0.5rem;
+            color: #ffffff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
         .login-button:hover {
             background-color: #417fde;
         }
@@ -114,6 +127,8 @@
         <div class="register-link">
             계정이 없으신가요? <a th:href="@{/register}">회원가입</a>
         </div>
+        <button class="guest-button" onclick="location.href='/guest'">비회원 주문조회</button>
+
     </div>
 
     <script th:inline="javascript">

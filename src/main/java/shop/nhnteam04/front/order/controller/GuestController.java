@@ -24,12 +24,17 @@ public class GuestController {
 
     @PostMapping
     public String guestPost(HttpServletRequest req, RedirectAttributes re) {
-        String orderNumber = req.getParameter("orderNumber");
+        try{
+            String orderNumber = req.getParameter("orderNumber");
 
-        // TODO: orderNumber에 맞는 Order가 없다면 알림과 함께 다시 입력 창으로 간다
+            orderService.getGuestOrder(orderNumber);
 
-        re.addAttribute("orderNumber", orderNumber);
-        return "redirect:/guest/order-detail";
+            re.addAttribute("orderNumber", orderNumber);
+
+            return "redirect:/guest/order-detail";
+        } catch (Exception e){
+            return "redirect:/guest";
+        }
     }
 
     // 주문 조회
@@ -38,6 +43,7 @@ public class GuestController {
         ModelAndView mav = new ModelAndView("order/guest-detail");
 
         OrderDetailResponse response = orderService.getGuestOrder(orderNumber);
+
         mav.addObject("orderDetail", response);
 
         return mav;

@@ -1,23 +1,101 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="utf-8" />
     <title>비회원 주문 조회</title>
+
+    <style>
+        .login-container {
+            background-color: white;
+            padding: 3rem 2rem;
+            border-radius: 1.2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-group label {
+            width: 80%;
+            text-align: left;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 80%;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .login-button {
+            margin-top: 1.2rem;
+            width: 100%;
+            padding: 0.9rem;
+            background-color: #5c9ded;
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #417fde;
+        }
+
+        .register-link a {
+            color: #417fde;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
+<main layout:fragment="content">
     <div class="login-container">
         <a th:href="@{/}" class="logo">북팡문고</a>
         <h2>비회원 주문 조회</h2>
         <form th:action="@{/guest}" method="post">
             <div class="input-group">
                 <label for="orderNumber">주문 번호</label>
-                <input type="text" id="orderNumber" name="orderNumber"
-                       placeholder="주문 번호를 입력해주세요" required />
+                <input type="text" id="orderNumber" name="orderNumber" required />
             </div>
             <button type="submit" class="login-button">확인하기</button>
         </form>
 
     </div>
+</main>
 </body>
 </html>

@@ -6,9 +6,34 @@
     <title>주문 조회 상세</title>
 </head>
 <body>
-    <div><strong>주문 조회 상세</strong></div>
-    <span th:text="${orderDetail.getOrderNumber()}"></span>
-    <span th:text="${orderDetail.getOrderCreatedAt()}"></span>
-    <span th:text="${orderDetail.getPaymentAmount()}"></span>
+    <h2>주문 조회 상세</h2>
+
+    <div><strong>주문 번호:</strong> <span th:text="${orderDetail.getOrderNumber()}"></span></div>
+    <div><strong>주문 날짜:</strong> <span th:text="${orderDetail.getOrderCreatedAt()}"></span></div>
+    <div><strong>주문 상태:</strong> <span th:text="${orderDetail.getStatus()}"></span></div>
+
+    <h2>상품</h2>
+
+    <table>
+        <tr th:each="item : ${orderDetail.getItems()}">
+            <td th:text="${item.isbn}"></td>
+            <td th:text="${item.qty}"></td>
+            <td th:text="${item.amount}"></td>
+        </tr>
+    </table>
+
+
+    <h2>배송 정보</h2>
+
+    <div><strong>수령인:</strong> <span th:text="${orderDetail.getRecipientName()}"></span></div>
+    <div><strong>연락처:</strong> <span th:text="${orderDetail.getRecipientPhoneNumber()}"></span></div>
+    <div><strong>이메일:</strong> <span th:text="${orderDetail.getRecipientEmail()}"></span></div>
+    <div><strong>주소:</strong> <span th:text="${orderDetail.getRecipientAddress()}"></span></div>
+
+    <h2>결제 정보</h2>
+
+    <div><strong>주문 금액:</strong> <span th:text="${orderDetail.getTotalPrice()}"></span></div>
+    <div><strong>할인 금액:</strong> <span th:text="${orderDetail.getTotalDiscountAmount()}"></span></div>
+    <div><strong>결제 금액:</strong> <span th:text="${orderDetail.getFinalPrice()}"></span></div>
 </body>
 </html>
