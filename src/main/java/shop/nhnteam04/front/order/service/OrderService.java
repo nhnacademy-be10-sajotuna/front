@@ -9,6 +9,7 @@ import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
 import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
+import shop.nhnteam04.front.order.dto.orders.response.ReturnReason;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -69,5 +70,15 @@ public class OrderService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
         return ldt.format(formatter);
+    }
+
+    // 주문 취소 처리
+    public void cancelOrder(long userId, long orderId) {
+        orderFeignClient.cancelOrder(userId, orderId);
+    }
+
+    // 주문 반품
+    public void returnOrder(long userId, long orderId, ReturnReason returnReason) {
+        orderFeignClient.returnOrder(userId, orderId, returnReason);
     }
 }

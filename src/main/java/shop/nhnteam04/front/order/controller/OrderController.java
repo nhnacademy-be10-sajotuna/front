@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
+import shop.nhnteam04.front.order.dto.orders.response.ReturnReason;
 import shop.nhnteam04.front.order.service.OrderService;
 import shop.nhnteam04.front.order.service.PaymentService;
 
@@ -72,18 +73,22 @@ public class OrderController {
 
     // 주문 취소
     @PostMapping("/cancel")
-    public String cancelOrder(@RequestParam("orderId") long orderId) {
-        paymentService.cancelPayment(orderId, "cancel");
+    public String cancelOrder(@AuthenticationPrincipal SecurityUser user,
+                              @RequestParam("orderId") long orderId) {
+        orderService.cancelOrder(user.getId(), orderId);
 
-        return "redirect:/order/my-list";
+        return "redirect:";
     }
 
     // 주문 반품
     @PostMapping("/return")
     public String returnOrder(@AuthenticationPrincipal SecurityUser user,
-                              @RequestParam("orderId") long orderId) {
-        paymentService.cancelPayment(orderId, "return");
+                              @RequestParam("orderId") long orderId,
+                              @RequestParam("returnReason") String reason) {
+        ReturnReason returnReason = ReturnReason.valueOf(reason.toUpperCase());
 
-        return "redirect:/order/my-list";
+        orderService.returnOrder(user.getId(), orderId, returnReason);
+
+        return "redirect:";
     }
 }
