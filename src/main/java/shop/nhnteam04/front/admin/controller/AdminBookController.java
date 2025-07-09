@@ -1,5 +1,7 @@
 package shop.nhnteam04.front.admin.controller;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.nhnteam04.front.admin.service.AdminBookService;
@@ -51,17 +54,22 @@ public class AdminBookController {
     @PostMapping
     public String create(@Valid @ModelAttribute BookCreateRequest bookCreateRequest,
                          BindingResult bindingResult,
-                         @RequestParam(required = false) MultipartFile imageFile) {
-
-        if (imageFile != null && !imageFile.isEmpty() && imageFile.getSize() > MAX_FILE_SIZE) {
-            bindingResult.reject("file.size", "이미지 파일 용량은 5MB를 초과할 수 없습니다.");
+                         @RequestParam(required = false) MultipartFile imageFile,
+                         RedirectAttributes redirectAttributes) {
+        try {
+            if (imageFile != null && !imageFile.isEmpty() && imageFile.getSize() > MAX_FILE_SIZE) {
+                bindingResult.reject("file.size", "이미지 파일 용량은 5MB를 초과할 수 없습니다.");
+            }
+            if (bindingResult.hasErrors()) {
+                throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            }
+            adminBookService.createBook(bookCreateRequest, imageFile);
+            return "redirect:/admin/books";
+        } catch (Exception e) {
+            String errorMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+            return "redirect:/admin/books/create?errorMessage="+errorMessage;
         }
-        if (bindingResult.hasErrors()) {
-            return "admin/book_create";
-        }
-        adminBookService.createBook(bookCreateRequest, imageFile);
 
-        return "redirect:/admin/books";
     }
 
 

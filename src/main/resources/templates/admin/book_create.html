@@ -253,6 +253,12 @@
         }
 
         renderCategorySelect();
+        /*<![CDATA[*/
+        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
+        if (errorMsg) {
+            alert(errorMsg);
+        }
+        /*]]>*/
     </script>
 </main>
 </body>
