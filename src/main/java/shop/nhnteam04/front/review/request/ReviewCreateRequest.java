@@ -23,4 +23,6 @@ public class ReviewCreateRequest {
     private String content;
 
     private String filePath;
+
+    private String maskedEmail;
 }
