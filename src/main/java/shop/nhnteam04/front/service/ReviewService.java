@@ -35,12 +35,13 @@ public class ReviewService {
             throw new IllegalStateException("리뷰를 작성할 자격이 없습니다.");
         }
         if (file == null || file.isEmpty()) {
-            reviewFeignClient.createReview(request, null, userId);
+            reviewFeignClient.createReview(request, userId);
         } else {
-            String fileName = validateImage(file);
+            String filePath = validateImage(file);
             try {
-                minioService.uploadFile(file, fileName);
-                reviewFeignClient.createReview(request, fileName, userId);
+                minioService.uploadFile(file, filePath);
+                request.setFilePath(filePath);
+                reviewFeignClient.createReview(request, userId);
             } catch (Exception e) {
                 throw new RuntimeException("리뷰 등록에 실패하여 업로드된 파일을 롤백합니다.", e);
             }
@@ -50,14 +51,16 @@ public class ReviewService {
     public void updateReview(Long id, ReviewUpdateRequest request, MultipartFile file, Long userId) {
         ReviewResponse existingReview = reviewFeignClient.getReviewById(id);
         String oldFilePath = existingReview.getFilePath();
+        request.setFilePath(oldFilePath);
 
         if (file == null || file.isEmpty()) {
-            reviewFeignClient.updateReview(id, request, oldFilePath, userId);
+            reviewFeignClient.updateReview(id, request, userId);
         } else {
-            String newFileName = validateImage(file);
+            String newFilePath = validateImage(file);
             try {
-                minioService.uploadFile(file, newFileName);
-                reviewFeignClient.updateReview(id, request, newFileName, userId);
+                minioService.uploadFile(file, newFilePath);
+                request.setFilePath(newFilePath);
+                reviewFeignClient.updateReview(id, request, userId);
                 if (oldFilePath != null && !oldFilePath.isEmpty()) {
                     minioService.deleteFile(oldFilePath);
                 }
@@ -80,6 +83,6 @@ public class ReviewService {
         } catch (IOException e) {
             throw new IllegalArgumentException("이미지 파일 검증 중 오류가 발생했습니다.");
         }
-        return minioService.getFileName(file);
+        return minioService.getFilePath(file);
     }
 }

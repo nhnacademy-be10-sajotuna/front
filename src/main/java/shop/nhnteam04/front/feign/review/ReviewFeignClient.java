@@ -16,7 +16,6 @@ public interface ReviewFeignClient {
     @PostMapping(value = "/api/reviews", consumes = "multipart/form-data")
     ReviewResponse createReview(
             @RequestPart("request") ReviewCreateRequest request,
-            @RequestPart(value = "filePath", required = false) String filePath,
             @RequestHeader("X-User-Id") Long userId
     );
 
@@ -24,7 +23,6 @@ public interface ReviewFeignClient {
     ReviewResponse updateReview(
             @PathVariable("id") Long id,
             @RequestPart("request") ReviewUpdateRequest request,
-            @RequestPart(value = "filePath", required = false) String filePath,
             @RequestHeader("X-User-Id") Long userId
     );
 

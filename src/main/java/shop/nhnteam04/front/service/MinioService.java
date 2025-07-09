@@ -19,15 +19,15 @@ public class MinioService {
         this.minioClient = minioClient;
     }
 
-    public String getFileName(MultipartFile file) {
+    public String getFilePath(MultipartFile file) {
         return UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
     }
 
-    public void uploadFile(MultipartFile file, String fileName) throws Exception {
+    public void uploadFile(MultipartFile file, String filePath) throws Exception {
         minioClient.putObject(
                 PutObjectArgs.builder()
                         .bucket(bucket)
-                        .object(fileName)
+                        .object(filePath)
                         .stream(file.getInputStream(), file.getSize(), -1)
                         .contentType(file.getContentType())
                         .build()
