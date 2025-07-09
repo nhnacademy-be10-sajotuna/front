@@ -9,7 +9,6 @@ import shop.nhnteam04.front.order.dto.orders.request.PackageRequest;
 import shop.nhnteam04.front.order.dto.orders.response.*;
 import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
 import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
-import shop.nhnteam04.front.order.dto.point.PointHistoryResponse;
 
 import java.util.List;
 
@@ -33,12 +32,10 @@ public interface OrderFeignClient {
     OrderResponse createOrder(@RequestHeader(value = "X-User-Id", required = false) Long userId, @RequestBody CreateOrderRequest request);
 
     @PutMapping("/api/orders/{order-id}/return")
-    void returnOrder(@PathVariable("order-id") Long orderId, @RequestHeader("X-User-Id") Long userId,
-                     @RequestParam("return-reason") ReturnReason returnReason);
+    void returnOrder(@PathVariable("order-id") Long orderId, @RequestHeader("X-User-Id") Long userId, @RequestParam("return-reason") ReturnReason returnReason);
 
     @PutMapping("/api/orders/{order-id}/cancel")
     void cancelOrder(@PathVariable("order-id") Long orderId);
-
 
 
     // orderPackage
@@ -55,22 +52,12 @@ public interface OrderFeignClient {
     void deletePackage(@PathVariable("package-id") Long packageId);
 
 
-
     // payment
     @PostMapping("/api/payments/confirm")
     PaymentResponse confirmPayment(@RequestBody PaymentConfirmRequest request);
 
     @PutMapping("/api/payments/cancel/{order-id}")
     void cancelPayment(@PathVariable("order-id") Long orderId, @RequestParam String cancelReason);
-
-
-
-    // point
-    @GetMapping("/api/points")
-    List<PointHistoryResponse> getPointsByUserId(@RequestHeader("X-User-Id") Long userId);
-
-    @GetMapping("/api/points/available")
-    Integer getAvailablePoint(@RequestHeader("X-User-Id") Long userId);
 
 
     // review
