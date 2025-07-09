@@ -22,11 +22,15 @@ public class AdminBookService {
     }
 
     public void createBook(BookCreateRequest bookCreateRequest, MultipartFile file) {
-        if (file != null && !file.isEmpty()) {
-            String filePath = minioService.handleImageUpload(file);
-            bookCreateRequest.setImageUrl("/images/"+filePath);
+        try {
+            if (file != null && !file.isEmpty()) {
+                String filePath = minioService.handleImageUpload(file);
+                bookCreateRequest.setImageUrl("/images/"+filePath);
+            }
+            bookFeignClient.createBook(bookCreateRequest);
+        } catch (Exception e) {
+            throw new RuntimeException("책 생성에 실패했습니다.", e);
         }
-        bookFeignClient.createBook(bookCreateRequest);
     }
 
 }
