@@ -37,6 +37,7 @@ public class ReviewController {
         ReviewCreateRequest req = new ReviewCreateRequest();
         req.setIsbn(isbn);
         model.addAttribute("reviewCreateRequest", req);
+        model.addAttribute("isbn", isbn);
         return "review/create";
     }
 
