@@ -39,7 +39,7 @@ public class ReviewService {
          }
 
         if (file != null && !file.isEmpty()) {
-            String filePath = handleImageUpload(file);
+            String filePath = minioService.handleImageUpload(file);
             request.setFilePath(filePath);
         }
 
@@ -54,7 +54,7 @@ public class ReviewService {
         request.setFilePath(oldFilePath); // 기본적으로 이전 파일 경로를 유지
 
         if (file != null && !file.isEmpty()) {
-            String newFilePath = handleImageUpload(file);
+            String newFilePath = minioService.handleImageUpload(file);
             request.setFilePath(newFilePath);
         }
 
@@ -70,43 +70,6 @@ public class ReviewService {
                 minioService.deleteFile(request.getFilePath());
             }
             throw new RuntimeException("리뷰 정보 업데이트에 실패했습니다.", e);
-        }
-    }
-
-    /**
-     * 이미지 파일을 검증하고 스토리지에 업로드한 후, 파일 경로를 반환합니다.
-     *
-     * @param file 업로드할 MultipartFile
-     * @return 스토리지에 저장된 파일 경로
-     */
-    private String handleImageUpload(MultipartFile file) {
-        validateImage(file);
-        String filePath = minioService.getFilePath(file);
-        try {
-            minioService.uploadFile(file, filePath);
-            return filePath;
-        } catch (Exception e) {
-            throw new RuntimeException("파일 업로드에 실패했습니다.", e);
-        }
-    }
-
-    /**
-     * 파일이 유효한 이미지인지 검증합니다.
-     *
-     * @param file 검증할 MultipartFile
-     */
-    private void validateImage(MultipartFile file) {
-        String contentType = file.getContentType();
-        if (contentType == null || !contentType.startsWith("image/")) {
-            throw new IllegalArgumentException("이미지 파일만 업로드할 수 있습니다.");
-        }
-        try {
-            BufferedImage image = ImageIO.read(file.getInputStream());
-            if (image == null) {
-                throw new IllegalArgumentException("유효하지 않은 이미지 파일입니다.");
-            }
-        } catch (IOException e) {
-            throw new IllegalArgumentException("이미지 파일 검증 중 오류가 발생했습니다.", e);
         }
     }
 }
