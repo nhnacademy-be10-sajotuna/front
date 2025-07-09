@@ -11,10 +11,17 @@
 
     <div><strong>주문 번호:</strong> <span th:text="${orderDetail.getOrderNumber()}"></span></div>
     <div><strong>주문 날짜:</strong> <span th:text="${orderDetail.getOrderCreatedAt()}"></span></div>
-    <div><strong>주문 상태:</strong> <span th:text="${orderDetail.getPaymentMethod()}"></span></div>
+    <div><strong>주문 상태:</strong> <span th:text="${orderDetail.getStatus()}"></span></div>
 
     <h2>상품</h2>
 
+    <table>
+        <tr th:each="item : ${orderDetail.getItems()}">
+            <td th:text="${item.getIsbn()}"></td>
+            <td th:text="${item.getQty()}"></td>
+            <td th:text="${item.getAmount()}"></td>
+        </tr>
+    </table>
 
     <h2>배송 정보</h2>
 
