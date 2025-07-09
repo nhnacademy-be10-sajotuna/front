@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.controller;
+package shop.nhnteam04.front.review.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.review.request.ReviewCreateRequest;
 import shop.nhnteam04.front.review.request.ReviewUpdateRequest;
 import shop.nhnteam04.front.review.response.ReviewResponse;
-import shop.nhnteam04.front.service.ReviewService;
+import shop.nhnteam04.front.review.service.ReviewService;
 
 import java.util.List;
 

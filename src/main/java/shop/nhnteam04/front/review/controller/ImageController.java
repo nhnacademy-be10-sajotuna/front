@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.controller;
+package shop.nhnteam04.front.review.controller;
 
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
