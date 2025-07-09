@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.service;
+package shop.nhnteam04.front.review.service;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;

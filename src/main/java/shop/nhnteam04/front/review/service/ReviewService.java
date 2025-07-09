@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.service;
+package shop.nhnteam04.front.review.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,8 +11,6 @@ import shop.nhnteam04.front.review.request.ReviewUpdateRequest;
 import shop.nhnteam04.front.review.response.ReviewResponse;
 import shop.nhnteam04.front.utils.MaskingUtils;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
