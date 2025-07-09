@@ -1,98 +1,194 @@
-/* =================================================================
-   공통 컨테이너 및 기본 스타일
-================================================================= */
-.review-container {
-    background-color: white;
-    padding: 2.5rem;
-    border-radius: 1.2rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    width: 100%;
+/* ==========================================================================
+   Base & Global Styles
+   ========================================================================== */
+:root {
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --secondary-color: #6c757d;
+    --secondary-hover-color: #5a6268;
+    --success-bg: #d4edda;
+    --success-text: #155724;
+    --error-bg: #f8d7da;
+    --error-text: #721c24;
+    --star-color: #ffc107;
+    --border-color: #dee2e6;
+    --bg-light: #f8f9fa;
+    --text-primary: #333;
+    --text-secondary: #555;
+    --border-radius: 0.5rem;
+    --box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.review-container h2 {
+/* ==========================================================================
+   Layout Containers
+   ========================================================================== */
+.review-container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.review-container__title {
     text-align: center;
     margin-bottom: 2rem;
-    color: #333;
+    color: var(--text-primary);
+    font-size: 1.8rem;
 }
 
-/* 메시지 박스 */
-.message, .error-message {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 0.5rem;
-    text-align: center;
-}
-
-.message {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.error-message {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-/* =================================================================
-   폼 스타일 (리뷰 작성 & 수정)
-================================================================= */
-.review-form-container {
-    max-width: 550px;
+/* ==========================================================================
+   Form Styles
+   ========================================================================== */
+.review-form {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .form-group {
     margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.form-group__label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    color: #555;
+    color: var(--text-secondary);
 }
 
-.form-group select,
-.form-group textarea,
-.form-group input {
+.form-group__control {
     width: 100%;
-    padding: 0.8rem;
-    border-radius: 0.5rem;
-    border: 1px solid #ccc;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
     font-size: 1rem;
     font-family: inherit;
-    box-sizing: border-box; /* 패딩과 테두리가 너비에 포함되도록 설정 */
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-group textarea {
-    min-height: 120px;
+.form-group__control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+textarea.form-group__control {
+    min-height: 150px;
     resize: vertical;
 }
 
-/* 기존 이미지 (수정 페이지) */
-.current-image-group {
+/* Star Rating */
+.star-rating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.star-rating__input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.star-rating__input input[type="radio"] {
+    display: none;
+}
+
+.star-rating__input label {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star-rating__input label:hover,
+.star-rating__input label:hover ~ label {
+    color: var(--star-color);
+}
+
+.star-rating__input input[type="radio"]:checked ~ label {
+    color: var(--star-color);
+}
+
+.star-rating__display {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    min-width: 80px;
+}
+
+/* Current Image Preview */
+.current-image {
     margin-bottom: 1.5rem;
 }
-
-.current-image-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #555;
-}
-
-.current-image-group img {
+.current-image img {
     max-width: 120px;
-    border-radius: 0.5rem;
-    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
 }
 
-/* =================================================================
-   목록 스타일
-================================================================= */
-.review-list-container {
-    max-width: 900px;
+/* ==========================================================================
+   Button Styles
+   ========================================================================== */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    color: #fff;
 }
 
+.btn:focus {
+    outline: 2px solid var(--primary-hover-color);
+    outline-offset: 2px;
+}
+
+.btn--primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.btn--primary:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--primary-hover-color);
+}
+
+.btn--secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+.btn--secondary:hover {
+    background-color: var(--secondary-hover-color);
+    border-color: var(--secondary-hover-color);
+}
+
+.btn--block {
+    width: 100%;
+    display: block;
+}
+
+.form-actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.list-actions {
+    text-align: right;
+    margin-top: 1.5rem;
+}
+
+
+/* ==========================================================================
+   Table Styles
+   ========================================================================== */
 .review-table {
     width: 100%;
     border-collapse: collapse;
@@ -100,80 +196,73 @@
 }
 
 .review-table th, .review-table td {
-    padding: 0.9rem;
+    padding: 1rem;
     text-align: center;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
 }
 
 .review-table thead th {
-    background-color: #f8f9fa;
+    background-color: var(--bg-light);
     font-weight: 600;
-    color: #495057;
+    color: var(--text-secondary);
 }
 
 .review-table tbody tr:hover {
     background-color: #f1f3f5;
 }
 
-.review-image-thumbnail {
+.review-table__image {
     max-width: 100px;
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius);
 }
 
-/* =================================================================
-   버튼 및 링크 스타일
-================================================================= */
-.form-actions {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+.review-table__stars {
+    color: var(--star-color);
+    font-size: 1.2rem;
 }
 
-.list-actions-footer {
-    text-align: right;
-    margin-top: 1.5rem;
-}
-
-.action-button, .button-link {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    border-radius: 0.5rem;
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
+/* ==========================================================================
+   Alert/Message Boxes
+   ========================================================================== */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--border-radius);
     text-align: center;
+    border: 1px solid transparent;
 }
 
-.action-button.full-width {
-    width: 100%;
+.alert--success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    border-color: var(--success-bg);
 }
 
-/* 주요 액션 버튼 (등록, 작성 등) */
-.btn-primary {
-    background-color: #5c9ded;
-}
-.btn-primary:hover {
-    background-color: #417fde;
+.alert--error {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border-color: var(--error-bg);
 }
 
-/* 보조 액션 버튼 (수정 등) */
-.btn-secondary {
-    background-color: #007bff;
-}
-.btn-secondary:hover {
-    background-color: #0069d9;
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+@media (max-width: 768px) {
+    .review-container {
+        padding: 1.5rem;
+    }
+    .review-table th, .review-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+    }
 }
 
-/* 취소/목록 버튼 */
-.btn-cancel {
-    background-color: #6c757d;
-}
-.btn-cancel:hover {
-    background-color: #5a6268;
+@media (max-width: 480px) {
+    .review-container__title {
+        font-size: 1.5rem;
+    }
+    .form-actions {
+        flex-direction: column;
+    }
 }

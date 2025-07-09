@@ -8,19 +8,21 @@
 </head>
 <body>
 <section layout:fragment="content">
-  <div class="review-container review-form-container">
-    <h2>리뷰 작성</h2>
-    <form th:action="@{/reviews/create}" th:object="${reviewCreateRequest}" method="post" enctype="multipart/form-data">
+  <div class="review-container">
+    <h2 class="review-container__title">리뷰 작성</h2>
+    <form th:action="@{/reviews/create}" th:object="${reviewCreateRequest}" method="post" enctype="multipart/form-data" class="review-form">
       <input type="hidden" th:field="*{isbn}" />
 
       <div th:replace="~{fragments/form_fields :: reviewForm}"></div>
 
       <div class="form-actions">
-        <a th:href="@{/reviews(isbn=${isbn})}" class="action-button btn-cancel full-width">목록으로</a>
-        <button type="submit" class="action-button btn-primary full-width">리뷰 등록</button>
+        <a th:href="@{/reviews(isbn=${isbn})}" class="btn btn--secondary btn--block">목록으로</a>
+        <button type="submit" class="btn btn--primary btn--block">리뷰 등록</button>
       </div>
     </form>
   </div>
+
+  <script th:src="@{/js/review.js}"></script>
 </section>
 </body>
 </html>
