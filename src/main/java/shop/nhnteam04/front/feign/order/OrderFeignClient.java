@@ -41,6 +41,9 @@ public interface OrderFeignClient {
     @GetMapping("api/orders/package")
     List<PackageResponse> getPackages();
 
+    @GetMapping("api/orders/package/{package-id}")
+    PackageResponse getPackages(@PathVariable("package-id") Long packageId);
+
 
     // payment
     @PostMapping("/api/payments/confirm")
