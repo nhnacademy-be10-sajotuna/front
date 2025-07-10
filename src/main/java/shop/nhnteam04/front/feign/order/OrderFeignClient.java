@@ -11,7 +11,7 @@ import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
 
 import java.util.List;
 
-@FeignClient(name = "gateway/order-api")
+@FeignClient(name = "gateway/order-api", contextId = "orderFeignClient")
 public interface OrderFeignClient {
 
     // orders
@@ -40,6 +40,9 @@ public interface OrderFeignClient {
     // orderPackage
     @GetMapping("api/orders/package")
     List<PackageResponse> getPackages();
+
+    @GetMapping("api/orders/package/{package-id}")
+    PackageResponse getPackageById(@PathVariable("package-id") Long packageId);
 
 
     // payment
