@@ -23,7 +23,7 @@ public class AdminOrderController {
 
         Page<OrderResponse> orders;
 
-        if(status == null || status.equals("ALL")){
+        if(status.isEmpty() || status.equals("ALL")){
             mav.addObject("status", "ALL");
             orders = adminOrderService.getAllOrders(pageable);
         } else {
