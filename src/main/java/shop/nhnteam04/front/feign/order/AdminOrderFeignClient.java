@@ -17,12 +17,17 @@ public interface AdminOrderFeignClient {
     @GetMapping("/api/admin/orders/{status}")
     Page<OrderResponse> getStatusOrders(@PathVariable String status, Pageable pageable);
 
+    @PutMapping("/api/admin/orders/{order-id}/delivery")
+    void shippedOrder(@PathVariable("order-id") Long orderId);
+
+
+
     @PostMapping("/api/admin/packages/package")
     PackageResponse createPackage(@RequestBody PackageRequest packageRequest);
 
     @PutMapping("/api/admin/packages/package/{package-id}")
     void updatePackage(@PathVariable("package-id") Long packageId, @RequestBody PackageRequest request);
 
-    @PutMapping("/api/admin/orders/{order-id}/delivery")
-    void shippedOrder(@PathVariable("order-id") Long orderId);
+    @DeleteMapping("/api/admin/packages/package/{package-id}")
+    void deletePackage(@PathVariable("package-id") Long packageId);
 }

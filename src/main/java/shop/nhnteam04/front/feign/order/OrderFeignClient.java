@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
-import shop.nhnteam04.front.order.dto.orders.request.PackageRequest;
 import shop.nhnteam04.front.order.dto.orders.response.*;
 import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
 import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
@@ -42,14 +41,6 @@ public interface OrderFeignClient {
     @GetMapping("api/orders/package")
     List<PackageResponse> getPackages();
 
-    @PostMapping("/api/admin/packages/package")
-    PackageResponse createPackage(@RequestBody PackageRequest packageRequest);
-
-    @PutMapping("/api/admin/packages/package/{package-id}")
-    void updatePackage(@PathVariable("package-id") Long packageId, @RequestBody PackageRequest request);
-
-    @DeleteMapping("/api/admin/packages/package/{package-id}")
-    void deletePackage(@PathVariable("package-id") Long packageId);
 
 
     // payment
