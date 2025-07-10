@@ -145,6 +145,22 @@
                 width: 100%;
             }
         }
+
+        select {
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+
+            color: #444;
+            background-color: #fff;
+
+            padding: 0.6em 1.4em 0.5em 0.8em;
+            margin: 0;
+
+            border: 1px solid #aaa;
+            border-radius: 0.5em;
+            box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
+        }
     </style>
 </head>
 
@@ -167,6 +183,17 @@
         <div class="admin-content">
             <h1>주문 관리</h1>
 
+            <label>
+                <select onchange="location.href='/admin/orders?status='+this.value" style="margin-bottom: 20px">
+                    <option th:value="'ALL'"       th:selected="${status == 'ALL'}">전체</option>
+                    <option th:value="'PENDING'"   th:selected="${status == 'PENDING'}">대기 중</option>
+                    <option th:value="'SHIPPED'"   th:selected="${status == 'SHIPPED'}">배송 중</option>
+                    <option th:value="'DELIVERED'" th:selected="${status == 'DELIVERED'}">배송 완료</option>
+                    <option th:value="'RETURNED'"  th:selected="${status == 'RETURNED'}">취소</option>
+                    <option th:value="'CANCELLED'" th:selected="${status == 'CANCELLED'}">반품</option>
+                </select>
+            </label>
+
             <table>
                 <thead>
                 <tr>
@@ -187,7 +214,7 @@
                     <td th:text="${order.status}"></td>
                     <td>
                         <form th:action="@{'/admin/orders/delivery/' + ${order.orderId}}" method="post" th:onsubmit="return confirm('변경하시겠습니까?')">
-                            <button type="submit" class="btn btn-edit">배송 중으로 변경</button>
+                            <button type="submit" class="btn btn-edit" th:if="${order.status.name() == 'PENDING'}">배송 중으로 변경</button>
                         </form>
                     </td>
                 </tr>
