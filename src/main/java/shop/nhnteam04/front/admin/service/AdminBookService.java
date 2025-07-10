@@ -29,4 +29,22 @@ public class AdminBookService {
         bookFeignClient.createBook(bookCreateRequest);
     }
 
+    public BookResponse getBook(String isbn) {
+        return bookFeignClient.getBook(isbn);
+    }
+
+    public void updateBook(String isbn, BookCreateRequest bookCreateRequest, MultipartFile file) {
+        if (file != null && !file.isEmpty()) {
+            String oldImageUrl = bookCreateRequest.getImageUrl();
+            minioService.deleteFile(oldImageUrl.substring(8));
+            String filePath = minioService.handleImageUpload(file);
+            bookCreateRequest.setImageUrl("/images/"+filePath);
+        }
+        bookCreateRequest.setIsbn(isbn);
+        bookFeignClient.updateBook(isbn, bookCreateRequest);
+    }
+
+    public void deleteBook(String isbn) {
+        bookFeignClient.deleteBook(isbn);
+    }
 }

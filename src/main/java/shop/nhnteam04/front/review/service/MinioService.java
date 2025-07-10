@@ -27,27 +27,33 @@ public class MinioService {
         return UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
     }
 
-    public void uploadFile(MultipartFile file, String filePath) throws Exception {
-        minioClient.putObject(
-                PutObjectArgs.builder()
-                        .bucket(bucket)
-                        .object(filePath)
-                        .stream(file.getInputStream(), file.getSize(), -1)
-                        .contentType(file.getContentType())
-                        .build()
-        );
+    public void uploadFile(MultipartFile file, String filePath) {
+        try {
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(bucket)
+                            .object(filePath)
+                            .stream(file.getInputStream(), file.getSize(), -1)
+                            .contentType(file.getContentType())
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("파일 업로드에 실패했습니다.", e);
+        }
     }
 
-    public void deleteFile(String objectPath) throws Exception {
-        minioClient.removeObject(
-                RemoveObjectArgs.builder()
-                        .bucket(bucket)
-                        .object(objectPath.startsWith("/") ? objectPath.substring(1 + bucket.length()) : objectPath)
-                        .build()
-        );
+    public void deleteFile(String objectPath) {
+        try {
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(bucket)
+                            .object(objectPath.startsWith("/") ? objectPath.substring(1 + bucket.length()) : objectPath)
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("파일 삭제에 실패했습니다.", e);
+        }
     }
-
-
     /**
      * 이미지 파일을 검증하고 스토리지에 업로드한 후, 파일 경로를 반환합니다.
      *
@@ -57,12 +63,8 @@ public class MinioService {
     public String handleImageUpload(MultipartFile file) {
         validateImage(file);
         String filePath = getFilePath(file);
-        try {
-            uploadFile(file, filePath);
-            return filePath;
-        } catch (Exception e) {
-            throw new RuntimeException("파일 업로드에 실패했습니다.", e);
-        }
+        uploadFile(file, filePath);
+        return filePath;
     }
 
     /**

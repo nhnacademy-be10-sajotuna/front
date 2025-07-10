@@ -54,8 +54,7 @@ public class AdminBookController {
     @PostMapping
     public String create(@Valid @ModelAttribute BookCreateRequest bookCreateRequest,
                          BindingResult bindingResult,
-                         @RequestParam(required = false) MultipartFile imageFile,
-                         RedirectAttributes redirectAttributes) {
+                         @RequestParam(required = false) MultipartFile imageFile) {
         try {
             if (imageFile != null && !imageFile.isEmpty() && imageFile.getSize() > MAX_FILE_SIZE) {
                 bindingResult.reject("file.size", "이미지 파일 용량은 5MB를 초과할 수 없습니다.");
@@ -69,8 +68,47 @@ public class AdminBookController {
             String errorMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
             return "redirect:/admin/books/create?errorMessage="+errorMessage;
         }
-
     }
 
+    @GetMapping("/edit/{book-isbn}")
+    public String updateForm(@PathVariable("book-isbn") String isbn, Model model) {
+        List<CategoryResponse> categories =  adminCategoryService.getAllCategories();
+        BookResponse book = adminBookService.getBook(isbn);
+        model.addAttribute("book", book);
+        try {
+            String categoriesJson = objectMapper.writeValueAsString(categories);
+            model.addAttribute("allCategoriesJson", categoriesJson);
+            String existingCategoriesJson = objectMapper.writeValueAsString(book.getCategories());
+            model.addAttribute("existingCategoriesJson", existingCategoriesJson);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "admin/book_edit";
+    }
 
+    @PostMapping("/edit/{book-isbn}")
+    public String update(@PathVariable("book-isbn") String isbn,
+                         @Valid @ModelAttribute BookCreateRequest bookCreateRequest,
+                         BindingResult bindingResult,
+                         @RequestParam(required = false) MultipartFile imageFile) {
+        try {
+            if (imageFile != null && !imageFile.isEmpty() && imageFile.getSize() > MAX_FILE_SIZE) {
+                bindingResult.reject("file.size", "이미지 파일 용량은 5MB를 초과할 수 없습니다.");
+            }
+            if (bindingResult.hasErrors()) {
+                throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            }
+            adminBookService.updateBook(isbn, bookCreateRequest, imageFile);
+            return "redirect:/admin/books";
+        } catch (Exception e) {
+            String errorMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+            return "redirect:/admin/books/edit/"+ isbn  + "?errorMessage="+errorMessage;
+        }
+    }
+
+    @PostMapping("/delete/{book-isbn}")
+    public String delete(@PathVariable("book-isbn") String isbn) {
+        adminBookService.deleteBook(isbn);
+        return "redirect:/admin/books";
+    }
 }

@@ -4,9 +4,7 @@ package shop.nhnteam04.front.feign.book;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.book.domain.BookCreateRequest;
 import shop.nhnteam04.front.book.domain.BookResponse;
 import shop.nhnteam04.front.book.domain.CategoryResponse;
@@ -25,4 +23,12 @@ public interface BookFeignClient {
     @PostMapping("/api/admin/books")
     void createBook(@RequestBody BookCreateRequest bookCreateRequest);
 
+    @PutMapping("/api/admin/books/{isbn}")
+    void updateBook(@PathVariable String isbn, @RequestBody BookCreateRequest bookCreateRequest);
+
+    @GetMapping("/api/admin/books/{isbn}")
+    BookResponse getBook(@PathVariable String isbn);
+
+    @DeleteMapping("/api/admin/books/{isbn}")
+    void deleteBook(@PathVariable String isbn);
 }
