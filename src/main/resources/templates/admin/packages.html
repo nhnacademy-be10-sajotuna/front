@@ -3,7 +3,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-    <title>관리자 홈</title>
+    <meta charset="utf-8" />
+    <title>책 포장 관리</title>
     <style>
         main {
             padding: 0 !important;
@@ -65,44 +66,76 @@
 
         .admin-content {
             flex: 1;
-            background-color: #f8f9fa;
             padding: 3rem 2rem;
             margin-left: 250px;
-            min-height: calc(100vh - 60px);
             width: calc(100% - 250px);
         }
 
         .admin-content h1 {
-            font-size: 2rem;
+            text-align: center;
             margin-bottom: 2rem;
-            color: #333;
         }
 
-        .admin-button-container {
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 0.95rem;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        img {
+            max-width: 80px;
+            height: auto;
+        }
+
+        .button-group {
             display: flex;
-            justify-content: flex-start;
-            gap: 2rem;
-            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        .admin-button {
-            background-color: #4CAF50;
-            color: white;
-            font-size: 1.2rem;
-            padding: 1rem 2.5rem;
+        .btn {
+            padding: 0.5rem 1rem;
             border: none;
-            border-radius: 2rem;
+            border-radius: 0.5rem;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 0.9rem;
             text-decoration: none;
+            color: white;
+        }
+
+        .btn-edit {
+            background-color: #2196F3;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+        }
+
+        .btn-add {
             display: inline-block;
-            min-width: 200px;
+            background-color: #4CAF50;
             text-align: center;
         }
 
-        .admin-button:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
+        .pagination a {
+            margin: 0 0.3rem;
+            text-decoration: none;
+            color: #333;
         }
 
         @media (max-width: 768px) {
@@ -122,29 +155,52 @@
 <body>
 <main layout:fragment="content">
     <div class="admin-container">
-        <!-- 🧭 사이드바 -->
+        <!-- 🧭 관리자 사이드바 -->
         <div class="admin-sidebar">
             <h3>관리자 메뉴</h3>
             <ul class="admin-sidebar-menu">
-                <li><a href="/admin" class="active">대시보드</a></li>
+                <li><a href="/admin">대시보드</a></li>
                 <li><a href="/admin/books">책 관리</a></li>
                 <li><a href="/admin/orders">주문 관리</a></li>
-                <!-- 필요에 따라 추가 -->
                 <li><a href="/admin/users">회원 관리</a></li>
                 <li><a href="/admin/categories">카테고리 관리</a></li>
-                <li><a href="/admin/packages">책 포장 관리</a></li>
+                <li><a href="/admin/packages" class="active">책 포장 관리</a></li>
                 <li><a href="/admin/coupons">쿠폰 관리</a></li>
             </ul>
         </div>
 
-        <!-- 📄 본문 -->
+        <!-- 📄 본문 영역 -->
         <div class="admin-content">
-            <h1>📊 관리자 대시보드</h1>
-            <div class="admin-button-container">
-                <a th:href="@{/admin/books}" class="admin-button">📚 책 관리</a>
-                <a th:href="@{/admin/orders}" class="admin-button">🧾 주문 관리</a>
-                <a th:href="@{/admin/users}" class="admin-button">👤 회원 관리</a>
-                <a th:href="@{/admin/categories}" class="admin-button">📂 카테고리 관리</a>
+            <h1>📚 책 포장 관리</h1>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>포장지</th>
+                    <th>가격</th>
+                    <th>작업</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="package : ${packages}">
+                    <td th:text="${package.id}"></td>
+                    <td th:text="${package.packaging}"></td>
+                    <td th:text="${package.price} + '원'"></td>
+                    <td>
+                        <div class="button-group">
+                            <a th:href="@{'/admin/packages/edit/' + ${package.id}}" class="btn btn-edit">수정</a>
+                            <form th:action="@{'/admin/packages/delete/' + ${package.id}}" method="post" th:onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                                <button type="submit" class="btn btn-delete">삭제</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a th:href="@{/admin/packages/create}" class="btn btn-add">➕ 포장 추가</a>
             </div>
         </div>
     </div>

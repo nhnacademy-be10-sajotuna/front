@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      th:inline="javascript"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-    <title>관리자 홈</title>
+    <title>포장 추가</title>
     <style>
         main {
             padding: 0 !important;
@@ -65,44 +66,43 @@
 
         .admin-content {
             flex: 1;
-            background-color: #f8f9fa;
             padding: 3rem 2rem;
             margin-left: 250px;
-            min-height: calc(100vh - 60px);
             width: calc(100% - 250px);
         }
 
-        .admin-content h1 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: #333;
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            background-color: white;
         }
 
-        .admin-button-container {
-            display: flex;
-            justify-content: flex-start;
-            gap: 2rem;
-            flex-wrap: wrap;
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
         }
 
-        .admin-button {
+        input, textarea, select {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.4rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 2rem;
+            padding: 0.8rem 2rem;
             background-color: #4CAF50;
             color: white;
-            font-size: 1.2rem;
-            padding: 1rem 2.5rem;
             border: none;
-            border-radius: 2rem;
+            border-radius: 0.4rem;
+            font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
-            min-width: 200px;
-            text-align: center;
-        }
-
-        .admin-button:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
@@ -122,14 +122,13 @@
 <body>
 <main layout:fragment="content">
     <div class="admin-container">
-        <!-- 🧭 사이드바 -->
+        <!-- 🧭 관리자 사이드바 -->
         <div class="admin-sidebar">
             <h3>관리자 메뉴</h3>
             <ul class="admin-sidebar-menu">
-                <li><a href="/admin" class="active">대시보드</a></li>
+                <li><a href="/admin">대시보드</a></li>
                 <li><a href="/admin/books">책 관리</a></li>
                 <li><a href="/admin/orders">주문 관리</a></li>
-                <!-- 필요에 따라 추가 -->
                 <li><a href="/admin/users">회원 관리</a></li>
                 <li><a href="/admin/categories">카테고리 관리</a></li>
                 <li><a href="/admin/packages">책 포장 관리</a></li>
@@ -137,14 +136,20 @@
             </ul>
         </div>
 
-        <!-- 📄 본문 -->
+        <!-- 📄 도서 추가 폼 -->
         <div class="admin-content">
-            <h1>📊 관리자 대시보드</h1>
-            <div class="admin-button-container">
-                <a th:href="@{/admin/books}" class="admin-button">📚 책 관리</a>
-                <a th:href="@{/admin/orders}" class="admin-button">🧾 주문 관리</a>
-                <a th:href="@{/admin/users}" class="admin-button">👤 회원 관리</a>
-                <a th:href="@{/admin/categories}" class="admin-button">📂 카테고리 관리</a>
+            <div class="form-container">
+                <h2>📚 책 포장 추가</h2>
+
+                <form th:action="@{/admin/packages/create}" method="post">
+                    <label>포장지</label>
+                    <input type="text" name="packaging" required />
+
+                    <label>가격</label>
+                    <input type="number" name="price" min="0" required />
+
+                    <button type="submit">포장 등록</button>
+                </form>
             </div>
         </div>
     </div>
