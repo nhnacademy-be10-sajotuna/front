@@ -1,5 +1,6 @@
 package shop.nhnteam04.front.admin.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class AdminPackageController {
     }
 
     @PostMapping("/create")
-    public String createPackage(@ModelAttribute PackageRequest packageRequest){
+    public String createPackage(@Valid @ModelAttribute PackageRequest packageRequest){
         adminPackageService.createPackage(packageRequest);
 
         return "redirect:/admin/packages";
