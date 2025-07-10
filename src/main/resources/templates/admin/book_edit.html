@@ -4,7 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-    <title>도서 추가</title>
+    <title>도서 수정</title>
     <style>
         main {
             padding: 0 !important;
@@ -138,46 +138,56 @@
             </ul>
         </div>
 
-        <!-- 📄 도서 추가 폼 -->
+        <!-- 📄 도서 수정 폼 -->
         <div class="admin-content">
             <div class="form-container">
-                <h2>📚 도서 추가</h2>
+                <h2>📚 도서 수정</h2>
 
-                <form th:action="@{/admin/books}" method="post" enctype="multipart/form-data">
-                <label>ISBN</label>
-                    <input type="text" name="isbn" required />
+                <form th:action="@{'/admin/books/edit/' + ${book.isbn}}" method="post" enctype="multipart/form-data">
+                    <label>ISBN</label>
+                    <input type="text" name="isbn" th:value="${book.isbn}" readonly />
 
                     <label>제목</label>
-                    <input type="text" name="title" required />
+                    <input type="text" name="title" th:value="${book.title}" required />
 
                     <label>저자</label>
-                    <input type="text" name="author" required />
+                    <input type="text" name="author" th:value="${book.author}" required />
 
                     <label>출판사</label>
-                    <input type="text" name="publisher" required />
+                    <input type="text" name="publisher" th:value="${book.publisher}" required />
 
                     <label>출판일</label>
-                    <input type="date" name="publicationDate" required />
+                    <input type="date" name="publicationDate" th:value="${book.publicationDate}" required />
 
                     <label>페이지 수</label>
-                    <input type="number" name="pageCount" min="0" />
+                    <input type="number" name="pageCount" th:value="${book.pageCount}" min="0" />
 
-                    <label>이미지 업로드</label>
+                    <label>기존 이미지</label>
+                    <div>
+                        <img th:if="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}"
+                             th:src="${book.imageUrl}" alt="기존 이미지" style="max-height: 150px;" />
+                        <span th:unless="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}">이미지 없음</span>
+                    </div>
+
+
+                    <input type="hidden" name="imageUrl" th:value="${book.imageUrl}" />
+
+                    <label>이미지 변경 (선택)</label>
                     <input type="file" name="imageFile" accept="image/*" />
 
                     <label>설명</label>
-                    <textarea name="description" rows="4"></textarea>
+                    <textarea name="description" rows="4" th:text="${book.description}"></textarea>
 
                     <label>정가</label>
-                    <input type="number" name="originalPrice" step="0.01" required />
+                    <input type="number" name="originalPrice" th:value="${book.originalPrice}" step="0.01" required />
 
                     <label>판매가</label>
-                    <input type="number" name="sellingPrice" step="0.01" required />
+                    <input type="number" name="sellingPrice" th:value="${book.sellingPrice}" step="0.01" required />
 
                     <label>선물 포장 가능 여부</label>
                     <select name="giftWrappingAvailable">
-                        <option value="true">가능</option>
-                        <option value="false" selected>불가능</option>
+                        <option th:value="true" th:selected="${book.giftWrappingAvailable} == true">가능</option>
+                        <option th:value="false" th:selected="${book.giftWrappingAvailable} == false">불가능</option>
                     </select>
 
                     <label>카테고리 선택</label>
@@ -190,12 +200,14 @@
                     <!-- 서버로 전송될 hidden input (쉼표 구분된 마지막 ID들) -->
                     <input type="hidden" name="categories" id="categories" />
 
+                    <input type="text" name="tagNames"
+                           th:value="${#strings.listJoin(book.getTags(), ',')}"
+                           placeholder="예: Java, Spring, Backend" />
 
-                    <label>태그 (쉼표로 구분)</label>
-                    <input type="text" name="tagNames" placeholder="예: Java, Spring, Backend" />
 
-                    <button type="submit">도서 등록</button>
+                    <button type="submit">도서 수정</button>
                 </form>
+
             </div>
         </div>
     </div>
@@ -205,13 +217,18 @@
         const allCategories = /*[[${allCategoriesJson}]]*/ '[]';
         const categories = JSON.parse(allCategories);
 
+        // 기존 book.categories 를 JSON 문자열로 넘긴다고 가정
+        // (예: List<List<CategoryResponse>> -> JSON.stringify)
+        const existingCategoriesJson = /*[[${existingCategoriesJson}]]*/ '[]';
+        const existingCategories = JSON.parse(existingCategoriesJson);
+
         const container = document.getElementById('category-selects');
         const selectedList = document.getElementById('selected-categories-list');
         const hiddenInput = document.getElementById('categories');
         const addBtn = document.getElementById('add-category-btn');
 
-        let currentPath = [];         // 현재 선택 중인 경로
-        let selectedCategoryIds = []; // 최종적으로 선택된 마지막 카테고리 ID들
+        let currentPath = [];          // 현재 선택 중인 경로
+        let selectedCategoryIds = [];  // 최종적으로 선택된 마지막 카테고리 ID들
 
         function renderCategorySelect(parentId = null, depth = 0) {
             while (container.children.length > depth) {
@@ -250,7 +267,43 @@
             container.appendChild(select);
         }
 
-        // 👉 카테고리 추가 버튼 클릭 시
+        // 기존에 있는 카테고리들을 리스트에 추가하는 함수
+        function addExistingCategoryPath(path) {
+            if (!Array.isArray(path) || path.length === 0) return;
+
+            const lastId = path[path.length - 1].id;
+
+            if (selectedCategoryIds.includes(lastId)) return; // 중복 방지
+
+            // 이름들을 ' > ' 로 연결
+            const names = path.map(cat => cat.name).filter(Boolean);
+
+            const li = document.createElement('li');
+            li.textContent = names.join(' > ');
+
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = '❌';
+            removeBtn.type = 'button';
+            removeBtn.style.marginLeft = '0.5rem';
+            removeBtn.addEventListener('click', () => {
+                selectedCategoryIds = selectedCategoryIds.filter(id => id !== lastId);
+                selectedList.removeChild(li);
+                updateHiddenInput();
+            });
+
+            li.appendChild(removeBtn);
+            selectedList.appendChild(li);
+
+            selectedCategoryIds.push(lastId);
+            updateHiddenInput();
+        }
+
+        // 초기 렌더링 시 기존 카테고리들 보여주기
+        existingCategories.forEach(path => {
+            addExistingCategoryPath(path);
+        });
+
+        // 카테고리 추가 버튼 이벤트
         addBtn.addEventListener('click', () => {
             if (currentPath.length === 0) return alert('카테고리를 선택하세요.');
 
@@ -260,7 +313,7 @@
                 return;
             }
 
-            // 카테고리 이름 경로로 보여주기
+            // 이름들을 ' > ' 로 연결
             const names = currentPath.map(id => categories.find(c => c.id === id)?.name).filter(Boolean);
             const li = document.createElement('li');
             li.textContent = names.join(' > ');

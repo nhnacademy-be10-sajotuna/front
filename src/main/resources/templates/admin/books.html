@@ -200,7 +200,7 @@
                 <tbody>
                 <tr th:each="book : ${books.content}">
                     <td th:text="${book.isbn}"></td>
-                    <td><img th:src="${book.imageUrl}" alt="책 표지"></td>
+                    <td><img th:src="${#strings.isEmpty(book.imageUrl)} ? '/image/default.png' : ${book.imageUrl}" alt="책 표지" /></td>
                     <td th:text="${book.title}"></td>
                     <td th:text="${book.author}"></td>
                     <td th:text="${book.publisher}"></td>

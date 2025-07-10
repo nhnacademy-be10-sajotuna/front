@@ -24,7 +24,7 @@
 
       <div class="form-group current-image" th:if="${review.filePath}">
         <label class="form-group__label">기존 사진</label>
-        <img th:src="@{|/images/${review.filePath}|}" alt="기존 리뷰 이미지"/>
+        <img th:src="@{|/image/${review.filePath}|}" alt="기존 리뷰 이미지"/>
       </div>
       <div class="form-group" th:if="${review.filePath == null}">
         <label class="form-group__label">기존 사진</label>
