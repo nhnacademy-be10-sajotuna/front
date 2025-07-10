@@ -11,7 +11,7 @@ import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
 
 import java.util.List;
 
-@FeignClient(name = "gateway/order-api")
+@FeignClient(name = "gateway/order-api", contextId = "orderFeignClient")
 public interface OrderFeignClient {
 
     // orders
