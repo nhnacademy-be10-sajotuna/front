@@ -20,6 +20,10 @@ public class AdminPackageService {
         return orderFeignClient.getPackages();
     }
 
+    public PackageResponse getPackageById(long id){
+        return orderFeignClient.getPackageById(id);
+    }
+
     public void updatePackage(long packageId, PackageRequest packageRequest) {
         if(packageId <= 0 || packageRequest == null){
             throw new IllegalArgumentException();

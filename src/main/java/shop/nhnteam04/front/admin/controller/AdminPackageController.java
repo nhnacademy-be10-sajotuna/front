@@ -41,6 +41,24 @@ public class AdminPackageController {
         return "redirect:/admin/packages";
     }
 
+    @GetMapping("/edit/{package-id}")
+    public ModelAndView editPackagePage(@PathVariable("package-id") long packageId){
+        ModelAndView mvc = new ModelAndView("admin/packages-edit");
+
+        PackageResponse response = adminPackageService.getPackageById(packageId);
+
+        mvc.addObject("package", response);
+
+        return mvc;
+    }
+
+    @PostMapping("/edit/{package-id}")
+    public String editPackage(@PathVariable("package-id") long packageId, @Valid @ModelAttribute PackageRequest packageRequest){
+        adminPackageService.updatePackage(packageId, packageRequest);
+
+        return "redirect:/admin/packages";
+    }
+
     @PostMapping("/delete/{package-id}")
     public String deletePackage(@PathVariable("package-id") long packageId){
         adminPackageService.deletePackage(packageId);

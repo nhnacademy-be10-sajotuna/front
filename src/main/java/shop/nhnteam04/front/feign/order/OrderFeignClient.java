@@ -42,7 +42,7 @@ public interface OrderFeignClient {
     List<PackageResponse> getPackages();
 
     @GetMapping("api/orders/package/{package-id}")
-    PackageResponse getPackages(@PathVariable("package-id") Long packageId);
+    PackageResponse getPackageById(@PathVariable("package-id") Long packageId);
 
 
     // payment
