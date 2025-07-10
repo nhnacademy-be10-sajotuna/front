@@ -182,7 +182,7 @@
                 <tr th:each="order : ${orders.content}">
                     <td th:text="${order.orderNumber}"></td>
                     <td th:text="${order.recipientName}"></td>
-                    <td th:text="${order.expectedDeliveryDate}"></td>
+                    <td th:text="${#temporals.format(order.expectedDeliveryDate, 'yyyy-MM-dd')}"></td>
                     <td th:text="${order.totalPrice}"></td>
                     <td th:text="${order.status}"></td>
                     <td>

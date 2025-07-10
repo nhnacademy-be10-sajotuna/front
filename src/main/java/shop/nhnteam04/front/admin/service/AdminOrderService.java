@@ -20,7 +20,7 @@ public class AdminOrderService {
 
     // 배송 중으로 전환
     public void shippedOrder(Long orderId){
-        if(orderId == null || orderId < 0){
+        if(orderId == null || orderId <= 0){
             throw new IllegalArgumentException();
         }
         orderFeignClient.shippedOrder(orderId);
