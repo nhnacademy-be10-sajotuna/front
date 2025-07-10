@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="utf-8" />
+    <title>주문 목록</title>
+
+    <style>
+        main {
+            padding: 0 !important;
+            background: linear-gradient(135deg, #f5f7fa, #dbe9f4) !important;
+            display: block !important;
+            justify-content: unset !important;
+            align-items: unset !important;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            height: calc(100vh - 60px);
+            position: fixed;
+            left: 0;
+            top: 60px;
+            overflow-y: auto;
+        }
+
+        .admin-sidebar h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .admin-sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: #666;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .admin-sidebar-menu a:hover,
+        .admin-sidebar-menu a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .admin-content {
+            flex: 1;
+            padding: 3rem 2rem;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .admin-content h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 0.95rem;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        img {
+            max-width: 80px;
+            height: auto;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-edit {
+            background-color: #2196F3;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .pagination a {
+            margin: 0 0.3rem;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .pagination .current {
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .admin-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<main layout:fragment="content">
+    <div class="admin-container">
+        <!-- 🧭 관리자 사이드바 -->
+        <div class="admin-sidebar">
+            <h3>관리자 메뉴</h3>
+            <ul class="admin-sidebar-menu">
+                <li><a href="/admin">대시보드</a></li>
+                <li><a href="/admin/books">책 관리</a></li>
+                <li><a href="/admin/orders" class="active">주문 관리</a></li>
+                <li><a href="/admin/users">회원 관리</a></li>
+                <li><a href="/admin/categories">카테고리 관리</a></li>
+            </ul>
+        </div>
+
+        <!-- 📄 본문 영역 -->
+        <div class="admin-content">
+            <h1>주문 관리</h1>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>주문번호</th>
+                    <th>수령인</th>
+                    <th>배송 희망 날짜</th>
+                    <th>주문 금액</th>
+                    <th>주문 상태</th>
+                    <th>작업</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders.content}">
+                    <td th:text="${order.orderNumber}"></td>
+                    <td th:text="${order.recipientName}"></td>
+                    <td th:text="${order.expectedDeliveryDate}"></td>
+                    <td th:text="${order.totalPrice}"></td>
+                    <td th:text="${order.status}"></td>
+                    <td>
+                        <form th:action="@{'/admin/orders/delivery/' + ${order.orderId}}" method="post" th:onsubmit="return confirm('변경하시겠습니까?')">
+                            <button type="submit" class="btn btn-edit">배송 중으로 변경</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <a th:if="${orders.hasPrevious()}" th:href="@{|?page=${orders.number - 1}|}">&laquo; 이전</a>
+                <span class="current">[[${orders.number + 1}]] / [[${orders.totalPages}]]</span>
+                <a th:if="${orders.hasNext()}" th:href="@{|?page=${orders.number + 1}|}">다음 &raquo;</a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
