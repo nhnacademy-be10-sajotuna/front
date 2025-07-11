@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="utf-8" />
-    <title>주문 조회 상세</title>
+    <title>비회원 주문 조회 상세</title>
 </head>
+
 <body>
+<div class="login-container">
     <h2>주문 조회 상세</h2>
 
     <div><strong>주문 번호:</strong> <span th:text="${orderDetail.getOrderNumber()}"></span></div>
-    <div><strong>주문 날짜:</strong> <span th:text="${orderDetail.getOrderCreatedAt()}"></span></div>
+    <div><strong>주문 날짜:</strong> <span th:text="${#temporals.format(orderDetail.getOrderCreatedAt(), 'yyyy-MM-dd HH:mm:ss')}"></span></div>
     <div><strong>주문 상태:</strong> <span th:text="${orderDetail.getStatus()}"></span></div>
 
     <h2>상품</h2>
 
     <table>
         <tr th:each="item : ${orderDetail.getItems()}">
-            <td th:text="${item.isbn}"></td>
-            <td th:text="${item.qty}"></td>
-            <td th:text="${item.amount}"></td>
+            <td th:text="${item.getIsbn()}"></td>
+            <td th:text="${item.getQty()}"></td>
+            <td th:text="${item.getAmount()}"></td>
         </tr>
     </table>
-
 
     <h2>배송 정보</h2>
 
@@ -35,5 +35,14 @@
     <div><strong>주문 금액:</strong> <span th:text="${orderDetail.getTotalPrice()}"></span></div>
     <div><strong>할인 금액:</strong> <span th:text="${orderDetail.getTotalDiscountAmount()}"></span></div>
     <div><strong>결제 금액:</strong> <span th:text="${orderDetail.getFinalPrice()}"></span></div>
+
+    <div th:if="${user != null}" style="margin-top: 20px">
+        <form th:action="@{'/order/cancel?orderId=' + ${orderDetail.orderId}}" method="post" th:onsubmit="return confirm('취소 처리하시겠습니까?')">
+            <button type="submit">주문 취소 신청</button>
+        </form>
+        <button>주문 반품 신청</button>
+    </div>
+
+</div>
 </body>
 </html>

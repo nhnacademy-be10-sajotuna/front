@@ -62,10 +62,12 @@ public class OrderController {
     }
 
     @GetMapping("/detail/{order-id}")
-    public ModelAndView OrderDetail(@PathVariable("order-id") Long orderId) {
+    public ModelAndView OrderDetail(@PathVariable("order-id") Long orderId, @AuthenticationPrincipal SecurityUser user) {
         ModelAndView mav = new ModelAndView("order/order-detail");
 
         OrderDetailResponse response = orderService.getOrder(orderId);
+
+        mav.addObject("user", user);
         mav.addObject("orderDetail", response);
 
         return mav;
@@ -77,7 +79,7 @@ public class OrderController {
                               @RequestParam("orderId") long orderId) {
         orderService.cancelOrder(user.getId(), orderId);
 
-        return "redirect:";
+        return "redirect:/order/detail/" + orderId;
     }
 
     // 주문 반품
@@ -89,6 +91,6 @@ public class OrderController {
 
         orderService.returnOrder(user.getId(), orderId, returnReason);
 
-        return "redirect:";
+        return "redirect:/order/detail/" + orderId;
     }
 }
