@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:inline="javascript"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="utf-8" />
+    <title>쿠폰 생성</title>
+    <style>
+        main {
+            padding: 0 !important;
+            background: linear-gradient(135deg, #f5f7fa, #dbe9f4) !important;
+            display: block !important;
+            justify-content: unset !important;
+            align-items: unset !important;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            height: calc(100vh - 60px);
+            position: fixed;
+            left: 0;
+            top: 60px;
+            overflow-y: auto;
+        }
+
+        .admin-sidebar h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .admin-sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: #666;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .admin-content {
+            flex: 1;
+            padding: 3rem 2rem;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            background-color: white;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        textarea, select {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.4rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.4rem;
+            border-radius: 0.4rem;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 2rem;
+            padding: 0.8rem 2rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0.4rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .admin-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="admin-container">
+        <!-- 🧭 관리자 사이드바 -->
+        <div class="admin-sidebar">
+            <h3>관리자 메뉴</h3>
+            <ul class="admin-sidebar-menu">
+                <li><a href="/admin">대시보드</a></li>
+                <li><a href="/admin/books">책 관리</a></li>
+                <li><a href="/admin/orders">주문 관리</a></li>
+                <li><a href="/admin/users">회원 관리</a></li>
+                <li><a href="/admin/categories">카테고리 관리</a></li>
+                <li><a href="/admin/packages">책 포장 관리</a></li>
+                <li><a href="/admin/coupons">쿠폰 관리</a></li>
+            </ul>
+        </div>
+
+        <!-- 📄 도서 추가 폼 -->
+        <div class="admin-content">
+            <div class="form-container">
+                <h2>쿠폰 생성</h2>
+
+                <form th:action="@{/admin/coupons/create}" method="post">
+                    <label>쿠폰 이름</label>
+                    <input type="text" name="name" class="text-input" required />
+
+                    <label>쿠폰 유형</label>
+                    <div style="margin-top: 0.6rem;">
+                        <input type="radio" name="couponType" value="ORDER" checked/> 일반 쿠폰
+                        <input type="radio" name="couponType" value="BOOK" style="margin-left: 1rem"/> 책 쿠폰
+                        <input type="radio" name="couponType" value="CATEGORY" style="margin-left: 1rem"/> 카테고리 쿠폰
+                    </div>
+
+                    <label>책 ISBN</label>
+                    <input type="text" class="text-input" name="isbn" placeholder="책 쿠폰을 선택할 경우 반드시 입력해야 합니다">
+
+                    <label>카테고리 ID</label>
+                    <input type="text" class="text-input" name="categoryId" placeholder="카테고리 쿠폰을 선택할 경우 반드시 입력해야 합니다">
+
+                    <label>할인 정책</label>
+                    <div style="margin-top: 0.6rem;">
+                        <input type="radio" name="policyType" value="FIXED" checked/> 할인 값
+                        <input type="radio" name="policyType" value="RATE" style="margin-left: 1rem"/> 할인 퍼센트
+                    </div>
+
+                    <label>할인률</label>
+                    <input type="number" name="discountAmount" class="text-input" min="0" required />
+
+                    <label>적용 금액</label>
+                    <input type="number" name="minOrderAmount" class="text-input" min="0" required />
+
+                    <label>최대 할인 금액</label>
+                    <input type="number" name="maxDiscountAmount" class="text-input" min="0" required />
+
+                    <label>기간</label>
+                    <input type="number" name="validDays" min="1" class="text-input" required />
+
+                    <button type="submit">쿠폰 생성</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
