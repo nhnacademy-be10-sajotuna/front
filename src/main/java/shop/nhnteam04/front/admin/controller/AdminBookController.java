@@ -111,4 +111,10 @@ public class AdminBookController {
         adminBookService.deleteBook(isbn);
         return "redirect:/admin/books";
     }
+
+    @PostMapping("/import")
+    public String importAladin(@RequestParam String keyword) {
+        adminBookService.importBook(keyword);
+        return "redirect:/admin/books";
+    }
 }
