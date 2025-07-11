@@ -11,6 +11,8 @@ import shop.nhnteam04.front.admin.service.AdminCouponService;
 import shop.nhnteam04.front.coupon.dto.request.CouponRequest;
 import shop.nhnteam04.front.coupon.dto.response.CouponResponse;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/admin/coupons")
@@ -23,7 +25,8 @@ public class AdminCouponController {
     public ModelAndView adminCouponPage() {
         ModelAndView mvc = new ModelAndView("admin/coupons");
 
-        // TODO: 쿠폰 목록 가져오기
+        List<CouponResponse> coupons = adminCouponService.getAllCoupons();
+        mvc.addObject("coupons", coupons);
 
         return mvc;
     }
