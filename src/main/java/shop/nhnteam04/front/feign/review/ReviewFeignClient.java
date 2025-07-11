@@ -11,10 +11,10 @@ import java.util.List;
 @FeignClient(name = "gateway/review-api")
 public interface ReviewFeignClient {
     @GetMapping("/api/reviews/books/isbn/{isbn}")
-    List<ReviewResponse> getReviewsByBook(@RequestParam("isbn") String isbn);
+    List<ReviewResponse> getReviewsByBook(@PathVariable("isbn") String isbn);
     
     @GetMapping("/api/reviews/books/user-id/{user-id}")
-    List<ReviewResponse> getReviewsByUser(@RequestParam("user-id") Long userId);
+    List<ReviewResponse> getReviewsByUser(@PathVariable("user-id") Long userId);
 
     @PostMapping(value = "/api/reviews", consumes = "multipart/form-data")
     ReviewResponse createReview(

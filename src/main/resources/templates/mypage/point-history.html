@@ -12,7 +12,7 @@
 
     <div class="card point-summary">
         <h3>현재 보유 포인트</h3>
-        <p th:text="${availablePoint} + ' P'">0 P</p>
+        <p th:text="(${availablePoint} ?: 0) + ' P'">0 P</p>
     </div>
 
     <div th:if="${pointHistory != null and !pointHistory.isEmpty()}">
