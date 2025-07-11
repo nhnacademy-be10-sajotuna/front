@@ -13,9 +13,40 @@
     <div class="card">
         <div class="profile-info-grid">
             <div class="info-group">
+                <strong>이름</strong>
+                <span th:text="${user.name}">김사조</span>
+            </div>
+
+            <div class="info-group">
                 <strong>이메일</strong>
                 <span th:text="${user.email}">qwer12345@naver.com</span>
             </div>
+
+            <div class="info-group">
+                <strong>전화번호</strong>
+                <span th:text="${user.phoneNumber}">010-2222-3333</span>
+            </div>
+
+            <div class="info-group">
+                <strong>생년월일</strong>
+                <span th:text="${#temporals.format(user.birthDate, 'yyyy-MM-dd')}">1996-06-01</span>
+            </div>
+
+            <div class="info-group">
+                <strong>가입일</strong>
+                <span th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">2025-06-17</span>
+            </div>
+
+            <div class="info-group">
+                <strong>최근 로그인</strong>
+                <span th:text="${#temporals.format(user.currentLoginAt, 'yyyy-MM-dd HH:mm')}">2025-06-17</span>
+            </div>
+
+            <div class="info-group">
+                <strong>회원 상태</strong>
+                <span th:text="${user.status}">ACTIVE</span>
+            </div>
+
             <div class="info-group">
                 <strong>인증 방식</strong>
                 <span th:text="${user.authType}">LOCAL</span>

@@ -10,41 +10,126 @@
 <section layout:fragment="page-content">
     <h2 class="page-header">내 쿠폰</h2>
 
-    <div class="tabs">
-        <button class="tab-item active" onclick="showTab(this, 'available')">사용가능<span class="count" id="available-count">0</span></button>
-        <button class="tab-item" onclick="showTab(this, 'used')">사용완료<span class="count" id="used-count">0</span></button>
-        <button class="tab-item" onclick="showTab(this, 'expired')">만료됨<span class="count" id="expired-count">0</span></button>
+    <div class="coupon-tabs">
+        <button class="coupon-tab active" onclick="showTab(this, 'available')">
+            사용가능 <span class="count" id="available-count">0</span>
+        </button>
+        <button class="coupon-tab" onclick="showTab(this, 'used')">
+            사용완료 <span class="count" id="used-count">0</span>
+        </button>
+        <button class="coupon-tab" onclick="showTab(this, 'expired')">
+            만료됨 <span class="count" id="expired-count">0</span>
+        </button>
     </div>
 
     <div id="available-tab" class="tab-content active">
         <div class="coupon-grid" id="available-grid">
-            <div th:each="coupon : ${coupons}" th:if="${coupon.status.name() == 'AVAILABLE'}" class="card coupon-card">
+            <div th:each="coupon : ${coupons}" th:if="${coupon.status.name() == 'AVAILABLE'}" class="coupon-card">
+                <div class="coupon-status">사용가능</div>
+                <h3 th:text="${coupon.couponName}">10% 할인 쿠폰</h3>
+                <div class="discount-highlight">
+                    <div class="discount-amount" th:text="${coupon.policyType.name() == 'RATE'} ? (${#numbers.formatDecimal(coupon.discountAmount / 10.0, 1, 1)} + '%') : ${#numbers.formatInteger(coupon.discountAmount, 0, 'COMMA')} + '원'">1.0%</div>
+                    <div th:text="${coupon.policyType.name() == 'FIXED'} ? '고정 할인' : '비율 할인'">비율 할인</div>
+                </div>
+                <div class="coupon-content">
+                    <div class="coupon-info">
+                        <div class="label">쿠폰 유형</div>
+                        <div class="value" th:text="${coupon.couponType.name() == 'CATEGORY'} ? '카테고리' : (${coupon.couponType.name() == 'BOOK'} ? '도서' : (${coupon.couponType.name() == 'ORDER'} ? '주문' : '기타'))">카테고리</div>
+                    </div>
+                    <div class="coupon-info">
+                        <div class="label">최소 주문금액</div>
+                        <div class="value" th:text="${#numbers.formatInteger(coupon.minOrderAmount, 0, 'COMMA')} + '원'">50,000원</div>
+                    </div>
+                    <div class="coupon-info">
+                        <div class="label">최대 할인금액</div>
+                        <div class="value" th:text="${#numbers.formatInteger(coupon.maxDiscountAmount, 0, 'COMMA')} + '원'">10,000원</div>
+                    </div>
+                    <div class="coupon-info">
+                        <div class="label">만료일</div>
+                        <div class="value" th:text="${#temporals.format(coupon.expiresAt, 'yyyy-MM-dd')}">2025-12-31</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="available-empty" class="empty-state" style="display: none;"><p>사용가능한 쿠폰이 없습니다.</p></div>
+        <div id="available-empty" class="empty-state" style="display: none;">
+            <p>사용가능한 쿠폰이 없습니다.</p>
+            <p>이벤트나 프로모션을 통해 쿠폰을 받아보세요!</p>
+        </div>
     </div>
 
     <div id="used-tab" class="tab-content">
         <div class="coupon-grid" id="used-grid">
-            <div th:each="coupon : ${coupons}" th:if="${coupon.status.name() == 'USED'}" class="card coupon-card expired">
+            <div th:each="coupon : ${coupons}" th:if="${coupon.status.name() == 'USED'}" class="coupon-card coupon-expired">
+                <div class="coupon-status">사용완료</div>
+                <h3 th:text="${coupon.couponName}">10% 할인 쿠폰</h3>
+                <div class="discount-highlight">
+                    <div class="discount-amount" th:text="${coupon.policyType.name() == 'RATE'} ? (${#numbers.formatDecimal(coupon.discountAmount / 10.0, 1, 1)} + '%') : ${#numbers.formatInteger(coupon.discountAmount, 0, 'COMMA')} + '원'">10%</div>
+                    <div th:text="${coupon.policyType.name() == 'FIXED'} ? '고정 할인' : '비율 할인'">비율 할인</div>
+                </div>
+                <div class="coupon-content">
+                    <div class="coupon-info">
+                        <div class="label">쿠폰 유형</div>
+                        <div class="value" th:text="${coupon.couponType.name() == 'CATEGORY'} ? '카테고리' : (${coupon.couponType.name() == 'BOOK'} ? '도서' : (${coupon.couponType.name() == 'ORDER'} ? '주문' : '기타'))">카테고리</div>
+                    </div>
+                    <div class="coupon-info">
+                        <div class="label">최소 주문금액</div>
+                        <div class="value" th:text="${#numbers.formatInteger(coupon.minOrderAmount, 0, 'COMMA')} + '원'">50,000원</div>
+                    </div>
+                    <div class="coupon-info">
+                        <div class="label">최대 할인금액</div>
+                        <div class="value" th:text="${#numbers.formatInteger(coupon.maxDiscountAmount, 0, 'COMMA')} + '원'">10,000원</div>
+                    </div>
+                    <div class="coupon-info">
+                        <div class="label">만료일</div>
+                        <div class="value" th:text="${#temporals.format(coupon.expiresAt, 'yyyy-MM-dd')}">2025-12-31</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="used-empty" class="empty-state" style="display: none;"><p>사용완료된 쿠폰이 없습니다.</p></div>
+        <div id="used-empty" class="empty-state" style="display: none;">
+            <p>사용완료된 쿠폰이 없습니다.</p>
+        </div>
     </div>
 
     <div id="expired-tab" class="tab-content">
         <div class="coupon-grid" id="expired-grid">
-            <div th:each="coupon : ${coupons}" th:if="${coupon.status.name() == 'EXPIRED'}" class="card coupon-card expired">
+            <div th:each="coupon : ${coupons}" th:if="${coupon.status.name() == 'EXPIRED'}" class="coupon-card coupon-expired">
+                <div class="coupon-status">만료됨</div>
+                <h3 th:text="${coupon.couponName}">10% 할인 쿠폰</h3>
+                <div class="discount-highlight">
+                    <div class="discount-amount" th:text="${coupon.policyType.name() == 'RATE'} ? (${#numbers.formatDecimal(coupon.discountAmount / 10.0, 1, 1)} + '%') : ${#numbers.formatInteger(coupon.discountAmount, 0, 'COMMA')} + '원'">10%</div>
+                    <div th:text="${coupon.policyType.name() == 'FIXED'} ? '고정 할인' : '비율 할인'">비율 할인</div>
+                </div>
+                <div class="coupon-content">
+                    <div class="coupon-info">
+                        <div class="label">쿠폰 유형</div>
+                        <div class="value" th:text="${coupon.couponType.name() == 'CATEGORY'} ? '카테고리' : (${coupon.couponType.name() == 'BOOK'} ? '도서' : (${coupon.couponType.name() == 'ORDER'} ? '주문' : '기타'))">카테고리</div>
+                    </div>
+                    <div class="coupon-info">
+                        <div class="label">최소 주문금액</div>
+                        <div class="value" th:text="${#numbers.formatInteger(coupon.minOrderAmount, 0, 'COMMA')} + '원'">50,000원</div>
+                    </div>
+                    <div class="coupon-info">
+                        <div class="label">최대 할인금액</div>
+                        <div class="value" th:text="${#numbers.formatInteger(coupon.maxDiscountAmount, 0, 'COMMA')} + '원'">10,000원</div>
+                    </div>
+                    <div class="coupon-info">
+                        <div class="label">만료일</div>
+                        <div class="value" th:text="${#temporals.format(coupon.expiresAt, 'yyyy-MM-dd')}">2025-12-31</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="expired-empty" class="empty-state" style="display: none;"><p>만료된 쿠폰이 없습니다.</p></div>
+        <div id="expired-empty" class="empty-state" style="display: none;">
+            <p>만료된 쿠폰이 없습니다.</p>
+        </div>
     </div>
 </section>
 
 <th:block layout:fragment="script">
     <script>
         function showTab(clickedButton, tabName) {
-            document.querySelectorAll('.tab-item').forEach(button => button.classList.remove('active'));
+            document.querySelectorAll('.coupon-tab').forEach(button => button.classList.remove('active'));
             clickedButton.classList.add('active');
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(tabName + '-tab').classList.add('active');
