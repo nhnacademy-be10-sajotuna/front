@@ -118,7 +118,7 @@ public class AdminBookController {
     }
 
     @PostMapping("/import")
-    public String importAladin(@RequestParam String keyword) {
+    public String importBook(@RequestParam String keyword) {
         try {
             adminBookService.importBook(keyword);
             return "redirect:/admin/books";
