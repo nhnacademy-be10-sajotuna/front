@@ -1,153 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layouts/admin-layout}"
+      th:with="activeMenu='dashboard'">
 <head>
     <title>관리자 홈</title>
-    <style>
-        main {
-            padding: 0 !important;
-            background: linear-gradient(135deg, #f5f7fa, #dbe9f4) !important;
-            display: block !important;
-            justify-content: unset !important;
-            align-items: unset !important;
-        }
-
-        .admin-container {
-            display: flex;
-            min-height: 100vh;
-            width: 100%;
-        }
-
-        .admin-sidebar {
-            width: 250px;
-            background-color: #fff;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            height: calc(100vh - 60px);
-            position: fixed;
-            left: 0;
-            top: 60px;
-            overflow-y: auto;
-        }
-
-        .admin-sidebar h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .admin-sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu a {
-            display: block;
-            padding: 0.8rem 1rem;
-            color: #666;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .admin-sidebar-menu a:hover,
-        .admin-sidebar-menu a.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .admin-content {
-            flex: 1;
-            background-color: #f8f9fa;
-            padding: 3rem 2rem;
-            margin-left: 250px;
-            min-height: calc(100vh - 60px);
-            width: calc(100% - 250px);
-        }
-
-        .admin-content h1 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: #333;
-        }
-
-        .admin-button-container {
-            display: flex;
-            justify-content: flex-start;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .admin-button {
-            background-color: #4CAF50;
-            color: white;
-            font-size: 1.2rem;
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 2rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
-            min-width: 200px;
-            text-align: center;
-        }
-
-        .admin-button:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
-        }
-
-        @media (max-width: 768px) {
-            .admin-sidebar {
-                width: 100%;
-                position: relative;
-                height: auto;
-            }
-
-            .admin-content {
-                margin-left: 0;
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
-<main layout:fragment="content">
-    <div class="admin-container">
-        <!-- 🧭 사이드바 -->
-        <div class="admin-sidebar">
-            <h3>관리자 메뉴</h3>
-            <ul class="admin-sidebar-menu">
-                <li><a href="/admin" class="active">대시보드</a></li>
-                <li><a href="/admin/books">책 관리</a></li>
-                <li><a href="/admin/orders">주문 관리</a></li>
-                <!-- 필요에 따라 추가 -->
-                <li><a href="/admin/users">회원 관리</a></li>
-                <li><a href="/admin/categories">카테고리 관리</a></li>
-                <li><a href="/admin/packages">책 포장 관리</a></li>
-                <li><a href="/admin/coupons">쿠폰 관리</a></li>
-            </ul>
-        </div>
-
-        <!-- 📄 본문 -->
-        <div class="admin-content">
-            <h1>📊 관리자 대시보드</h1>
-            <div class="admin-button-container">
-                <a th:href="@{/admin/books}" class="admin-button">📚 책 관리</a>
-                <a th:href="@{/admin/orders}" class="admin-button">🧾 주문 관리</a>
-                <a th:href="@{/admin/users}" class="admin-button">👤 회원 관리</a>
-                <a th:href="@{/admin/categories}" class="admin-button">📂 카테고리 관리</a>
-            </div>
-        </div>
+<section layout:fragment="page-content">
+    <h1 class="page-header">📊 관리자 대시보드</h1>
+    <div class="dashboard-buttons">
+        <a th:href="@{/admin/books}" class="btn btn--primary">📚 책 관리</a>
+        <a th:href="@{/admin/orders}" class="btn btn--primary">🧾 주문 관리</a>
+        <a th:href="@{/admin/users}" class="btn btn--primary">👤 회원 관리</a>
+        <a th:href="@{/admin/categories}" class="btn btn--primary">📂 카테고리 관리</a>
     </div>
-</main>
+</section>
 </body>
 </html>
