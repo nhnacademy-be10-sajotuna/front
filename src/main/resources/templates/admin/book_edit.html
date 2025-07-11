@@ -77,10 +77,21 @@
     <script th:src="@{/js/admin-category-selector.js}"></script>
 
     <script th:inline="javascript">
-        let errorMsg = [[${errorMessage}]];
-        if (errorMsg) {
-            alert(errorMsg);
-        }
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', function() {
+            // 공통 카테고리 매니저 초기화 (기존 카테고리 데이터 추가)
+            setupCategorySelector({
+                allCategoriesJson: /*[[${allCategoriesJson}]]*/ '[]',
+                existingCategoriesJson: /*[[${existingCategoriesJson}]]*/ '[]'
+            });
+
+            // 에러 메시지 처리
+            const errorMsg = /*[[${errorMessage}]]*/ null;
+            if (errorMsg) {
+                alert(errorMsg);
+            }
+        });
+        /*]]>*/
     </script>
 </th:block>
 </body>

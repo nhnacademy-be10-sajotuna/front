@@ -1,55 +1,62 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 카테고리 선택 기능이 필요한 페이지인지 확인
-    const container = document.getElementById('category-selects');
-    if (!container) return;
+/**
+ * 도서 관리(생성/수정) 페이지의 카테고리 선택 로직을 처리하는 모듈
+ * @param {object} config - 설정 객체
+ * @param {string} config.allCategoriesJson - 모든 카테고리 정보 JSON 문자열
+ * @param {string} [config.existingCategoriesJson='[]'] - (수정 시) 기존에 선택된 카테고리 경로 정보 JSON 문자열
+ */
+function setupCategorySelector(config) {
+    const { allCategoriesJson, existingCategoriesJson = '[]' } = config;
 
-    // 공통으로 사용하는 DOM 요소들
+    // JSON 문자열을 객체로 파싱
+    const allCategories = JSON.parse(allCategoriesJson);
+    const existingCategoryPaths = JSON.parse(existingCategoriesJson);
+
+    // DOM 요소 가져오기
+    const container = document.getElementById('category-selects');
     const selectedList = document.getElementById('selected-categories-list');
     const hiddenInput = document.getElementById('categories');
     const addBtn = document.getElementById('add-category-btn');
 
-    // Thymeleaf로부터 전달받은 JSON 데이터
-    const allCategoriesDataEl = document.getElementById('all-categories-data');
-    const existingCategoriesDataEl = document.getElementById('existing-categories-data');
+    // 필수 DOM 요소가 없는 경우 오류를 출력하고 종료
+    if (!container || !selectedList || !hiddenInput || !addBtn) {
+        console.error('카테고리 관리에 필요한 DOM 요소가 없습니다.');
+        return;
+    }
 
-    const allCategories = JSON.parse(allCategoriesDataEl.textContent);
-    const existingCategoryPaths = existingCategoriesDataEl ? JSON.parse(existingCategoriesDataEl.textContent) : [];
-
-    let currentPath = []; // 현재 선택 중인 카테고리 ID 경로
-    let selectedFinalCategoryIds = []; // 최종 선택된 카테고리 ID 목록
+    let currentSelectPath = [];      // 현재 드롭다운에서 선택 중인 카테고리 ID 경로
+    let finalSelectedCategoryIds = []; // 최종적으로 선택 완료된 카테고리 ID 목록
 
     /**
-     * 숨겨진 input 태그의 값을 업데이트하는 함수
+     * Hidden Input의 값을 업데이트하는 함수
      */
     function updateHiddenInput() {
-        hiddenInput.value = selectedFinalCategoryIds.join(',');
+        hiddenInput.value = finalSelectedCategoryIds.join(',');
     }
 
     /**
-     * 선택된 카테고리 경로를 화면의 리스트(ul)에 추가하는 함수
-     * @param {Array<Object>} path - 카테고리 객체들의 배열 (예: [{id:1, name:'국내도서'}, {id:2, name:'소설'}])
+     * 선택된 카테고리 경로를 UI에 리스트 아이템으로 추가하는 함수
+     * @param {number[]} idPath - 카테고리 ID 경로 배열
+     * @param {string[]} namePath - 카테고리 이름 경로 배열
      */
-    function addCategoryPathToList(path) {
-        if (!Array.isArray(path) || path.length === 0) return;
+    function addCategoryPathToList(idPath, namePath) {
+        if (!idPath || idPath.length === 0) return;
 
-        const finalCategory = path[path.length - 1];
-        if (selectedFinalCategoryIds.includes(finalCategory.id)) {
+        const lastId = idPath[idPath.length - 1];
+        if (finalSelectedCategoryIds.includes(lastId)) {
             alert('이미 추가된 카테고리입니다.');
             return;
         }
 
-        const pathNames = path.map(cat => cat.name).join(' > ');
-
         const li = document.createElement('li');
-        li.textContent = pathNames;
-        li.dataset.id = finalCategory.id;
+        li.textContent = namePath.join(' > ');
+        li.dataset.id = lastId; // 삭제를 위해 ID 저장
 
         const removeBtn = document.createElement('button');
         removeBtn.textContent = '❌';
         removeBtn.type = 'button';
-        removeBtn.style.cssText = 'background:none; border:none; cursor:pointer; margin-left:0.5rem; vertical-align:middle;';
+        removeBtn.style.marginLeft = '0.5rem';
         removeBtn.onclick = () => {
-            selectedFinalCategoryIds = selectedFinalCategoryIds.filter(id => id !== finalCategory.id);
+            finalSelectedCategoryIds = finalSelectedCategoryIds.filter(id => id !== lastId);
             selectedList.removeChild(li);
             updateHiddenInput();
         };
@@ -57,38 +64,43 @@ document.addEventListener('DOMContentLoaded', () => {
         li.appendChild(removeBtn);
         selectedList.appendChild(li);
 
-        selectedFinalCategoryIds.push(finalCategory.id);
+        finalSelectedCategoryIds.push(lastId);
         updateHiddenInput();
     }
 
     /**
-     * 하위 카테고리 select 박스를 렌더링하는 함수
+     * 부모 ID에 따라 하위 카테고리 select 엘리먼트를 렌더링하는 함수
      * @param {number|null} parentId - 부모 카테고리 ID (최상위는 null)
-     * @param {number} depth - 현재 렌더링 깊이
+     * @param {number} depth - 현재 카테고리의 깊이
      */
     function renderCategorySelect(parentId = null, depth = 0) {
-        // 현재 깊이보다 더 깊은 select 박스들 제거
+        // 현재 깊이 이후의 select 박스는 모두 제거
         while (container.children.length > depth) {
             container.removeChild(container.lastChild);
         }
+        currentSelectPath = currentSelectPath.slice(0, depth);
 
-        const children = allCategories.filter(c => parentId === null ? c.parentId === null : c.parentId === parentId);
-        if (children.length === 0) return; // 하위 카테고리가 없으면 종료
+        const filtered = allCategories.filter(c => parentId === null ? c.parentId === null : c.parentId === parentId);
+        if (filtered.length === 0) return; // 하위 카테고리가 없으면 종료
 
         const select = document.createElement('select');
-        select.innerHTML = `<option value="">-- ${depth + 1}차 카테고리 --</option>`;
-        children.forEach(c => {
-            const option = new Option(c.name, c.id);
-            select.add(option);
+        select.innerHTML = `<option value="">선택하세요</option>`;
+        filtered.forEach(c => {
+            const option = document.createElement('option');
+            option.value = c.id;
+            option.textContent = c.name;
+            select.appendChild(option);
         });
 
         select.addEventListener('change', () => {
-            currentPath = currentPath.slice(0, depth); // 현재 깊이 이전 경로 유지
-            const selectedId = select.value ? parseInt(select.value) : null;
+            const selectedId = select.value ? parseInt(select.value, 10) : null;
             if (selectedId) {
-                currentPath.push(selectedId);
+                currentSelectPath = currentSelectPath.slice(0, depth);
+                currentSelectPath.push(selectedId);
+                renderCategorySelect(selectedId, depth + 1);
+            } else {
+                renderCategorySelect(parentId, depth); // 선택 취소 시 현재 레벨 다시 렌더링
             }
-            renderCategorySelect(selectedId, depth + 1);
         });
 
         container.appendChild(select);
@@ -96,16 +108,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // "카테고리 추가" 버튼 이벤트 리스너
     addBtn.addEventListener('click', () => {
-        if (currentPath.length === 0) return alert('추가할 카테고리를 선택하세요.');
-        const fullPath = currentPath.map(id => allCategories.find(c => c.id === id));
-        addCategoryPathToList(fullPath);
+        if (currentSelectPath.length === 0) {
+            alert('카테고리를 선택하세요.');
+            return;
+        }
+        const namePath = currentSelectPath.map(id => allCategories.find(c => c.id === id)?.name);
+        addCategoryPathToList(currentSelectPath, namePath);
     });
 
     // --- 초기화 로직 ---
-    // 1. 도서 수정 페이지의 경우, 기존 카테고리 목록을 렌더링
-    existingCategoryPaths.forEach(path => {
-        addCategoryPathToList(path);
-    });
-    // 2. 첫 번째 카테고리 select 박스 렌더링
+
+    // (수정 페이지용) 기존 카테고리가 있으면 먼저 목록에 추가
+    if (existingCategoryPaths && existingCategoryPaths.length > 0) {
+        existingCategoryPaths.forEach(path => {
+            const idPath = path.map(cat => cat.id);
+            const namePath = path.map(cat => cat.name);
+            addCategoryPathToList(idPath, namePath);
+        });
+    }
+
+    // 첫번째 카테고리 select 렌더링
     renderCategorySelect();
-});
+}
