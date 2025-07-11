@@ -33,12 +33,13 @@
 /* ==========================================================================
    2. Layout: Admin Container & Sidebar
    ========================================================================== */
-main {
-    padding: 0 !important;
-    background: var(--color-background-gradient) !important;
-    display: block !important;
+.admin-container > main,
+body.admin-page main {
+    /* admin 전용 main */
+    padding: 0;
+    background: var(--color-background-gradient);
+    display: block;
 }
-
 .admin-container {
     display: flex;
     min-height: calc(100vh - var(--header-height));
