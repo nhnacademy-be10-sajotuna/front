@@ -25,6 +25,20 @@
                 <input type="email" id="email" th:value="${user.email}" disabled>
             </div>
         </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="phoneNumber">전화번호 *</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}" required>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">생년월일</label>
+                <input type="date" id="birthDate" th:value="${user.birthDate}" disabled>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">변경할 비밀번호</label>
+            <input type="password" id="password" name="password" placeholder="변경할 비밀번호를 입력해주세요(미 입력시 변경되지 않습니다)">
+        </div>
         <div class="button-group">
             <button type="submit" class="btn btn--primary">정보 수정</button>
             <a th:href="@{/my-page/profile}" class="btn btn--secondary">취소</a>
