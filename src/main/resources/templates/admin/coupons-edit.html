@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin-layout}"
+      th:with="activeMenu='packages'">
+<head>
+    <title>쿠폰 수정</title>
+</head>
+<body>
+<section layout:fragment="page-content">
+    <div class="form-container">
+        <h2 style="text-align: center;">쿠폰 수정</h2>
+
+        <form th:action="@{'/admin/coupons/edit/' + ${coupon.id}}" method="post">
+            <label>쿠폰 이름</label>
+            <input type="text" name="name" th:value="${coupon.name}" required />
+
+            <input type="hidden" name="couponType" th:value="${coupon.couponType}" />
+
+            <label>할인 정책</label>
+            <div style="margin-top: 0.6rem;">
+                <input type="radio" name="policyType" value="FIXED" style="width: fit-content;" th:checked="${coupon.policyType.name() == 'FIXED'}"/> 할인 값
+                <input type="radio" name="policyType" value="RATE" style="margin-left: 1rem; width: fit-content;" th:checked="${coupon.policyType.name() == 'RATE'}"/> 할인 %
+            </div>
+
+            <label>할인가</label>
+            <input type="number" name="discountAmount" min="0" th:value="${coupon.discountAmount}" required />
+
+            <label>적용 금액</label>
+            <input type="number" name="minOrderAmount" min="0" th:value="${coupon.minOrderAmount}" required />
+
+            <label>최대 할인 금액</label>
+            <input type="number" name="maxDiscountAmount" min="0" th:value="${coupon.maxDiscountAmount}" required />
+
+            <label>기간</label>
+            <input type="number" name="validDays" min="1" th:value="${coupon.validDays}" required />
+
+            <button type="submit" class="btn btn--primary">쿠폰 수정</button>
+        </form>
+    </div>
+</section>
+
+</body>
+</html>

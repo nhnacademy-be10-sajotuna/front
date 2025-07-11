@@ -40,7 +40,7 @@ public class GuestController {
     // 주문 조회
     @GetMapping("/order-detail")
     public ModelAndView guestOrderDetail(@RequestParam String orderNumber){
-        ModelAndView mav = new ModelAndView("order/guest-detail");
+        ModelAndView mav = new ModelAndView("order/order-detail");
 
         OrderDetailResponse response = orderService.getGuestOrder(orderNumber);
 

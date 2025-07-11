@@ -11,7 +11,16 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <h1 class="page-header" style="margin-bottom: 0; text-align: left;">📚 도서 관리</h1>
-        <a th:href="@{/admin/books/create}" class="btn btn--primary">➕ 도서 추가</a>
+        <div style="display: flex; gap: 0.5rem; align-items: center; margin-left: auto;">
+            <!-- 🔍 import 키워드 입력 -->
+            <form th:action="@{/admin/books/import}" method="post" style="display: flex; align-items: center; gap: 0.3rem;">
+                <input type="text" name="keyword" placeholder="키워드" style="padding: 0.3rem 0.5rem;" />
+                <button type="submit" class="btn btn--primary">import</button>
+            </form>
+
+            <!-- ➕ 도서 추가 -->
+            <a th:href="@{/admin/books/create}" class="btn btn--primary">➕ 도서 추가</a>
+        </div>
     </div>
 
     <table class="data-table">

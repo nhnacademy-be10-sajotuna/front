@@ -2,6 +2,7 @@ package shop.nhnteam04.front.feign.coupon;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import shop.nhnteam04.front.coupon.dto.response.CouponResponse;
@@ -17,7 +18,10 @@ public interface CouponFeignClient {
     List<UserCouponDetailResponse> getUserCoupons(@RequestHeader("X-User-Id") Long userId);
 
     @GetMapping("/api/coupons/available-coupons/book")
-    List<CouponResponse> getAvailableBookCoupons(@RequestHeader("X-User-Id") Long userId, 
+    List<CouponResponse> getAvailableBookCoupons(@RequestHeader("X-User-Id") Long userId,
                                                 @RequestParam("isbn") String isbn,
                                                 @RequestParam("categoryIds") Set<Long> categoryIds);
+
+    @GetMapping("/api/coupons/{coupon-id}")
+    CouponResponse getCouponById(@PathVariable(name = "coupon-id") Long couponId);
 }

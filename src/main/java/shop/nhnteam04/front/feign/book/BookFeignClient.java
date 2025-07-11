@@ -31,4 +31,7 @@ public interface BookFeignClient {
 
     @DeleteMapping("/api/admin/books/{isbn}")
     void deleteBook(@PathVariable String isbn);
+
+    @PostMapping("/api/admin/search/import")
+    void importBook(@RequestParam String keyword, @RequestParam int totalPages );
 }
