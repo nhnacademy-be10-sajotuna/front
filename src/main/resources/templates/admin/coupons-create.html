@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin-layout}"
+      th:with="activeMenu='packages'">
+<head>
+    <title>쿠폰 생성</title>
+</head>
+<body>
+<section layout:fragment="page-content">
+    <div class="form-container">
+        <h2 style="text-align: center;">쿠폰 생성</h2>
+
+        <form th:action="@{/admin/coupons/create}" method="post">
+            <label>쿠폰 이름</label>
+            <input type="text" name="name" required />
+
+            <label>쿠폰 유형</label>
+            <div style="margin-top: 0.6rem;">
+                <input type="radio" name="couponType" value="ORDER" style="width: fit-content;" checked/> 일반 쿠폰
+                <input type="radio" name="couponType" value="BOOK" style="margin-left: 1rem; width: fit-content;"/> 책 쿠폰
+                <input type="radio" name="couponType" value="CATEGORY" style="margin-left: 1rem; width: fit-content;"/> 카테고리 쿠폰
+            </div>
+
+            <label>책 ISBN</label>
+            <input type="text" name="isbn" placeholder="책 쿠폰을 선택할 경우 반드시 입력해야 합니다"/>
+
+            <label>카테고리 ID</label>
+            <input type="text" name="categoryId" placeholder="카테고리 쿠폰을 선택할 경우 반드시 입력해야 합니다"/>
+
+            <label>할인 정책</label>
+            <div style="margin-top: 0.6rem;">
+                <input type="radio" name="policyType" value="FIXED" style="width: fit-content;" checked/> 할인 값
+                <input type="radio" name="policyType" value="RATE" style="margin-left: 1rem; width: fit-content;"/> 할인 %
+            </div>
+
+            <label>할인가</label>
+            <input type="number" name="discountAmount" min="0" required />
+
+            <label>적용 금액</label>
+            <input type="number" name="minOrderAmount" min="0" required />
+
+            <label>최대 할인 금액</label>
+            <input type="number" name="maxDiscountAmount" min="0" required />
+
+            <label>기간</label>
+            <input type="number" name="validDays" min="1" required />
+
+            <button type="submit" class="btn btn--primary">쿠폰 생성</button>
+        </form>
+    </div>
+</section>
+
+</body>
+</html>
