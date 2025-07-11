@@ -8,6 +8,7 @@ import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
 import shop.nhnteam04.front.order.dto.orders.response.*;
 import shop.nhnteam04.front.order.dto.payment.PaymentConfirmRequest;
 import shop.nhnteam04.front.order.dto.payment.PaymentResponse;
+import shop.nhnteam04.front.order.dto.point.PointHistoryResponse;
 
 import java.util.List;
 
@@ -36,6 +37,8 @@ public interface OrderFeignClient {
     @PutMapping("/api/orders/{order-id}/cancel")
     void cancelOrder(@RequestHeader("X-User-Id") Long userId, @PathVariable("order-id") Long orderId);
 
+    @GetMapping("/api/orders/form")
+    OrderFormResponse getOrderForm(@RequestHeader(value = "X-User-Id") Long userId);
 
     // orderPackage
     @GetMapping("api/orders/package")
@@ -49,6 +52,12 @@ public interface OrderFeignClient {
     @PostMapping("/api/payments/confirm")
     PaymentResponse confirmPayment(@RequestBody PaymentConfirmRequest request);
 
+    // point
+    @GetMapping("/api/points")
+    List<PointHistoryResponse> getPointsByUserId(@RequestHeader("X-User-Id") Long userId);
+
+    @GetMapping("/api/points/available")
+    Integer getAvailablePoint(@RequestHeader("X-User-Id") Long userId);
 
     // review
     @GetMapping("/api/orders/product/review-eligible/{userId}/{isbn}")
