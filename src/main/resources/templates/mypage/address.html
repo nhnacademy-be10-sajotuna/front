@@ -1,349 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layouts/mypage-layout}"
+      th:with="activeMenu='address'">
 <head>
     <title>주소 관리 - 마이페이지</title>
-    <style>
-        /* layout.html의 main 스타일 오버라이드 */
-        main {
-            padding: 0 !important;
-            display: block !important;
-            justify-content: unset !important;
-            align-items: unset !important;
-        }
-        
-        .mypage-container {
-            display: flex;
-            gap: 0;
-            min-height: calc(100vh - 70px);
-            width: 100%;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #fff;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            height: calc(100vh - 70px);
-            position: fixed;
-            left: 0;
-            top: 70px;
-            overflow-y: auto;
-        }
-
-        .sidebar h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #c3cfe2;
-            padding-bottom: 0.5rem;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar-menu a {
-            display: block;
-            padding: 0.8rem 1rem;
-            color: #666;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background-color: #c3cfe2;
-            color: #333;
-        }
-
-        .content-area {
-            flex: 1;
-            background-color: #f8f9fa;
-            padding: 0;
-            margin-left: 250px;
-            min-height: calc(100vh - 70px);
-            width: calc(100% - 250px);
-        }
-
-        .content-header {
-            background-color: #fff;
-            padding: 2rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .content-body {
-            padding: 2rem;
-        }
-
-        .content-header h2 {
-            color: #333;
-            margin-bottom: 0;
-            border-bottom: 2px solid #c3cfe2;
-            padding-bottom: 0.5rem;
-        }
-
-        .header-add-button {
-            background-color: #c3cfe2;
-            color: #333;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .header-add-button:hover {
-            background-color: #a8b8d1;
-            transform: translateY(-1px);
-        }
-
-        .address-list {
-            background-color: #fff;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-
-        .address-item {
-            display: flex;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.3s ease;
-        }
-
-        .address-item:last-child {
-            border-bottom: none;
-        }
-
-        .address-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .address-info {
-            flex: 1;
-        }
-
-        .address-nickname {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .address-detail {
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .address-actions {
-            margin-left: 1rem;
-        }
-
-        .delete-button {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .delete-button:hover {
-            background-color: #c82333;
-            transform: translateY(-1px);
-        }
-
-        .add-address-section {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .add-address-section h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #c3cfe2;
-            padding-bottom: 0.5rem;
-        }
-
-        .add-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            align-items: end;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group input {
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #c3cfe2;
-            box-shadow: 0 0 0 2px rgba(195, 207, 226, 0.2);
-        }
-
-        .add-button {
-            background-color: #c3cfe2;
-            color: #333;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            height: fit-content;
-        }
-
-        .add-button:hover {
-            background-color: #a8b8d1;
-            transform: translateY(-1px);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #666;
-            background-color: #fff;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-
-        .empty-state h3 {
-            color: #c3cfe2;
-            margin-bottom: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                position: relative;
-                height: auto;
-                top: 0;
-            }
-            
-            .content-area {
-                margin-left: 0;
-                width: 100%;
-            }
-            
-            .address-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .add-form {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 <body>
-<main layout:fragment="content">
-    <div class="mypage-container">
-        <div class="sidebar">
-            <h3>마이페이지</h3>
-            <ul class="sidebar-menu">
-                <li><a href="/my-page">대시보드</a></li>
-                <li><a href="/my-page/profile">회원 정보</a></li>
-                <li><a href="/my-page/order-list">주문 내역</a></li>
-                <li><a href="/my-page/address" class="active">주소 관리</a></li>
-                <li><a href="/my-page/point-history">포인트 내역</a></li>
-                <li><a href="/my-page/coupons">내 쿠폰</a></li>
-            </ul>
-        </div>
+<section layout:fragment="page-content">
+    <h2 class="page-header">주소 관리</h2>
 
-        <div class="content-area">
-            <div class="content-header">
-                <h2>주소 관리</h2>
+    <div th:if="${addressList != null and !addressList.isEmpty()}" class="card" style="padding: 0;">
+        <div th:each="address : ${addressList}" class="address-item">
+            <div class="address-info">
+                <div class="address-nickname" th:text="${address.nickName}">별칭</div>
+                <div class="address-detail" th:text="${address.streetAddress}">주소</div>
             </div>
-
-            <div class="content-body">
-                <div th:if="${addressList != null and #lists.size(addressList) > 0}">
-                    <div class="address-list">
-                        <div th:each="address : ${addressList}" class="address-item">
-                            <div class="address-info">
-                                <div class="address-nickname" th:text="${address.nickName}">별칭</div>
-                                <div class="address-detail" th:text="${address.streetAddress}">주소</div>
-                            </div>
-                            
-                            <div class="address-actions">
-                                <form th:action="@{'/my-page/address/' + ${address.id}}" method="post" style="display: inline;"
-                                      onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                                    <input type="hidden" name="_method" value="delete"/>
-                                    <button type="submit" class="delete-button">삭제</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div th:if="${addressList == null or #lists.size(addressList) == 0}" class="empty-state">
-                    <h3>등록된 주소가 없습니다</h3>
-                    <p>새로운 주소를 추가해보세요.</p>
-                </div>
-
-                <div class="add-address-section" id="addAddressForm">
-                    <h3>새 주소 추가</h3>
-                    <form th:action="@{/my-page/address}" method="post" class="add-form">
-                        <div class="form-group">
-                            <label for="nickName">주소 별칭 *</label>
-                            <input type="text" id="nickName" name="nickName" placeholder="예: 집, 회사" required/>
-                        </div>
-                        <div class="form-group">
-                            <label for="streetAddress">주소 *</label>
-                            <input type="text" id="streetAddress" name="streetAddress" placeholder="상세 주소를 입력하세요" required/>
-                        </div>
-                        <button type="submit" class="add-button">주소 추가</button>
-                    </form>
-                </div>
+            <div class="address-actions">
+                <form th:action="@{'/my-page/address/' + ${address.id}}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn--danger">삭제</button>
+                </form>
             </div>
         </div>
     </div>
 
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
-        if (errorMsg) {
-            alert(errorMsg);
-        }
-        /*]]>*/
-    </script>
-</main>
+    <div th:if="${addressList == null or addressList.isEmpty()}" class="empty-state">
+        <h3>등록된 주소가 없습니다</h3>
+        <p>새로운 주소를 추가해보세요.</p>
+    </div>
+
+    <div class="card" id="addAddressForm">
+        <h3 class="card__title">새 주소 추가</h3>
+        <form th:action="@{/my-page/address}" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nickName">주소 별칭 *</label>
+                    <input type="text" id="nickName" name="nickName" placeholder="예: 집, 회사" required/>
+                </div>
+                <div class="form-group">
+                    <label for="streetAddress">주소 *</label>
+                    <input type="text" id="streetAddress" name="streetAddress" placeholder="상세 주소를 입력하세요" required/>
+                </div>
+            </div>
+            <div style="text-align: right; margin-top: 1rem;">
+                <button type="submit" class="btn btn--primary">주소 추가</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<th:block layout:fragment="script">
+</th:block>
 </body>
 </html>

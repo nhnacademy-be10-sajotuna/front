@@ -1,158 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:inline="javascript"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layouts/admin-layout}"
+      th:with="activeMenu='packages'">
 <head>
     <title>포장 추가</title>
-    <style>
-        main {
-            padding: 0 !important;
-            background: linear-gradient(135deg, #f5f7fa, #dbe9f4) !important;
-            display: block !important;
-            justify-content: unset !important;
-            align-items: unset !important;
-        }
-
-        .admin-container {
-            display: flex;
-            min-height: 100vh;
-            width: 100%;
-        }
-
-        .admin-sidebar {
-            width: 250px;
-            background-color: #fff;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            height: calc(100vh - 60px);
-            position: fixed;
-            left: 0;
-            top: 60px;
-            overflow-y: auto;
-        }
-
-        .admin-sidebar h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .admin-sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu a {
-            display: block;
-            padding: 0.8rem 1rem;
-            color: #666;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .admin-sidebar-menu a:hover,
-        .admin-sidebar-menu a.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .admin-content {
-            flex: 1;
-            padding: 3rem 2rem;
-            margin-left: 250px;
-            width: calc(100% - 250px);
-        }
-
-        .form-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            border: 1px solid #ccc;
-            border-radius: 0.5rem;
-            background-color: white;
-        }
-
-        label {
-            display: block;
-            margin-top: 1rem;
-            font-weight: bold;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 0.6rem;
-            margin-top: 0.4rem;
-            border-radius: 0.4rem;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            margin-top: 2rem;
-            padding: 0.8rem 2rem;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 0.4rem;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .admin-sidebar {
-                width: 100%;
-                position: relative;
-                height: auto;
-            }
-
-            .admin-content {
-                margin-left: 0;
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
-<main layout:fragment="content">
-    <div class="admin-container">
-        <!-- 🧭 관리자 사이드바 -->
-        <div class="admin-sidebar">
-            <h3>관리자 메뉴</h3>
-            <ul class="admin-sidebar-menu">
-                <li><a href="/admin">대시보드</a></li>
-                <li><a href="/admin/books">책 관리</a></li>
-                <li><a href="/admin/orders">주문 관리</a></li>
-                <li><a href="/admin/users">회원 관리</a></li>
-                <li><a href="/admin/categories">카테고리 관리</a></li>
-                <li><a href="/admin/packages">책 포장 관리</a></li>
-                <li><a href="/admin/coupons">쿠폰 관리</a></li>
-            </ul>
-        </div>
+<section layout:fragment="page-content">
+    <div class="form-container">
+        <h2 style="text-align: center;">🎁 책 포장 추가</h2>
 
-        <!-- 📄 도서 추가 폼 -->
-        <div class="admin-content">
-            <div class="form-container">
-                <h2>📚 책 포장 추가</h2>
+        <form th:action="@{/admin/packages/create}" method="post">
+            <label for="packaging">포장지</label>
+            <input type="text" id="packaging" name="packaging" required />
 
-                <form th:action="@{/admin/packages/create}" method="post">
-                    <label>포장지</label>
-                    <input type="text" name="packaging" required />
+            <label for="price">가격</label>
+            <input type="number" id="price" name="price" min="0" required />
 
-                    <label>가격</label>
-                    <input type="number" name="price" min="0" required />
-
-                    <button type="submit">포장 등록</button>
-                </form>
-            </div>
-        </div>
+            <button type="submit" class="btn btn--primary">포장 등록</button>
+        </form>
     </div>
-</main>
+</section>
 </body>
 </html>

@@ -1,351 +1,98 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:inline="javascript"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layouts/admin-layout}"
+      th:with="activeMenu='books'">
 <head>
     <title>도서 수정</title>
-    <style>
-        main {
-            padding: 0 !important;
-            background: linear-gradient(135deg, #f5f7fa, #dbe9f4) !important;
-            display: block !important;
-            justify-content: unset !important;
-            align-items: unset !important;
-        }
-
-        .admin-container {
-            display: flex;
-            min-height: 100vh;
-            width: 100%;
-        }
-
-        .admin-sidebar {
-            width: 250px;
-            background-color: #fff;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            height: calc(100vh - 60px);
-            position: fixed;
-            left: 0;
-            top: 60px;
-            overflow-y: auto;
-        }
-
-        .admin-sidebar h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .admin-sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu a {
-            display: block;
-            padding: 0.8rem 1rem;
-            color: #666;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .admin-sidebar-menu a:hover,
-        .admin-sidebar-menu a.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .admin-content {
-            flex: 1;
-            padding: 3rem 2rem;
-            margin-left: 250px;
-            width: calc(100% - 250px);
-        }
-
-        .form-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            border: 1px solid #ccc;
-            border-radius: 0.5rem;
-            background-color: white;
-        }
-
-        label {
-            display: block;
-            margin-top: 1rem;
-            font-weight: bold;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 0.6rem;
-            margin-top: 0.4rem;
-            border-radius: 0.4rem;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            margin-top: 2rem;
-            padding: 0.8rem 2rem;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 0.4rem;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .category-select-wrapper {
-            margin-top: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .admin-sidebar {
-                width: 100%;
-                position: relative;
-                height: auto;
-            }
-
-            .admin-content {
-                margin-left: 0;
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
-<main layout:fragment="content">
-    <div class="admin-container">
-        <!-- 🧭 관리자 사이드바 -->
-        <div class="admin-sidebar">
-            <h3>관리자 메뉴</h3>
-            <ul class="admin-sidebar-menu">
-                <li><a href="/admin">대시보드</a></li>
-                <li><a href="/admin/books" class="active">책 관리</a></li>
-                <li><a href="/admin/orders">주문 관리</a></li>
-                <li><a href="/admin/users">회원 관리</a></li>
-                <li><a href="/admin/categories">카테고리 관리</a></li>
-            </ul>
-        </div>
+<section layout:fragment="page-content">
+    <div class="form-container">
+        <h2 style="text-align: center;">📚 도서 수정</h2>
+        <form th:action="@{'/admin/books/edit/' + ${book.isbn}}" method="post" enctype="multipart/form-data">
 
-        <!-- 📄 도서 수정 폼 -->
-        <div class="admin-content">
-            <div class="form-container">
-                <h2>📚 도서 수정</h2>
+            <label for="isbn">ISBN</label>
+            <input type="text" id="isbn" name="isbn" th:value="${book.isbn}" readonly />
 
-                <form th:action="@{'/admin/books/edit/' + ${book.isbn}}" method="post" enctype="multipart/form-data">
-                    <label>ISBN</label>
-                    <input type="text" name="isbn" th:value="${book.isbn}" readonly />
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" th:value="${book.title}" required />
 
-                    <label>제목</label>
-                    <input type="text" name="title" th:value="${book.title}" required />
+            <label for="author">저자</label>
+            <input type="text" id="author" name="author" th:value="${book.author}" required />
 
-                    <label>저자</label>
-                    <input type="text" name="author" th:value="${book.author}" required />
+            <label for="publisher">출판사</label>
+            <input type="text" id="publisher" name="publisher" th:value="${book.publisher}" required />
 
-                    <label>출판사</label>
-                    <input type="text" name="publisher" th:value="${book.publisher}" required />
+            <label for="publicationDate">출판일</label>
+            <input type="date" id="publicationDate" name="publicationDate" th:value="${#temporals.format(book.publicationDate, 'yyyy-MM-dd')}" required />
 
-                    <label>출판일</label>
-                    <input type="date" name="publicationDate" th:value="${book.publicationDate}" required />
+            <label for="pageCount">페이지 수</label>
+            <input type="number" id="pageCount" name="pageCount" th:value="${book.pageCount}" min="0" />
 
-                    <label>페이지 수</label>
-                    <input type="number" name="pageCount" th:value="${book.pageCount}" min="0" />
-
-                    <label>기존 이미지</label>
-                    <div>
-                        <img th:if="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}"
-                             th:src="${book.imageUrl}" alt="기존 이미지" style="max-height: 150px;" />
-                        <span th:unless="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}">이미지 없음</span>
-                    </div>
-
-
-                    <input type="hidden" name="imageUrl" th:value="${book.imageUrl}" />
-
-                    <label>이미지 변경 (선택)</label>
-                    <input type="file" name="imageFile" accept="image/*" />
-
-                    <label>설명</label>
-                    <textarea name="description" rows="4" th:text="${book.description}"></textarea>
-
-                    <label>정가</label>
-                    <input type="number" name="originalPrice" th:value="${book.originalPrice}" step="0.01" required />
-
-                    <label>판매가</label>
-                    <input type="number" name="sellingPrice" th:value="${book.sellingPrice}" step="0.01" required />
-
-                    <label>선물 포장 가능 여부</label>
-                    <select name="giftWrappingAvailable">
-                        <option th:value="true" th:selected="${book.giftWrappingAvailable} == true">가능</option>
-                        <option th:value="false" th:selected="${book.giftWrappingAvailable} == false">불가능</option>
-                    </select>
-
-                    <label>카테고리 선택</label>
-                    <div id="category-selects" class="category-select-wrapper"></div>
-                    <button type="button" id="add-category-btn" style="margin-top: 1rem;">+ 카테고리 추가</button>
-
-                    <!-- 선택된 최종 카테고리 ID 리스트 -->
-                    <ul id="selected-categories-list" style="margin-top: 1rem;"></ul>
-
-                    <!-- 서버로 전송될 hidden input (쉼표 구분된 마지막 ID들) -->
-                    <input type="hidden" name="categories" id="categories" />
-
-                    <input type="text" name="tagNames"
-                           th:value="${#strings.listJoin(book.getTags(), ',')}"
-                           placeholder="예: Java, Spring, Backend" />
-
-
-                    <button type="submit">도서 수정</button>
-                </form>
-
+            <label>기존 이미지</label>
+            <div>
+                <img th:if="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}"
+                     th:src="${book.imageUrl}" alt="기존 이미지" style="max-height: 150px; border: 1px solid #ddd; border-radius: 4px;" />
+                <span th:unless="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}">이미지 없음</span>
             </div>
-        </div>
+            <input type="hidden" name="imageUrl" th:value="${book.imageUrl}" />
+
+            <label for="imageFile">이미지 변경 (선택)</label>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*" />
+
+            <label for="description">설명</label>
+            <textarea id="description" name="description" rows="4" th:text="${book.description}"></textarea>
+
+            <label for="originalPrice">정가</label>
+            <input type="number" id="originalPrice" name="originalPrice" th:value="${book.originalPrice}" step="0.01" required />
+
+            <label for="sellingPrice">판매가</label>
+            <input type="number" id="sellingPrice" name="sellingPrice" th:value="${book.sellingPrice}" step="0.01" required />
+
+            <label for="giftWrappingAvailable">선물 포장 가능 여부</label>
+            <select id="giftWrappingAvailable" name="giftWrappingAvailable">
+                <option th:value="true" th:selected="${book.giftWrappingAvailable}">가능</option>
+                <option th:value="false" th:selected="${!book.giftWrappingAvailable}">불가능</option>
+            </select>
+
+            <label>카테고리 선택</label>
+            <div id="category-selects" style="margin-top: 0.5rem;"></div>
+            <button type="button" id="add-category-btn" class="btn btn--secondary" style="margin-top: 0.5rem;">+ 카테고리 추가</button>
+            <ul id="selected-categories-list" style="list-style: none; padding-left: 0; margin-top: 1rem;"></ul>
+            <input type="hidden" name="categories" id="categories" />
+
+            <label for="tagNames">태그 (쉼표로 구분)</label>
+            <input type="text" id="tagNames" name="tagNames" th:value="${#strings.listJoin(book.getTags(), ',')}" placeholder="예: Java, Spring, Backend" />
+
+            <button type="submit" class="btn btn--primary">도서 수정</button>
+        </form>
     </div>
+</section>
 
-    <!-- 🧠 카테고리 JS 로직 -->
+<th:block layout:fragment="script">
+    <script id="all-categories-data" type="application/json" th:text="${allCategoriesJson}"></script>
+    <script id="existing-categories-data" type="application/json" th:text="${existingCategoriesJson}"></script>
+
+    <script th:src="@{/js/admin-category-selector.js}"></script>
+
     <script th:inline="javascript">
-        const allCategories = /*[[${allCategoriesJson}]]*/ '[]';
-        const categories = JSON.parse(allCategories);
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', function() {
+            // 공통 카테고리 매니저 초기화 (기존 카테고리 데이터 추가)
+            setupCategorySelector({
+                allCategoriesJson: /*[[${allCategoriesJson}]]*/ '[]',
+                existingCategoriesJson: /*[[${existingCategoriesJson}]]*/ '[]'
+            });
 
-        // 기존 book.categories 를 JSON 문자열로 넘긴다고 가정
-        // (예: List<List<CategoryResponse>> -> JSON.stringify)
-        const existingCategoriesJson = /*[[${existingCategoriesJson}]]*/ '[]';
-        const existingCategories = JSON.parse(existingCategoriesJson);
-
-        const container = document.getElementById('category-selects');
-        const selectedList = document.getElementById('selected-categories-list');
-        const hiddenInput = document.getElementById('categories');
-        const addBtn = document.getElementById('add-category-btn');
-
-        let currentPath = [];          // 현재 선택 중인 경로
-        let selectedCategoryIds = [];  // 최종적으로 선택된 마지막 카테고리 ID들
-
-        function renderCategorySelect(parentId = null, depth = 0) {
-            while (container.children.length > depth) {
-                container.removeChild(container.lastChild);
-                currentPath.pop();
+            // 에러 메시지 처리
+            const errorMsg = /*[[${errorMessage}]]*/ null;
+            if (errorMsg) {
+                alert(errorMsg);
             }
-
-            const filtered = categories.filter(c => parentId === null ? c.parentId === null : c.parentId === parentId);
-
-            if (filtered.length === 0) return;
-
-            const select = document.createElement('select');
-            select.innerHTML = `<option value="">선택하세요</option>`;
-
-            filtered.forEach(c => {
-                const option = document.createElement('option');
-                option.value = c.id;
-                option.textContent = c.name;
-                select.appendChild(option);
-            });
-
-            select.addEventListener('change', () => {
-                const selectedId = select.value ? parseInt(select.value) : null;
-                if (selectedId !== null && !isNaN(selectedId)) {
-                    currentPath = currentPath.slice(0, depth);
-                    currentPath.push(selectedId);
-                    renderCategorySelect(selectedId, depth + 1);
-                } else {
-                    currentPath = currentPath.slice(0, depth);
-                    while (container.children.length > depth + 1) {
-                        container.removeChild(container.lastChild);
-                    }
-                }
-            });
-
-            container.appendChild(select);
-        }
-
-        // 기존에 있는 카테고리들을 리스트에 추가하는 함수
-        function addExistingCategoryPath(path) {
-            if (!Array.isArray(path) || path.length === 0) return;
-
-            const lastId = path[path.length - 1].id;
-
-            if (selectedCategoryIds.includes(lastId)) return; // 중복 방지
-
-            // 이름들을 ' > ' 로 연결
-            const names = path.map(cat => cat.name).filter(Boolean);
-
-            const li = document.createElement('li');
-            li.textContent = names.join(' > ');
-
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = '❌';
-            removeBtn.type = 'button';
-            removeBtn.style.marginLeft = '0.5rem';
-            removeBtn.addEventListener('click', () => {
-                selectedCategoryIds = selectedCategoryIds.filter(id => id !== lastId);
-                selectedList.removeChild(li);
-                updateHiddenInput();
-            });
-
-            li.appendChild(removeBtn);
-            selectedList.appendChild(li);
-
-            selectedCategoryIds.push(lastId);
-            updateHiddenInput();
-        }
-
-        // 초기 렌더링 시 기존 카테고리들 보여주기
-        existingCategories.forEach(path => {
-            addExistingCategoryPath(path);
         });
-
-        // 카테고리 추가 버튼 이벤트
-        addBtn.addEventListener('click', () => {
-            if (currentPath.length === 0) return alert('카테고리를 선택하세요.');
-
-            const lastId = currentPath[currentPath.length - 1];
-            if (selectedCategoryIds.includes(lastId)) {
-                alert('이미 추가된 카테고리입니다.');
-                return;
-            }
-
-            // 이름들을 ' > ' 로 연결
-            const names = currentPath.map(id => categories.find(c => c.id === id)?.name).filter(Boolean);
-            const li = document.createElement('li');
-            li.textContent = names.join(' > ');
-
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = '❌';
-            removeBtn.type = 'button';
-            removeBtn.style.marginLeft = '0.5rem';
-            removeBtn.addEventListener('click', () => {
-                selectedCategoryIds = selectedCategoryIds.filter(id => id !== lastId);
-                selectedList.removeChild(li);
-                updateHiddenInput();
-            });
-
-            li.appendChild(removeBtn);
-            selectedList.appendChild(li);
-
-            selectedCategoryIds.push(lastId);
-            updateHiddenInput();
-        });
-
-        function updateHiddenInput() {
-            hiddenInput.value = selectedCategoryIds.join(',');
-        }
-
-        renderCategorySelect();
-        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
-        if (errorMsg) {
-            alert(errorMsg);
-        }
+        /*]]>*/
     </script>
-
-</main>
+</th:block>
 </body>
 </html>

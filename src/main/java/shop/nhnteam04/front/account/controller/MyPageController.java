@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +25,8 @@ import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
 import shop.nhnteam04.front.order.dto.point.PointHistoryResponse;
 import shop.nhnteam04.front.order.service.OrderService;
 import shop.nhnteam04.front.point.service.PointService;
+import shop.nhnteam04.front.review.response.ReviewResponse;
+import shop.nhnteam04.front.review.service.ReviewService;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -39,6 +42,7 @@ public class MyPageController {
     private final LoginService loginService;
     private final AddressService addressService;
     private final CouponService couponService;
+    private final ReviewService reviewService;
 
     // 유저 주문 내역
     @GetMapping("/orders")
@@ -153,5 +157,13 @@ public class MyPageController {
     public String deleteAddress(@AuthenticationPrincipal SecurityUser user, @PathVariable Long addressId) {
         addressService.deleteAddress(user.getId(), addressId);
         return "redirect:/my-page/address";
+    }
+
+    @GetMapping("/reviews")
+    public String myReviews(@AuthenticationPrincipal SecurityUser user, Model model) {
+        List<ReviewResponse> reviews = reviewService.getReviewsByUser(user.getId());
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("user", user);
+        return "mypage/review-list";
     }
 }

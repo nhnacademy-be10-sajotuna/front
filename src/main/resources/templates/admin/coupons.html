@@ -1,211 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layouts/admin-layout}"
+      th:with="activeMenu='coupons'">
 <head>
-    <meta charset="utf-8" />
     <title>쿠폰 관리</title>
-    <style>
-        main {
-            padding: 0 !important;
-            background: linear-gradient(135deg, #f5f7fa, #dbe9f4) !important;
-            display: block !important;
-            justify-content: unset !important;
-            align-items: unset !important;
-        }
-
-        .admin-container {
-            display: flex;
-            min-height: 100vh;
-            width: 100%;
-        }
-
-        .admin-sidebar {
-            width: 250px;
-            background-color: #fff;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            height: calc(100vh - 60px);
-            position: fixed;
-            left: 0;
-            top: 60px;
-            overflow-y: auto;
-        }
-
-        .admin-sidebar h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .admin-sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu a {
-            display: block;
-            padding: 0.8rem 1rem;
-            color: #666;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .admin-sidebar-menu a:hover,
-        .admin-sidebar-menu a.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .admin-content {
-            flex: 1;
-            padding: 3rem 2rem;
-            margin-left: 250px;
-            width: calc(100% - 250px);
-        }
-
-        .admin-content h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-            table-layout: fixed;
-        }
-
-        th, td {
-            padding: 1rem;
-            border: 1px solid #ddd;
-            text-align: center;
-            font-size: 0.95rem;
-            word-wrap: break-word;
-            word-break: break-word;
-            white-space: normal;
-        }
-
-        th {
-            background-color: #f4f4f4;
-        }
-
-        img {
-            max-width: 80px;
-            height: auto;
-        }
-
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            text-decoration: none;
-            color: white;
-        }
-
-        .btn-edit {
-            background-color: #2196F3;
-        }
-
-        .btn-delete {
-            background-color: #f44336;
-        }
-
-        .btn-add {
-            display: inline-block;
-            background-color: #4CAF50;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .admin-sidebar {
-                width: 100%;
-                position: relative;
-                height: auto;
-            }
-
-            .admin-content {
-                margin-left: 0;
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
-<main layout:fragment="content">
-    <div class="admin-container">
-        <!-- 🧭 관리자 사이드바 -->
-        <div class="admin-sidebar">
-            <h3>관리자 메뉴</h3>
-            <ul class="admin-sidebar-menu">
-                <li><a href="/admin">대시보드</a></li>
-                <li><a href="/admin/books">책 관리</a></li>
-                <li><a href="/admin/orders">주문 관리</a></li>
-                <li><a href="/admin/users">회원 관리</a></li>
-                <li><a href="/admin/categories">카테고리 관리</a></li>
-                <li><a href="/admin/packages">책 포장 관리</a></li>
-                <li><a href="/admin/coupons" class="active">쿠폰 관리</a></li>
-            </ul>
-        </div>
+<section layout:fragment="page-content">
+    <h1 class="page-header">🎟️ 쿠폰 관리</h1>
 
-        <!-- 📄 본문 영역 -->
-        <div class="admin-content">
-            <h1>쿠폰 관리</h1>
-
-            <table>
-                <thead>
-                <tr>
-                    <th>쿠폰 이름</th>
-                    <th>쿠폰 유형</th>
-                    <th>쿠폰 정책</th>
-                    <th>할인률</th>
-                    <th>적용 금액</th>
-                    <th>최대 할인 금액</th>
-                    <th>기간</th>
-                    <th>작업</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="coupon : ${coupons}">
-                    <td th:text="${coupon.name}"></td>
-                    <td th:text="${coupon.couponType}"></td>
-                    <td th:text="${coupon.policyType}"></td>
-                    <td th:text="${coupon.discountAmount}"></td>
-                    <td th:text="${coupon.minOrderAmount} + '원'"></td>
-                    <td th:text="${coupon.maxDiscountAmount} + '원'"></td>
-                    <td th:text="${coupon.validDays} + '일'"></td>
-                    <td>
-                        <div class="button-group">
-                            <a th:href="@{'/admin/coupons/edit/' + ${coupon.id}}" class="btn btn-edit">수정</a>
-                            <form th:action="@{'/admin/coupons/delete/' + ${coupon.id}}" method="post" th:onsubmit="return confirm('정말 삭제하시겠습니까?')">
-                                <button type="submit" class="btn btn-delete">삭제</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div style="text-align: center; margin-top: 2rem;">
-                <a th:href="@{/admin/coupons/create}" class="btn btn-add">➕ 쿠폰 추가</a>
-            </div>
-        </div>
+    <div style="text-align: right; margin-bottom: 1rem;">
+        <a th:href="@{/admin/coupons/create}" class="btn btn--primary">➕ 쿠폰 추가</a>
     </div>
-</main>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>쿠폰 이름</th>
+            <th>쿠폰 유형</th>
+            <th>쿠폰 정책</th>
+            <th>할인률/금액</th>
+            <th>최소 주문 금액</th>
+            <th>최대 할인 금액</th>
+            <th>유효 기간</th>
+            <th>작업</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="coupon : ${coupons}">
+            <td th:text="${coupon.name}"></td>
+            <td th:text="${coupon.couponType}"></td>
+            <td th:text="${coupon.policyType}"></td>
+            <td th:text="${coupon.discountAmount}"></td>
+            <td th:text="${coupon.minOrderAmount} + '원'"></td>
+            <td th:text="${coupon.maxDiscountAmount} + '원'"></td>
+            <td th:text="${coupon.validDays} + '일'"></td>
+            <td>
+                <div class="button-group">
+                    <a th:href="@{'/admin/coupons/edit/' + ${coupon.id}}" class="btn btn--secondary">수정</a>
+                    <form th:action="@{'/admin/coupons/delete/' + ${coupon.id}}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                        <button type="submit" class="btn btn--danger">삭제</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
 </body>
 </html>
