@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="utf-8" />
-    <title>비회원 주문 조회 상세</title>
+    <title>주문 조회 상세</title>
 </head>
 
 <body>
@@ -36,12 +36,6 @@
     <div><strong>할인 금액:</strong> <span th:text="${orderDetail.getTotalDiscountAmount()}"></span></div>
     <div><strong>결제 금액:</strong> <span th:text="${orderDetail.getFinalPrice()}"></span></div>
 
-    <div th:if="${user != null}" style="margin-top: 20px">
-        <form th:action="@{'/order/cancel?orderId=' + ${orderDetail.orderId}}" method="post" th:onsubmit="return confirm('취소 처리하시겠습니까?')">
-            <button type="submit">주문 취소 신청</button>
-        </form>
-        <button>주문 반품 신청</button>
-    </div>
 
 </div>
 </body>
