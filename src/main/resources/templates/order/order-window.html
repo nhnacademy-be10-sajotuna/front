@@ -789,7 +789,7 @@
                             <div class="coupon-name" th:text="${coupon.couponName}">주문 쿠폰명</div>
                             <div class="coupon-discount"
                                  th:text="${coupon.policyType == T(shop.nhnteam04.front.coupon.dto.response.CouponPolicyType).RATE} 
-                                     ? ${coupon.discountAmount} + '% 할인' 
+                                     ? ${coupon.discountAmount / 10} + '% 할인' 
                                      : ${#numbers.formatInteger(coupon.discountAmount, 0, 'COMMA')} + '원 할인'">10% 할인</div>
                             <div class="coupon-condition"
                                  th:text="${coupon.minOrderAmount != null and coupon.minOrderAmount > 0} 
@@ -890,7 +890,7 @@
                     let html = '';
                     coupons.forEach(c => {
                         const dt = c.policyType === 'RATE'
-                            ? `${c.discountAmount}% 할인`
+                            ? `${c.discountAmount / 10}% 할인`
                             : `${c.discountAmount.toLocaleString()}원 할인`;
                         
                         const condition = c.minOrderAmount 
@@ -1062,7 +1062,7 @@
         // 주문 쿠폰 선택 함수
         function selectOrderCoupon(couponId, couponName, policyType, discountAmount, minOrderAmount) {
             const discountText = policyType === 'RATE' 
-                ? `${discountAmount}% 할인`
+                ? `${discountAmount / 10}% 할인`
                 : `${parseInt(discountAmount).toLocaleString()}원 할인`;
                 
             selectedOrderCoupon = {
@@ -1136,7 +1136,7 @@
             if (selectedOrderCoupon) {
                 if (selectedOrderCoupon.policyType === 'RATE') {
                     // 퍼센트 할인: 상품 금액 기준으로 계산
-                    orderCouponDiscount = totalProductAmount * (selectedOrderCoupon.discountAmount / 100);
+                    orderCouponDiscount = totalProductAmount * (selectedOrderCoupon.discountAmount / 1000);
                 } else {
                     // 정액 할인
                     orderCouponDiscount = selectedOrderCoupon.discountAmount;
