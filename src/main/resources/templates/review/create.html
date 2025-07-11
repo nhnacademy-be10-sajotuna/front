@@ -13,7 +13,7 @@
     <form th:action="@{/reviews/create}" th:object="${reviewCreateRequest}" method="post" enctype="multipart/form-data" class="review-form">
       <input type="hidden" th:field="*{isbn}" />
 
-      <div th:replace="~{fragments/form_fields :: reviewForm}"></div>
+      <div th:replace="~{review/fragments/form_fields :: reviewForm}"></div>
 
       <div class="form-actions">
         <a th:href="@{/reviews(isbn=${isbn})}" class="btn btn--secondary btn--block">목록으로</a>
@@ -22,7 +22,7 @@
     </form>
   </div>
 
-  <script th:src="@{/js/review.js}"></script>
+  <script th:src="@{/js/review-form.js}"></script>
 </section>
 </body>
 </html>

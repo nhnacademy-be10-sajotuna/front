@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mypage-layout}"
+      th:with="activeMenu='reviews'">
+<head>
+  <title>내 리뷰</title>
+</head>
+<body>
+<section layout:fragment="page-content">
+  <h2 class="page-header">내 리뷰 목록</h2>
+
+  <div th:if="${message}" th:text="${message}" class="info-note"></div>
+  <div th:if="${errorMessage}" th:text="${errorMessage}" class="info-note" style="border-color: var(--color-danger); background-color: #fbe9e9;"></div>
+
+  <div class="review-table-wrapper">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>평점</th>
+        <th>내용</th>
+        <th>사진</th>
+        <th>작성일</th>
+        <th>비고</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="review : ${reviews}">
+        <td>
+          <div class="review-table__stars" th:aria-label="|${review.rating}점|">
+            <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="${i <= review.rating} ? '★' : '☆'"></span>
+          </div>
+        </td>
+        <td th:text="${review.content}" style="max-width: 400px; white-space: pre-wrap; word-break: break-all;"></td>
+        <td>
+          <img th:if="${review.filePath}" th:src="@{|/images/${review.filePath}|}" alt="리뷰 이미지" class="review-table__image"/>
+          <span th:unless="${review.filePath}">-</span>
+        </td>
+        <td th:text="${#temporals.format(review.postedAt, 'yyyy-MM-dd')}"></td>
+        <td>
+          <a th:href="@{|/reviews?isbn=${review.getIsbn()}|}" class="btn btn--primary" style="padding: 0.5rem 1rem;">리뷰 목록</a>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(reviews)}">
+        <td colspan="5" style="padding: 2.5rem; text-align: center;">등록된 리뷰가 없습니다.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</body>
+</html>

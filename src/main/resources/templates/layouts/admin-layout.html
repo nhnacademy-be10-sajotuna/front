@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+  <th:block layout:fragment="css"></th:block>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="admin-container">
+    <aside class="admin-sidebar">
+      <h3 class="sidebar__title">관리자 메뉴</h3>
+      <ul class="sidebar-menu">
+        <li><a href="/admin" th:classappend="${activeMenu == 'dashboard'} ? 'active'">대시보드</a></li>
+        <li><a href="/admin/books" th:classappend="${activeMenu == 'books'} ? 'active'">책 관리</a></li>
+        <li><a href="/admin/orders" th:classappend="${activeMenu == 'orders'} ? 'active'">주문 관리</a></li>
+        <li><a href="/admin/users" th:classappend="${activeMenu == 'users'} ? 'active'">회원 관리</a></li>
+        <li><a href="/admin/categories" th:classappend="${activeMenu == 'categories'} ? 'active'">카테고리 관리</a></li>
+        <li><a href="/admin/packages" th:classappend="${activeMenu == 'packages'} ? 'active'">책 포장 관리</a></li>
+        <li><a href="/admin/coupons" th:classappend="${activeMenu == 'coupons'} ? 'active'">쿠폰 관리</a></li>
+      </ul>
+    </aside>
+
+    <section class="admin-content">
+      <th:block layout:fragment="page-content"></th:block>
+    </section>
+  </div>
+  <th:block layout:fragment="script"></th:block>
+</main>
+</body>
+</html>

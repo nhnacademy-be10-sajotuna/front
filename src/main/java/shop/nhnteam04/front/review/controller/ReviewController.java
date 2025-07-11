@@ -26,7 +26,7 @@ public class ReviewController {
 
     @GetMapping
     public String list(@RequestParam("isbn") String isbn, Model model) {
-        List<ReviewResponse> reviews = reviewService.getReviews(isbn);
+        List<ReviewResponse> reviews = reviewService.getReviewsByBook(isbn);
         model.addAttribute("reviews", reviews);
         model.addAttribute("isbn", isbn);
         return "review/list";
