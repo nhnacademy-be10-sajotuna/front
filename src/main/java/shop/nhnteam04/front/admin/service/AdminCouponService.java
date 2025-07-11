@@ -8,12 +8,18 @@ import shop.nhnteam04.front.coupon.dto.response.CouponType;
 import shop.nhnteam04.front.feign.coupon.AdminCouponFeignClient;
 import shop.nhnteam04.front.feign.coupon.CouponFeignClient;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AdminCouponService {
 
     private final AdminCouponFeignClient adminCouponFeignClient;
     private final CouponFeignClient couponFeignClient;
+
+    public List<CouponResponse> getAllCoupons(){
+        return adminCouponFeignClient.getAllCoupons();
+    }
 
     public void createCoupon(CouponRequest couponRequest, String isbn, String categoryId) {
         if(couponRequest.getCouponType().equals(CouponType.ORDER)){

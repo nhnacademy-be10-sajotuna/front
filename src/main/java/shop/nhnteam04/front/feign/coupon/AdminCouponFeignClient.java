@@ -6,8 +6,13 @@ import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.coupon.dto.request.CouponRequest;
 import shop.nhnteam04.front.coupon.dto.response.CouponResponse;
 
+import java.util.List;
+
 @FeignClient(name = "gateway/order-api", contextId = "adminCouponFeignClient")
 public interface AdminCouponFeignClient {
+
+    @GetMapping("/api/admin/coupons")
+    List<CouponResponse> getAllCoupons();
 
     @PostMapping("/api/admin/coupons")
     CouponResponse createCoupon(@Valid @RequestBody CouponRequest couponRequest);
