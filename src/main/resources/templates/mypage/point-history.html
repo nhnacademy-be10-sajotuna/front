@@ -38,7 +38,47 @@
         <p>쇼핑몰에서 구매하시면 포인트가 적립됩니다.</p>
     </div>
 
-    <div th:if="${pointHistory != null and !pointHistory.isEmpty()}" class="pagination">
+    <!-- 페이징 네비게이션 -->
+    <div th:if="${pointHistory != null and !pointHistory.isEmpty() and totalPages > 1}" class="pagination">
+        <!-- 첫 페이지로 -->
+        <a th:if="${currentPage > 0}" 
+           th:href="@{/my-page/point-history(page=0, size=${size})}" 
+           title="첫 페이지">«</a>
+        <span th:if="${currentPage == 0}" class="disabled">«</span>
+        
+        <!-- 이전 페이지 -->
+        <a th:if="${currentPage > 0}" 
+           th:href="@{/my-page/point-history(page=${currentPage - 1}, size=${size})}" 
+           title="이전 페이지">‹</a>
+        <span th:if="${currentPage == 0}" class="disabled">‹</span>
+        
+        <!-- 페이지 번호들 -->
+        <th:block th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
+            <a th:if="${pageNum != currentPage}" 
+               th:href="@{/my-page/point-history(page=${pageNum}, size=${size})}" 
+               th:text="${pageNum + 1}">1</a>
+            <span th:if="${pageNum == currentPage}" 
+                  class="current" 
+                  th:text="${pageNum + 1}">1</span>
+        </th:block>
+        
+        <!-- 다음 페이지 -->
+        <a th:if="${currentPage < totalPages - 1}" 
+           th:href="@{/my-page/point-history(page=${currentPage + 1}, size=${size})}" 
+           title="다음 페이지">›</a>
+        <span th:if="${currentPage >= totalPages - 1}" class="disabled">›</span>
+        
+        <!-- 마지막 페이지로 -->
+        <a th:if="${currentPage < totalPages - 1}" 
+           th:href="@{/my-page/point-history(page=${totalPages - 1}, size=${size})}" 
+           title="마지막 페이지">»</a>
+        <span th:if="${currentPage >= totalPages - 1}" class="disabled">»</span>
+    </div>
+    
+    <!-- 페이지 정보 표시 -->
+    <div th:if="${pointHistory != null and !pointHistory.isEmpty()}" 
+         style="text-align: center; margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        <span th:text="${currentPage + 1} + ' / ' + ${totalPages} + ' 페이지'">1 / 5 페이지</span>
     </div>
 </section>
 </body>
