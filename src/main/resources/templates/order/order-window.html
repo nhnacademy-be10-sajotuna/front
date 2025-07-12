@@ -466,7 +466,7 @@
             <div class="form-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                     <h3>주문자 정보</h3>
-                    <button type="button" onclick="fillOrdererInfo()" 
+                    <button type="button" onclick="fillOrdererInfo()"
                             style="padding: 0.5rem 1rem; background-color: #6c757d; color: white; border: none; border-radius: 0.25rem; cursor: pointer; font-size: 0.9rem;">
                         기본값 불러오기
                     </button>
@@ -493,7 +493,7 @@
             <div class="form-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                     <h3>수령인 정보</h3>
-                    <button type="button" onclick="copyOrdererToRecipient()" 
+                    <button type="button" onclick="copyOrdererToRecipient()"
                             style="padding: 0.5rem 1rem; background-color: #6c757d; color: white; border: none; border-radius: 0.25rem; cursor: pointer; font-size: 0.9rem;">
                         주문자와 같음
                     </button>
@@ -588,7 +588,7 @@
                             <div class="packaging-section" th:if="${item.giftWrappingAvailable}">
                                 <div class="packaging-option">
                                     <label class="packaging-label">
-                                        <input type="checkbox" 
+                                        <input type="checkbox"
                                                th:name="'items[' + ${iterStat.index} + '].packagingRequest'"
                                                th:id="'packagingRequest_' + ${iterStat.index}"
                                                value="true"
@@ -596,22 +596,24 @@
                                         포장 신청
                                     </label>
                                 </div>
-                                <div class="packaging-select-container" 
+                                <div class="packaging-select-container"
                                      th:id="'packagingContainer_' + ${iterStat.index}"
                                      style="display: none; margin-top: 0.5rem;">
-                                    <select th:name="'items[' + ${iterStat.index} + '].orderPackagingId'"
-                                            th:id="'packageSelect_' + ${iterStat.index}"
-                                            class="packaging-select"
-                                            onchange="updatePackagingPrice(this)">
-                                        <option value="">포장 선택</option>
-                                        <option th:each="pkg : ${packages}"
-                                                th:value="${pkg.id}"
-                                                th:text="${pkg.packaging} + ' (+' + ${pkg.price} + '원)'"
-                                                th:data-price="${pkg.price}">
-                                            기본 포장 (+1,000원)
-                                        </option>
-                                    </select>
-                                    <div class="packaging-price-info" 
+                                    <label>
+                                        <select th:name="'items[' + ${iterStat.index} + '].orderPackagingId'"
+                                                th:id="'packageSelect_' + ${iterStat.index}"
+                                                class="packaging-select"
+                                                onchange="updatePackagingPrice(this)">
+                                            <option value="">포장 선택</option>
+                                            <option th:each="pkg : ${packages}"
+                                                    th:value="${pkg.id}"
+                                                    th:text="${pkg.packaging} + ' (+' + ${pkg.price} + '원)'"
+                                                    th:data-price="${pkg.price}">
+                                                기본 포장 (+1,000원)
+                                            </option>
+                                        </select>
+                                    </label>
+                                    <div class="packaging-price-info"
                                          th:id="'packagingPrice_' + ${iterStat.index}"
                                          style="font-size: 0.9rem; color: #666; margin-top: 0.25rem;">
                                     </div>
@@ -646,9 +648,11 @@
                     <input type="hidden"
                            th:name="'items[' + ${iterStat.index} + '].packagingRequest'"
                            value="false"/>
-                    <input type="hidden"
-                           th:name="'items[' + ${iterStat.index} + '].orderPackagingId'"
-                           value="1"/>
+                    <!-- orderPackagingId는 JavaScript에서 동적 처리 -->
+                    <!--                    <input type="hidden"-->
+                    <!--                           th:name="'items[' + ${iterStat.index} + '].orderPackagingId'"-->
+                    <!--                           th:id="'hiddenPackagingId_' + ${iterStat.index}"-->
+                    <!--                           value="1"/>-->
                     <input type="hidden"
                            th:name="'items[' + ${iterStat.index} + '].bookCouponId'"
                            th:id="'selectedCoupon_' + ${iterStat.index}"
@@ -785,6 +789,7 @@
                              th:data-policy-type="${coupon.policyType}"
                              th:data-discount-amount="${coupon.discountAmount}"
                              th:data-min-order-amount="${coupon.minOrderAmount}"
+                             th:data-max-discount-amount="${coupon.maxDiscountAmount}"
                              style="cursor: pointer;">
                             <div class="coupon-name" th:text="${coupon.couponName}">주문 쿠폰명</div>
                             <div class="coupon-discount"
@@ -795,6 +800,9 @@
                                  th:text="${coupon.minOrderAmount != null and coupon.minOrderAmount > 0} 
                                      ? ${#numbers.formatInteger(coupon.minOrderAmount, 0, 'COMMA')} + '원 이상 구매시'
                                      : '제한 없음'">제한 없음</div>
+                            <div class="coupon-max-discount" style="font-size: 0.85em; color: #666;"
+                                 th:if="${coupon.maxDiscountAmount != null and coupon.maxDiscountAmount > 0}"
+                                 th:text="'최대 ' + ${#numbers.formatInteger(coupon.maxDiscountAmount, 0, 'COMMA')} + '원 할인'">최대 할인 금액</div>
                         </div>
                     </div>
                 </div>
@@ -839,11 +847,11 @@
         let selectedOrderCoupon = null; // 선택된 주문 쿠폰 정보
         let availablePoints = 0; // 사용 가능한 포인트
         let selectedOrderCouponForModal = null; // 모달에서 선택된 주문 쿠폰
-        
+
         // Thymeleaf에서 전달된 사용자 정보
         const userInfo = {
             name: '[[${user.name}]]',
-            email: '[[${user.email}]]', 
+            email: '[[${user.email}]]',
             phoneNumber: '[[${user.phoneNumber}]]'
         };
 
@@ -864,13 +872,13 @@
         function loadAvailableCoupons(isbn, categoryIds) {
             const list = document.getElementById('couponList');
             list.innerHTML = '<div style="text-align:center;padding:2rem;">쿠폰 목록을 불러오는 중...</div>';
-            
+
             // API 호출로 실제 쿠폰 데이터 가져오기
             const params = new URLSearchParams({
                 isbn: isbn,
                 categoryIds: categoryIds
             });
-            
+
             fetch(`/api/coupons/available-coupons/book?${params}`)
                 .then(response => {
                     if (!response.ok) {
@@ -883,29 +891,35 @@
                         list.innerHTML = '<div style="text-align:center;padding:2rem;color:#666;">적용 가능한 쿠폰이 없습니다.</div>';
                         return;
                     }
-                    
+
                     // 이미 적용된 쿠폰 ID들 수집
                     const appliedCouponIds = Array.from(appliedCoupons.values()).map(c => c.couponId);
-                    
+
                     let html = '';
                     coupons.forEach(c => {
+                        console.log('Coupon data:', c); // 쿠폰 데이터 로그
                         const dt = c.policyType === 'RATE'
                             ? `${c.discountAmount / 10}% 할인`
                             : `${c.discountAmount.toLocaleString()}원 할인`;
-                        
-                        const condition = c.minOrderAmount 
+
+                        const condition = c.minOrderAmount
                             ? `${c.minOrderAmount.toLocaleString()}원 이상 구매시`
                             : '제한 없음';
-                        
+
+                        // maxDiscountAmount 정보 추가
+                        const maxDiscountInfo = c.maxDiscountAmount && c.maxDiscountAmount > 0 
+                            ? ` (최대 ${c.maxDiscountAmount.toLocaleString()}원)`
+                            : '';
+
                         const isApplied = appliedCouponIds.includes(c.id);
                         const appliedClass = isApplied ? ' style="opacity: 0.5; background-color: #f8f9fa;"' : '';
                         const appliedText = isApplied ? ' (이미 적용됨)' : '';
-                        const onclick = isApplied ? '' : `onclick="selectCoupon(this, ${c.id}, '${c.name}', '${dt}')"`;
-                            
+                        const onclick = isApplied ? '' : `onclick="selectCoupon(this, ${c.id}, '${c.name}', '${dt}', ${c.discountAmount}, '${c.policyType}', ${c.maxDiscountAmount || 0})"`;
+
                         html += `
                             <div class="coupon-item"${appliedClass} ${onclick}>
                                 <div class="coupon-name">${c.name}${appliedText}</div>
-                                <div class="coupon-discount">${dt}</div>
+                                <div class="coupon-discount">${dt}${maxDiscountInfo}</div>
                                 <div class="coupon-condition">${condition}</div>
                             </div>
                         `;
@@ -918,14 +932,17 @@
                 });
         }
 
-        function selectCoupon(buttonEl, couponId, couponName, discountText) {
+        function selectCoupon(buttonEl, couponId, couponName, discountText, discountAmount, policyType, maxDiscountAmount) {
             document.querySelectorAll('.coupon-item').forEach(el => el.classList.remove('selected'));
             buttonEl.classList.add('selected');
             selectedCouponId = couponId;
             selectedCoupon = {
                 id: couponId,
                 name: couponName,
-                discountText: discountText
+                discountText: discountText,
+                discountAmount: discountAmount,
+                policyType: policyType,
+                maxDiscountAmount: maxDiscountAmount || 0
             };
         }
 
@@ -934,119 +951,132 @@
                 alert('쿠폰을 선택해주세요.');
                 return;
             }
-            
+
             // 기존 쿠폰이 적용되어 있다면 제거
             if (appliedCoupons.has(currentIsbn)) {
                 removeCouponByIsbn(currentIsbn);
             }
-            
+
             // 쿠폰 적용 정보 저장
             appliedCoupons.set(currentIsbn, {
                 couponId: selectedCoupon.id,
                 couponName: selectedCoupon.name,
                 discountText: selectedCoupon.discountText,
-                productIndex: currentProductIndex
+                productIndex: currentProductIndex,
+                actualDiscountAmount: 0 // 실제 할인 금액은 updateCouponUI에서 설정
             });
-            
+
             // Hidden input에 쿠폰 ID 설정
             document.getElementById(`selectedCoupon_${currentProductIndex}`).value = selectedCouponId;
-            
+
             // UI 업데이트
             updateCouponUI(currentProductIndex, selectedCoupon, currentIsbn);
-            
-            // 결제 요약 업데이트
-            updatePaymentSummary();
-            
+
             closeCouponModal();
         }
-        
+
         function updateCouponUI(productIndex, coupon, isbn) {
             const productItems = document.querySelectorAll('.product-item');
             const productItem = productItems[productIndex];
-            
+
             // 쿠폰 버튼 숨기기, 취소 버튼 보이기
             const couponBtn = productItem.querySelector('.btn-coupon');
             const removeBtn = productItem.querySelector('.btn-coupon-remove');
             const appliedInfo = productItem.querySelector('.applied-coupon-info');
             const appliedName = productItem.querySelector('.applied-coupon-name');
-            
+
             couponBtn.style.display = 'none';
             removeBtn.style.display = 'block';
             appliedInfo.style.display = 'block';
             appliedName.textContent = coupon.name;
-            
+
             // 가격 정보 업데이트
-            updatePriceDisplay(productItem, coupon);
+            updatePriceDisplay(productItem, coupon, isbn);
         }
-        
-        function updatePriceDisplay(productItem, coupon) {
+
+        function updatePriceDisplay(productItem, coupon, isbn) {
             const sellingPriceSpan = productItem.querySelector('.selling-price');
             const discountInfo = productItem.querySelector('.coupon-discount-info');
             const discountText = productItem.querySelector('.coupon-discount-text');
             const finalPriceSpan = productItem.querySelector('.final-price');
-            
+
             const originalPrice = parseFloat(sellingPriceSpan.dataset.originalPrice);
             const quantity = parseInt(productItem.querySelector('.product-quantity span').textContent);
-            
-            // 할인 금액 계산 (개당 가격 기준으로 계산)
-            let discountPerUnit = 0;
-            if (coupon.discountText.includes('%')) {
-                const percentage = parseInt(coupon.discountText.match(/\d+/)[0]);
-                discountPerUnit = originalPrice * (percentage / 100);
+
+            // 할인 금액 계산 (1개 상품에만 적용)
+            let singleItemDiscount = 0;
+            if (coupon.policyType === 'RATE') {
+                // RATE 쿠폰: 1개 상품에만 퍼센트 적용
+                const percentage = coupon.discountAmount / 10; // DB에 100으로 저장된 10%
+                singleItemDiscount = originalPrice * (percentage / 100);
             } else {
-                // 정액 할인의 경우 개당으로 나누어 적용
-                const totalDiscount = parseInt(coupon.discountText.match(/[\d,]+/)[0].replace(/,/g, ''));
-                discountPerUnit = totalDiscount / quantity;
+                // AMOUNT 쿠폰: 1개 상품에만 정액 할인 적용
+                singleItemDiscount = coupon.discountAmount;
             }
             
-            const discountedUnitPrice = originalPrice - discountPerUnit;
-            const totalDiscountAmount = discountPerUnit * quantity;
-            const finalTotalPrice = discountedUnitPrice * quantity;
-            
+            // maxDiscountAmount 적용
+            if (coupon.maxDiscountAmount && coupon.maxDiscountAmount > 0) {
+                singleItemDiscount = Math.min(singleItemDiscount, coupon.maxDiscountAmount);
+            }
+
+            // 1개 상품에만 할인 적용, 나머지는 원가 유지
+            const totalDiscountAmount = singleItemDiscount; // 1개에만 적용
+            const finalTotalPrice = (originalPrice * quantity) - singleItemDiscount; // 전체 금액 - 1개 할인
+
             // 할인 정보 표시
             discountText.textContent = `쿠폰 할인: -${totalDiscountAmount.toLocaleString()}원`;
             finalPriceSpan.textContent = `최종 가격: ${finalTotalPrice.toLocaleString()}원`;
             discountInfo.style.display = 'block';
-            
-            // amount hidden input 업데이트 (개당 할인된 가격)
-            const amountInput = productItem.querySelector('input[name*=".amount"]');
-            if (amountInput) {
-                amountInput.value = discountedUnitPrice;
+
+            // 실제 할인 금액을 appliedCoupons에 저장
+            if (appliedCoupons.has(isbn)) {
+                const couponInfo = appliedCoupons.get(isbn);
+                couponInfo.actualDiscountAmount = totalDiscountAmount;
+                appliedCoupons.set(isbn, couponInfo);
+                
+                // 할인 금액 저장 후 결제 요약 업데이트
+                updatePaymentSummary();
             }
+
+            // amount hidden input은 원래 가격 유지 (백엔드에서 쿠폰 적용 처리)
+            // const amountInput = productItem.querySelector('input[name*=".amount"]');
+            // if (amountInput) {
+            //     amountInput.value = discountedUnitPrice; // 제거: 백엔드에서 처리
+            // }
         }
 
         function removeCouponByIsbn(isbn) {
             const couponInfo = appliedCoupons.get(isbn);
             if (!couponInfo) return;
-            
+
             const productIndex = couponInfo.productIndex;
             const productItems = document.querySelectorAll('.product-item');
             const productItem = productItems[productIndex];
-            
+
             // UI 초기화
             const couponBtn = productItem.querySelector('.btn-coupon');
             const removeBtn = productItem.querySelector('.btn-coupon-remove');
             const appliedInfo = productItem.querySelector('.applied-coupon-info');
             const discountInfo = productItem.querySelector('.coupon-discount-info');
-            
+
             couponBtn.style.display = 'block';
             removeBtn.style.display = 'none';
             appliedInfo.style.display = 'none';
             discountInfo.style.display = 'none';
-            
+
             // 가격 원복
             const sellingPriceSpan = productItem.querySelector('.selling-price');
             const originalPrice = parseFloat(sellingPriceSpan.dataset.originalPrice);
-            
-            // amount hidden input 원복 (개당 가격으로)
-            const amountInput = productItem.querySelector('input[name*=".amount"]');
-            if (amountInput) {
-                amountInput.value = originalPrice; // 개당 원래 가격으로 원복
-            }
-            
+
+            // amount hidden input은 항상 원래 가격 유지 (백엔드에서 쿠폰 적용 처리)
+            // const amountInput = productItem.querySelector('input[name*=".amount"]');
+            // if (amountInput) {
+            //     amountInput.value = originalPrice; // 제거: 원래 가격 유지
+            // }
+
             // 쿠폰 ID hidden input 초기화
             document.getElementById(`selectedCoupon_${productIndex}`).value = '';
-            
+
             // 적용된 쿠폰 목록에서 제거
             appliedCoupons.delete(isbn);
             updatePaymentSummary();
@@ -1060,27 +1090,59 @@
         }
 
         // 주문 쿠폰 선택 함수
-        function selectOrderCoupon(couponId, couponName, policyType, discountAmount, minOrderAmount) {
-            const discountText = policyType === 'RATE' 
-                ? `${discountAmount / 10}% 할인`
-                : `${parseInt(discountAmount).toLocaleString()}원 할인`;
-                
+        function selectOrderCoupon(couponId, couponName, policyType, discountAmount, minOrderAmount, maxDiscountAmount) {
+            // 현재 상품 총 금액 계산
+            let totalProductAmount = 0;
+            document.querySelectorAll('.product-item').forEach(item => {
+                const priceSpan = item.querySelector('.selling-price');
+                const qtySpan = item.querySelector('.product-quantity span');
+                if (priceSpan && qtySpan) {
+                    const price = parseFloat(priceSpan.dataset.originalPrice);
+                    const qty = parseInt(qtySpan.textContent);
+                    totalProductAmount += price * qty;
+                }
+            });
+
+            // 실제 할인 금액 계산
+            let actualDiscount = 0;
+            if (policyType === 'RATE') {
+                const percentage = discountAmount / 10;
+                actualDiscount = totalProductAmount * (percentage / 100);
+            } else {
+                actualDiscount = parseInt(discountAmount);
+            }
+
+            // maxDiscountAmount 적용
+            if (maxDiscountAmount && maxDiscountAmount > 0) {
+                actualDiscount = Math.min(actualDiscount, maxDiscountAmount);
+            }
+
+            // 최소 주문 금액 체크
+            if (minOrderAmount > 0 && totalProductAmount < minOrderAmount) {
+                actualDiscount = 0;
+            }
+
+            const discountText = policyType === 'RATE'
+                ? `${discountAmount / 10}% 할인 (실제: ${actualDiscount.toLocaleString()}원)`
+                : `${parseInt(discountAmount).toLocaleString()}원 할인${maxDiscountAmount && maxDiscountAmount > 0 && actualDiscount < parseInt(discountAmount) ? ` (최대: ${actualDiscount.toLocaleString()}원)` : ''}`;
+
             selectedOrderCoupon = {
-                id: couponId, 
+                id: couponId,
                 name: couponName,
                 policyType: policyType,
                 discountAmount: parseInt(discountAmount),
-                minOrderAmount: parseInt(minOrderAmount || 0)
+                minOrderAmount: parseInt(minOrderAmount || 0),
+                maxDiscountAmount: parseInt(maxDiscountAmount || 0)
             };
-            
+
             document.getElementById('orderCouponId').value = couponId.toString();
             document.getElementById('selectedOrderCouponName').textContent = couponName;
             document.getElementById('selectedOrderCouponDiscount').textContent = discountText;
             document.getElementById('selectedOrderCouponInfo').style.display = 'block';
-            
+
             // 주문 쿠폰 선택 버튼 숨기기
             document.querySelector('.btn-select-order-coupon').style.display = 'none';
-            
+
             updatePaymentSummary();
         }
 
@@ -1089,10 +1151,10 @@
             selectedOrderCoupon = null;
             document.getElementById('orderCouponId').value = '';
             document.getElementById('selectedOrderCouponInfo').style.display = 'none';
-            
+
             // 주문 쿠폰 선택 버튼 다시 보이기
             document.querySelector('.btn-select-order-coupon').style.display = 'block';
-            
+
             updatePaymentSummary();
         }
 
@@ -1101,53 +1163,50 @@
             let totalProductAmount = 0;
             let totalCouponDiscount = 0;
             let originalTotalAmount = 0;
-            
-            // 각 상품의 최종 금액 합계 계산 (amount * quantity)
+
+            // 각 상품의 원래 금액 합계 계산 (원래 가격 * quantity)
             document.querySelectorAll('.product-item').forEach(item => {
-                const amountInput = item.querySelector('input[name*=".amount"]');
+                const sellingPriceSpan = item.querySelector('.selling-price');
                 const quantity = parseInt(item.querySelector('.product-quantity span').textContent);
-                if (amountInput) {
-                    const unitPrice = parseFloat(amountInput.value) || 0;
-                    totalProductAmount += unitPrice * quantity; // 개당 가격 * 수량
-                }
-                
-                // 원래 금액 계산 (쿠폰 적용 전)
-                const sellingPriceSpan = item.querySelector('.selling-price');
-                const originalPrice = parseFloat(sellingPriceSpan.dataset.originalPrice);
-                originalTotalAmount += originalPrice * quantity;
-            });
-            
-            // 상품 쿠폰 할인 계산
-            document.querySelectorAll('.product-item').forEach(item => {
-                const sellingPriceSpan = item.querySelector('.selling-price');
-                const discountInfo = item.querySelector('.coupon-discount-info');
-                
-                if (discountInfo && discountInfo.style.display !== 'none') {
-                    const originalPrice = parseFloat(sellingPriceSpan.dataset.originalPrice);
-                    const quantity = parseInt(item.querySelector('.product-quantity span').textContent);
-                    const discountedUnitPrice = parseFloat(item.querySelector('input[name*=".amount"]').value);
-                    const discountPerUnit = originalPrice - discountedUnitPrice;
-                    totalCouponDiscount += discountPerUnit * quantity;
+                if (sellingPriceSpan) {
+                    const originalPrice = parseFloat(sellingPriceSpan.dataset.originalPrice) || 0;
+                    totalProductAmount += originalPrice * quantity; // 원래 개당 가격 * 수량
                 }
             });
-            
+
+            // 원래 금액은 totalProductAmount와 동일
+            originalTotalAmount = totalProductAmount;
+
+            // 상품 쿠폰 할인 계산 - 저장된 실제 할인 금액 사용
+            appliedCoupons.forEach((couponInfo, isbn) => {
+                if (couponInfo.actualDiscountAmount) {
+                    totalCouponDiscount += couponInfo.actualDiscountAmount;
+                }
+            });
+
             // 주문 쿠폰 할인 계산
             let orderCouponDiscount = 0;
             if (selectedOrderCoupon) {
                 if (selectedOrderCoupon.policyType === 'RATE') {
                     // 퍼센트 할인: 상품 금액 기준으로 계산
-                    orderCouponDiscount = totalProductAmount * (selectedOrderCoupon.discountAmount / 1000);
+                    const percentage = selectedOrderCoupon.discountAmount / 10; // DB에 100으로 저장된 10%
+                    orderCouponDiscount = totalProductAmount * (percentage / 100);
                 } else {
                     // 정액 할인
                     orderCouponDiscount = selectedOrderCoupon.discountAmount;
                 }
                 
+                // maxDiscountAmount 적용
+                if (selectedOrderCoupon.maxDiscountAmount && selectedOrderCoupon.maxDiscountAmount > 0) {
+                    orderCouponDiscount = Math.min(orderCouponDiscount, selectedOrderCoupon.maxDiscountAmount);
+                }
+
                 // 최소 주문 금액 체크 (필요한 경우)
                 if (selectedOrderCoupon.minOrderAmount > 0 && totalProductAmount < selectedOrderCoupon.minOrderAmount) {
                     orderCouponDiscount = 0; // 최소 주문 금액 미달시 할인 없음
                 }
             }
-            
+
             // 포장비 계산
             let totalPackagingCost = 0;
             document.querySelectorAll('.packaging-select').forEach(select => {
@@ -1158,13 +1217,13 @@
                     }
                 }
             });
-            
+
             // 포인트 사용량
             const usedPoints = parseInt(document.getElementById('usedPoint').value) || 0;
-            
+
             // 최종 결제 금액
-            const finalAmount = Math.max(0, totalProductAmount - orderCouponDiscount - usedPoints + totalPackagingCost);
-            
+            const finalAmount = Math.max(0, totalProductAmount - totalCouponDiscount - orderCouponDiscount - usedPoints + totalPackagingCost);
+
             // UI 업데이트
             document.getElementById('totalProductAmount').textContent = originalTotalAmount.toLocaleString() + '원';
             document.getElementById('totalCouponDiscount').textContent = totalCouponDiscount > 0 ? '-' + totalCouponDiscount.toLocaleString() + '원' : '-0원';
@@ -1190,8 +1249,8 @@
 
         function applyOrderCoupon() {
             if (selectedOrderCouponForModal) {
-                const {couponId, couponName, policyType, discountAmount, minOrderAmount} = selectedOrderCouponForModal;
-                selectOrderCoupon(couponId, couponName, policyType, discountAmount, minOrderAmount);
+                const {couponId, couponName, policyType, discountAmount, minOrderAmount, maxDiscountAmount} = selectedOrderCouponForModal;
+                selectOrderCoupon(couponId, couponName, policyType, discountAmount, minOrderAmount, maxDiscountAmount);
                 closeOrderCouponModal();
             } else {
                 alert('주문 쿠폰을 선택해주세요.');
@@ -1209,7 +1268,7 @@
             const ordererName = document.getElementById('ordererName').value;
             const ordererEmail = document.getElementById('ordererEmail').value;
             const ordererPhoneNumber = document.getElementById('ordererPhoneNumber').value;
-            
+
             document.getElementById('recipientName').value = ordererName;
             document.getElementById('recipientEmail').value = ordererEmail;
             document.getElementById('recipientPhoneNumber').value = ordererPhoneNumber;
@@ -1228,13 +1287,22 @@
             const container = document.getElementById(`packagingContainer_${productIndex}`);
             const select = document.getElementById(`packageSelect_${productIndex}`);
             const priceInfo = document.getElementById(`packagingPrice_${productIndex}`);
-            
+            const hiddenPackagingId = document.getElementById(`hiddenPackagingId_${productIndex}`);
+
             if (checkbox.checked) {
                 container.style.display = 'block';
+                // 포장 신청 시 select 요소가 값을 처리하도록 hidden input 비활성화
+                if (hiddenPackagingId) {
+                    hiddenPackagingId.disabled = true;
+                }
             } else {
                 container.style.display = 'none';
                 select.value = '';
                 priceInfo.textContent = '';
+                // 포장 신청 안할 때 hidden input으로 기본값 1 전송
+                if (hiddenPackagingId) {
+                    hiddenPackagingId.disabled = false;
+                }
                 updatePaymentSummary(); // 결제 요약 업데이트
             }
         }
@@ -1244,14 +1312,23 @@
             const productIndex = selectElement.id.split('_')[1];
             const priceInfo = document.getElementById(`packagingPrice_${productIndex}`);
             const selectedOption = selectElement.options[selectElement.selectedIndex];
-            
+            const hiddenPackagingId = document.getElementById(`hiddenPackagingId_${productIndex}`);
+
             if (selectedOption.value && selectedOption.dataset.price) {
                 const price = parseInt(selectedOption.dataset.price);
                 priceInfo.textContent = `포장비: +${price.toLocaleString()}원`;
+                // 포장 선택 시 hidden input 비활성화 (선택된 값이 전송됨)
+                if (hiddenPackagingId) {
+                    hiddenPackagingId.disabled = true;
+                }
             } else {
                 priceInfo.textContent = '';
+                // 포장 미선택 시 hidden input 활성화 (기본값 1 전송)
+                if (hiddenPackagingId) {
+                    hiddenPackagingId.disabled = false;
+                }
             }
-            
+
             updatePaymentSummary(); // 결제 요약 업데이트
         }
 
@@ -1268,7 +1345,7 @@
             if (pointMatch) {
                 availablePoints = parseInt(pointMatch[1].replace(/,/g, ''));
             }
-            
+
             // 쿠폰 적용 버튼 이벤트
             document.querySelectorAll('.btn-coupon').forEach(button => {
                 button.addEventListener('click', function() {
@@ -1277,7 +1354,7 @@
                     showCouponModal(isbn, categoryIds);
                 });
             });
-            
+
             // 쿠폰 제거 버튼 이벤트
             document.querySelectorAll('.btn-coupon-remove').forEach(button => {
                 button.addEventListener('click', function() {
@@ -1287,7 +1364,7 @@
                     removeCouponByIsbn(isbn);
                 });
             });
-            
+
             // 주문 쿠폰 모달 내 아이템 클릭 이벤트
             document.querySelectorAll('.order-coupon-item').forEach(item => {
                 item.addEventListener('click', function() {
@@ -1295,45 +1372,46 @@
                     document.querySelectorAll('.order-coupon-item').forEach(el => {
                         el.classList.remove('selected');
                     });
-                    
+
                     // 현재 아이템 선택
                     this.classList.add('selected');
-                    
+
                     // 선택된 쿠폰 정보 저장
                     selectedOrderCouponForModal = {
                         couponId: this.dataset.couponId,
                         couponName: this.dataset.couponName,
                         policyType: this.dataset.policyType,
                         discountAmount: this.dataset.discountAmount,
-                        minOrderAmount: this.dataset.minOrderAmount
+                        minOrderAmount: this.dataset.minOrderAmount,
+                        maxDiscountAmount: this.dataset.maxDiscountAmount || 0
                     };
                 });
             });
-            
+
             // 포장 선택 체크박스 이벤트 리스너 추가
             document.querySelectorAll('input[type="checkbox"][id^="packagingRequest_"]').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     togglePackagingSelect(this);
                 });
             });
-            
+
             // 포장 선택 셀렉트 이벤트 리스너 추가
             document.querySelectorAll('.packaging-select').forEach(select => {
                 select.addEventListener('change', function() {
                     updatePackagingPrice(this);
                 });
             });
-            
+
             // 배송 희망일 최소값 설정
             setMinDeliveryDate();
-            
+
             // 초기 결제 요약 계산
             updatePaymentSummary();
-            
+
             // 폼 제출 전 데이터 타입 변환 처리
             document.getElementById('payment-form').addEventListener('submit', function(e) {
                 e.preventDefault(); // 기본 제출 방지
-                
+
                 try {
                     // 배송 희망일을 LocalDateTime 형식으로 변환 (yyyyMMddHHmmss)
                     const deliveryDateInput = document.getElementById('expectedDeliveryDate');
@@ -1345,20 +1423,22 @@
                         deliveryDateInput.value = formattedDate;
                         console.log('Final input value:', deliveryDateInput.value);
                     }
-                    
-                    // amount 필드들을 정수로 변환
-                    document.querySelectorAll('input[name*=".amount"]').forEach(amountInput => {
-                        const currentValue = parseFloat(amountInput.value) || 0;
-                        console.log('Original amount value:', amountInput.value);
-                        const roundedValue = Math.round(currentValue);
-                        console.log('Rounded amount value:', roundedValue);
-                        amountInput.value = roundedValue.toString(); // 정수를 문자열로 변환
-                        console.log('Final amount input value:', amountInput.value);
+
+                    // amount 필드들을 원래 sellingPrice로 재설정 (쿠폰 적용 무시)
+                    document.querySelectorAll('.product-item').forEach((productItem, index) => {
+                        const amountInput = productItem.querySelector('input[name*=".amount"]');
+                        const sellingPriceSpan = productItem.querySelector('.selling-price');
+                        if (amountInput && sellingPriceSpan) {
+                            const originalPrice = parseFloat(sellingPriceSpan.dataset.originalPrice) || 0;
+                            const roundedPrice = Math.round(originalPrice);
+                            amountInput.value = roundedPrice.toString(); // 원래 가격으로 재설정
+                            console.log(`Product ${index} amount reset to original price:`, roundedPrice);
+                        }
                     });
-                    
+
                     // 데이터 변환 완료 후 실제 폼 제출
                     console.log('All conversions completed, submitting form...');
-                    
+
                     // 약간의 지연 후 폼 제출 (브라우저가 값 변경을 처리할 시간 제공)
                     setTimeout(() => {
                         this.submit();
