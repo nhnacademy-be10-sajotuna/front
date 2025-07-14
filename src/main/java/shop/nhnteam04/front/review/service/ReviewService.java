@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import shop.nhnteam04.front.account.user.dto.SecurityUser;
+import shop.nhnteam04.front.book.domain.BookResponse;
+import shop.nhnteam04.front.feign.book.BookFeignClient;
 import shop.nhnteam04.front.feign.order.OrderFeignClient;
 import shop.nhnteam04.front.feign.review.ReviewFeignClient;
 import shop.nhnteam04.front.review.request.ReviewCreateRequest;
@@ -19,13 +21,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewFeignClient reviewFeignClient;
+    private final BookFeignClient bookFeignClient;
     private final OrderFeignClient orderFeignClient;
     private final MinioService minioService;
-    
+
     public List<ReviewResponse> getReviewsByBook(String isbn) {
         return reviewFeignClient.getReviewsByBook(isbn);
     }
-    
+
     public List<ReviewResponse> getReviewsByUser(Long userId) {
         return reviewFeignClient.getReviewsByUser(userId);
     }
@@ -35,7 +38,7 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
     }
 
-    public void createReview(ReviewCreateRequest request, MultipartFile file, SecurityUser user) throws IOException {
+    public void createReview(ReviewCreateRequest request, MultipartFile file, SecurityUser user) {
          if (!orderFeignClient.isEligibleForReview(user.getId(), request.getIsbn())) {
              throw new IllegalStateException("리뷰를 작성할 자격이 없습니다.");
          }
@@ -45,12 +48,14 @@ public class ReviewService {
             request.setFilePath(filePath);
         }
 
+        BookResponse book = bookFeignClient.getBook(request.getIsbn());
+        request.setBookTitle(book.getTitle());
         request.setMaskedEmail(MaskingUtils.maskEmail(user.getEmail()));
 
         reviewFeignClient.createReview(request, user.getId());
     }
 
-    public void updateReview(Long id, ReviewUpdateRequest request, MultipartFile file, Long userId) throws Exception {
+    public void updateReview(Long id, ReviewUpdateRequest request, MultipartFile file, Long userId) {
         ReviewResponse existingReview = getReviewById(id); // 기존 리뷰 정보 조회 (getReviewById로 대체하여 Null 체크)
         String oldFilePath = existingReview.getFilePath();
         request.setFilePath(oldFilePath); // 기본적으로 이전 파일 경로를 유지
