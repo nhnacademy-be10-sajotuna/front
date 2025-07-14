@@ -1,42 +1,128 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="utf-8" />
     <title>주문 조회 상세</title>
+    <style>
+        /* 컨테이너 & 카드 */
+
+        .order-detail-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        /* 주문 요약 */
+        .order-summary { text-align: left; margin-bottom: 30px; }
+        .order-number span { display: block; align-items: center; font-size: 18px; margin-bottom: 10px; }
+        .order-meta { display: flex; justify-content: left; gap: 20px; font-size: 14px; color: #6b7280; }
+        .order-meta .meta-item { display: flex; align-items: center; gap: 5px; }
+
+        /* 소제목 */
+        .subtitle { font-size: 20px; margin-bottom: 10px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; }
+
+        /* 상품 테이블 */
+        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .items-table th, .items-table td { padding: 12px; text-align: left; border-bottom: 1px solid #f3f4f6; }
+        .items-table tr:hover { background: #f9fafb; }
+
+        /* 배송 & 결제 정보 */
+        .info-sections { display: flex; flex-wrap: wrap; gap: 20px; }
+        .section { flex: 1; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 6px; padding: 15px; }
+
+        /* 뒤로가기 버튼 */
+        .actions { text-align: right; margin-top: 20px; }
+        .actions button { background: #4f46e5; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; transition: background 0.3s; }
+        .actions button:hover { background: #4338ca; }
+
+        /* 반응형 */
+        @media (max-width: 640px) {
+            .info-sections { flex-direction: column; }
+            .order-meta { flex-direction: column; gap: 10px; }
+        }
+
+        p {
+            margin-top: 12px;
+            margin-bottom: 12px;
+        }
+    </style>
 </head>
 
 <body>
-<div class="login-container">
-    <h2>주문 조회 상세</h2>
+<main layout:fragment="content">
+    <div class="order-detail-container">
+        <div class="card">
+            <!-- 주문 요약 헤더 -->
+            <h3 class="subtitle">주문 상세 조회</h3>
 
-    <div><strong>주문 번호:</strong> <span th:text="${orderDetail.getOrderNumber()}"></span></div>
-    <div><strong>주문 날짜:</strong> <span th:text="${#temporals.format(orderDetail.getOrderCreatedAt(), 'yyyy-MM-dd HH:mm:ss')}"></span></div>
-    <div><strong>주문 상태:</strong> <span th:text="${orderDetail.getStatus()}"></span></div>
+            <div class="order-summary">
+                <div class="order-number">
+                    <span th:text="${orderDetail.getOrderNumber()}"></span>
+                </div>
+                <div class="order-meta">
+                    <div class="meta-item">
+                        <strong>주문 날짜:</strong>
+                        <span th:text="${#temporals.format(orderDetail.getOrderCreatedAt(), 'yyyy-MM-dd HH:mm:ss')}"></span>
+                    </div>
+                    <div class="meta-item">
+                        <strong>주문 상태:</strong>
+                        <span th:text="${orderDetail.getStatus()}"></span>
+                    </div>
+                </div>
+            </div>
 
-    <h2>상품</h2>
+            <!-- 상품 목록 -->
+            <h3 class="subtitle">상품 목록</h3>
+            <table class="items-table">
+                <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>수량</th>
+                    <th>금액(원)</th>
+                </tr>
+                </thead>
+                <tbody th:each="item : ${orderDetail.getItems()}">
+                <tr>
+                    <td th:text="${item.getIsbn()}"></td>
+                    <td th:text="${item.getQty()}"></td>
+                    <td th:text="${item.getAmount()}"></td>
+                </tr>
+                </tbody>
+            </table>
 
-    <table>
-        <tr th:each="item : ${orderDetail.getItems()}">
-            <td th:text="${item.getIsbn()}"></td>
-            <td th:text="${item.getQty()}"></td>
-            <td th:text="${item.getAmount()}"></td>
-        </tr>
-    </table>
+            <!-- 배송 & 결제 정보 -->
+            <div class="info-sections">
+                <div class="section">
+                    <h3>배송 정보</h3>
+                    <p><strong>수령인:</strong> <span th:text="${orderDetail.getRecipientName()}"></span></p>
+                    <p><strong>연락처:</strong> <span th:text="${orderDetail.getRecipientPhoneNumber()}"></span></p>
+                    <p><strong>이메일:</strong> <span th:text="${orderDetail.getRecipientEmail()}"></span></p>
+                    <p><strong>주소:</strong> <span th:text="${orderDetail.getRecipientAddress()}"></span></p>
+                </div>
+                <div class="section">
+                    <h3>결제 정보</h3>
+                    <p><strong>주문 금액:</strong> <span th:text="${orderDetail.getTotalPrice()}"></span>원</p>
+                    <p><strong>할인 금액:</strong> <span th:text="${orderDetail.getTotalDiscountAmount()}"></span>원</p>
+                    <p><strong>결제 금액:</strong> <span th:text="${orderDetail.getFinalPrice()}"></span>원</p>
+                </div>
+            </div>
 
-    <h2>배송 정보</h2>
-
-    <div><strong>수령인:</strong> <span th:text="${orderDetail.getRecipientName()}"></span></div>
-    <div><strong>연락처:</strong> <span th:text="${orderDetail.getRecipientPhoneNumber()}"></span></div>
-    <div><strong>이메일:</strong> <span th:text="${orderDetail.getRecipientEmail()}"></span></div>
-    <div><strong>주소:</strong> <span th:text="${orderDetail.getRecipientAddress()}"></span></div>
-
-    <h2>결제 정보</h2>
-
-    <div><strong>주문 금액:</strong> <span th:text="${orderDetail.getTotalPrice()}"></span></div>
-    <div><strong>할인 금액:</strong> <span th:text="${orderDetail.getTotalDiscountAmount()}"></span></div>
-    <div><strong>결제 금액:</strong> <span th:text="${orderDetail.getFinalPrice()}"></span></div>
-
-
-</div>
+            <!-- 뒤로가기 -->
+            <div class="actions">
+                <button onclick="history.back()">뒤로가기</button>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>
