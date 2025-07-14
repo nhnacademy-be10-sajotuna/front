@@ -239,11 +239,11 @@
                         <div class="order-id" th:text="'주문번호: ' + ${order.orderNumber}">주문번호: ORD-20241111-001</div>
                         <div class="order-date" th:text="'주문일시: ' + ${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}">주문일시: 2024-11-11 14:30</div>
                     </div>
-                    <div class="order-status" th:switch="${order.status}">
+                    <div class="order-status" th:switch="${order.status.name()}">
                         <span th:case="'PENDING'" class="status-pending">주문확인중</span>
-                        <span th:case="'CONFIRMED'" class="status-confirmed">주문확인</span>
-                        <span th:case="'SHIPPING'" class="status-shipping">배송중</span>
+                        <span th:case="'SHIPPED'" class="status-shipping">배송중</span>
                         <span th:case="'DELIVERED'" class="status-delivered">배송완료</span>
+                        <span th:case="'RETURNED'" class="status-confirmed">주문반품</span>
                         <span th:case="'CANCELLED'" class="status-cancelled">주문취소</span>
                         <span th:case="*" th:text="${order.status}">기타</span>
                     </div>
@@ -266,7 +266,7 @@
 
                 <div class="order-actions">
                     <a th:href="@{'/order/detail/' + ${order.orderId}}" class="btn btn-primary">주문 상세</a>
-                    <button th:if="${order.status == 'PENDING'}" 
+                    <button th:if="${order.status.name() == 'PENDING'}"
                             type="button" 
                             class="btn btn-secondary"
                             th:onclick="'cancelOrder(' + ${order.orderId} + ')'">주문 취소</button>
