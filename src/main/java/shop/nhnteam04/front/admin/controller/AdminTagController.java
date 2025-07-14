@@ -10,8 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.admin.service.AdminTagService;
-import shop.nhnteam04.front.book.domain.request.TagRequest;
-import shop.nhnteam04.front.book.domain.response.TagResponse;
+import shop.nhnteam04.front.book.dto.request.TagRequest;
+import shop.nhnteam04.front.book.dto.response.TagResponse;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.book.domain.request;
+package shop.nhnteam04.front.book.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

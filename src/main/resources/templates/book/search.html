@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>도서 검색</title>
+    <style>
+        .search-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            width: 200px;
+            background: #fff;
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+        }
+
+        .main-content {
+            flex: 1;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        #autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ccc;
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        /* 정렬 탭 위에 간격 확보 */
+        .sort-tabs {
+            margin-top: 1.5rem;
+        }
+
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .search-form input {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .search-form button {
+            padding: 0.6rem 2rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .search-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .sort-tabs {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+            justify-content: center;
+        }
+
+        .sort-tab {
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            background-color: #f2f2f2;
+            color: #555;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .sort-tab:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .sort-tab.active {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .book-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .book-list li {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .book-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .book-meta {
+            margin-top: 0.3rem;
+            color: #555;
+        }
+
+        .pagination-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .pagination {
+            display: inline-flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            text-align: center;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .pagination li.active a {
+            background-color: #555;
+            color: white;
+            border-color: #555;
+        }
+
+        .pagination li.disabled a {
+            color: #ccc;
+            pointer-events: none;
+            border-color: #eee;
+        }
+
+        .pagination a:hover {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+<div class="search-container">
+    <aside class="sidebar">
+        <select name="category" onchange="location.href='?category=' + this.value">
+            <option value="">카테고리 선택</option>
+            <option th:each="cat : ${categories}"
+                    th:value="${cat.id}"
+                    th:text="${cat.name}"
+                    th:selected="${cat.id == category}">
+            </option>
+        </select>
+    </aside>
+
+    <div class="main-content">
+        <form class="search-form" th:action="@{/book/search/keyword}" method="get">
+            <div style="position: relative; flex: 1; max-width: 600px;">
+                <input type="text" id="searchInput" name="keyword" placeholder="검색어 입력" th:value="${keyword}" />
+                <ul id="autocomplete-list" style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; background: white; border: 1px solid #ccc; border-top: none; max-height: 200px; overflow-y: auto;"></ul>
+            </div>
+            <button type="submit">검색</button>
+        </form>
+
+        <div class="sort-tabs">
+            <a th:href="@{/book/search/keyword(keyword=${keyword}, category=${category}, sort='popularity')}"
+               th:classappend="${sort == 'popularity'} ? 'active'" class="sort-tab">인기도</a>
+            <a th:href="@{/book/search/keyword(keyword=${keyword}, category=${category}, sort='newest')}"
+               th:classappend="${sort == 'newest'} ? 'active'" class="sort-tab">신상품</a>
+            <a th:href="@{/book/search/keyword(keyword=${keyword}, category=${category}, sort='lowestPrice')}"
+               th:classappend="${sort == 'lowestPrice'} ? 'active'" class="sort-tab">최저가</a>
+            <a th:href="@{/book/search/keyword(keyword=${keyword}, category=${category}, sort='highestPrice')}"
+               th:classappend="${sort == 'highestPrice'} ? 'active'" class="sort-tab">최고가</a>
+            <a th:href="@{/book/search/keyword(keyword=${keyword}, category=${category}, sort='averageRating')}"
+               th:classappend="${sort == 'averageRating'} ? 'active'" class="sort-tab">평점</a>
+            <a th:href="@{/book/search/keyword(keyword=${keyword}, category=${category}, sort='reviewCount')}"
+               th:classappend="${sort == 'reviewCount'} ? 'active'" class="sort-tab">리뷰</a>
+        </div>
+
+        <ul class="book-list">
+            <li th:each="book : ${books}">
+                <img th:src="${book.imageUrl}" alt="책 이미지" style="width:100px; height:auto; border-radius: 4px;"/>
+                <div>
+                    <div class="book-title" th:text="${book.title}">도서 제목</div>
+                    <div class="book-meta">
+                        <span th:text="'저자: ' + ${book.author}"></span><br/>
+
+                        <!-- 할인율이 존재할 경우 -->
+                        <span th:if="${book.originalPrice != null and book.originalPrice > 0 and ((book.originalPrice - book.sellingPrice) / book.originalPrice * 100.0) > 0.0}"
+                              th:text="${#numbers.formatDecimal(book.originalPrice, 1, 0)} + '원 → '
+                               + ${#numbers.formatDecimal(book.sellingPrice, 1, 0)} + '원 ('
+                               + ${#numbers.formatDecimal((book.originalPrice - book.sellingPrice) / book.originalPrice * 100.0, 1, 1)} + '% 할인)'">
+                </span>
+
+                        <!-- 할인율이 0일 경우 -->
+                        <span th:if="${book.originalPrice != null and book.originalPrice > 0 and ((book.originalPrice - book.sellingPrice) / book.originalPrice * 100.0) <= 0.0}"
+                              th:text="${#numbers.formatDecimal(book.originalPrice, 1, 0)} + '원 → '
+                               + ${#numbers.formatDecimal(book.sellingPrice, 1, 0)} + '원'">
+                </span>
+
+                        <!-- 원가 자체가 없는 경우 (즉, 원가 없이 판매가만 있는 경우) -->
+                        <span th:if="${book.originalPrice == null or book.originalPrice == 0}"
+                              th:text="'판매가: ' + ${#numbers.formatDecimal(book.sellingPrice, 1, 0)} + '원'">
+                </span><br/>
+
+                        <span th:text="'평점: ' + ${book.averageRating} + '점'"></span><br/>
+                        <span th:text="'리뷰 수: ' + ${book.reviewCount} + '개'"></span><br/>
+                        <span th:text="'발행일: ' + ${book.publishedDate}"></span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="pagination-container" th:if="${page.totalPages > 1}">
+            <ul class="pagination">
+                <li th:class="${!page.hasPrevious()} ? 'disabled'">
+                    <a th:href="@{/book/search/keyword(keyword=${keyword}, category=${category}, sort=${sort}, page=${page.number - 1}, size=${page.size})}">&lt;</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" th:classappend="${i == page.number} ? 'active'">
+                    <a th:href="@{/book/search/keyword(keyword=${keyword}, category=${category}, sort=${sort}, page=${i}, size=${page.size})}"
+                       th:text="${i + 1}">1</a>
+                </li>
+                <li th:class="${!page.hasNext()} ? 'disabled'">
+                    <a th:href="@{/book/search/keyword(keyword=${keyword}, category=${category}, sort=${sort}, page=${page.number + 1}, size=${page.size})}">&gt;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- 자동완성 기능 JS -->
+<script src="/js/search.js"></script>
+</body>
+</html>

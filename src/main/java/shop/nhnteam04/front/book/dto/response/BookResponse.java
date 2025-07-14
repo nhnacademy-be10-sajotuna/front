@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.book.domain.response;
+package shop.nhnteam04.front.book.dto.response;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
