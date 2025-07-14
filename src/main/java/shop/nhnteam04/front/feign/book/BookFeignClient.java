@@ -47,7 +47,7 @@ public interface BookFeignClient {
             @RequestParam("size") int size
     );
 
-    @GetMapping("api/search/autocomplete")
+    @GetMapping("/api/search/autocomplete")
     List<String> autoComplete(@RequestParam("keyword") String keyword);
 
     @PutMapping("/api/admin/books/{isbn}")
