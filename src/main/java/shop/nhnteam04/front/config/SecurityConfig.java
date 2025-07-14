@@ -30,7 +30,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/login", "/register").anonymous()
-                                .requestMatchers("/logout", "/my-page/**").authenticated()
+                                .requestMatchers("/logout", "/my-page/**", "/order/**").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .exceptionHandling(ex -> ex
