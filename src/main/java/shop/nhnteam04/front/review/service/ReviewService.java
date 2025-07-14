@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import shop.nhnteam04.front.account.user.dto.SecurityUser;
-import shop.nhnteam04.front.book.domain.response.BookResponse;
+import shop.nhnteam04.front.book.dto.response.BookResponse;
 import shop.nhnteam04.front.feign.book.BookFeignClient;
 import shop.nhnteam04.front.feign.order.OrderFeignClient;
 import shop.nhnteam04.front.feign.review.ReviewFeignClient;

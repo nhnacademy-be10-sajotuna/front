@@ -4,13 +4,18 @@ package shop.nhnteam04.front.feign.book;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import shop.nhnteam04.front.book.dto.request.BookCreateRequest;
+import shop.nhnteam04.front.book.dto.response.BookResponse;
+import shop.nhnteam04.front.book.dto.response.BookSearchResponse;
+import shop.nhnteam04.front.book.dto.response.CategoryResponse;
 import org.springframework.web.bind.annotation.*;
-import shop.nhnteam04.front.book.domain.request.BookCreateRequest;
-import shop.nhnteam04.front.book.domain.request.TagRequest;
-import shop.nhnteam04.front.book.domain.response.BookResponse;
-import shop.nhnteam04.front.book.domain.request.CategoryCreateRequest;
-import shop.nhnteam04.front.book.domain.response.CategoryResponse;
-import shop.nhnteam04.front.book.domain.response.TagResponse;
+import shop.nhnteam04.front.book.dto.request.TagRequest;
+import shop.nhnteam04.front.book.dto.request.CategoryCreateRequest;
+import shop.nhnteam04.front.book.dto.response.TagResponse;
 
 import java.util.List;
 
@@ -20,8 +25,30 @@ public interface BookFeignClient {
     @GetMapping("/api/admin/books")
     Page<BookResponse> getAllBooks(Pageable pageable);
 
+    @GetMapping("/api/categories?page=0&size=10000")
+    Page<CategoryResponse> getAllCategories();
+
     @PostMapping("/api/admin/books")
     void createBook(@RequestBody BookCreateRequest bookCreateRequest);
+
+    @GetMapping("/api/search/keyword")
+    Page<BookSearchResponse> searchByKeyword(
+     @RequestParam("keyword") String keyword,
+     @RequestParam("sort") String sort,
+     @RequestParam("page") int page,
+     @RequestParam("size") int size
+    );
+
+    @GetMapping("/api/search/categories")
+    Page<BookSearchResponse> searchByCategory(
+            @RequestParam("category") String category,
+            @RequestParam("sort") String sort,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+    );
+
+    @GetMapping("/api/search/autocomplete")
+    List<String> autoComplete(@RequestParam("keyword") String keyword);
 
     @PutMapping("/api/admin/books/{isbn}")
     void updateBook(@PathVariable String isbn, @RequestBody BookCreateRequest bookCreateRequest);
@@ -34,9 +61,6 @@ public interface BookFeignClient {
 
     @PostMapping("/api/admin/search/import")
     void importBook(@RequestParam String keyword, @RequestParam int totalPages );
-
-    @GetMapping("/api/categories?page=0&size=10000")
-    Page<CategoryResponse> getAllCategories();
 
     @GetMapping("/api/categories/children")
     Page<CategoryResponse> getAllCategoriesByParentId(Pageable pageable, @RequestParam Long parentId);

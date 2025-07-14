@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import shop.nhnteam04.front.book.domain.request.TagRequest;
-import shop.nhnteam04.front.book.domain.response.TagResponse;
+import shop.nhnteam04.front.book.dto.request.TagRequest;
+import shop.nhnteam04.front.book.dto.response.TagResponse;
 import shop.nhnteam04.front.feign.book.BookFeignClient;
 
 @Service
