@@ -1,18 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="utf-8" />
     <title>주문 완료</title>
+
+    <style>
+        .payment-container {
+            background-color: white;
+            padding: 3rem 2rem;
+            border-radius: 1.2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .payment-button {
+            margin-top: 1.2rem;
+            width: 100%;
+            padding: 0.9rem;
+            background-color: #5c9ded;
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-button:hover {
+            background-color: #417fde;
+        }
+
+        h2 {
+            margin-bottom: 50px;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>주문이 완료되었습니다.</h2>
+    <main layout:fragment="content">
+        <div class="payment-container">
+            <h2>주문이 완료되었습니다.</h2>
 
-    <div class="order-info">
-        <p><strong>주문 번호:</strong> <span th:text="${orderNumber}"></span></p>
-        <p><strong>결제 금액:</strong> <span th:text="${amount}"></span>원</p>
-    </div>
+            <p><strong>주문 번호</strong>: <span th:text="${orderNumber}"></span></p>
+            <p><strong>총 결제 금액</strong>: <span th:text="${amount}"></span>원</p>
 
-    <button onclick="location.href='/'">완료</button>
+            <button class="payment-button" onclick="location.href='/'">확인</button>
+        </div>
+    </main>
 </body>
 </html>
