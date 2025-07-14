@@ -65,7 +65,7 @@
                 </td>
             </tr>
         </th:block>
-        <tr th:if="${#lists.isEmpty(categories)}">
+        <tr th:if="${#lists.isEmpty(categories.content)}">
             <td colspan="3" style="padding: 2rem;">하위 카테고리가 없습니다.</td>
         </tr>
         </tbody>
