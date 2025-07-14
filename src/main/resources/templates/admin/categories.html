@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin-layout}"
+      th:with="activeMenu='categories'">
+<head>
+    <title>카테고리 관리</title>
+</head>
+<body>
+<section layout:fragment="page-content">
+
+    <div style="margin-bottom: 1.5rem;">
+        <h1 class="page-header" style="margin-bottom: 0;">📁 카테고리 관리</h1>
+
+        <!-- 현재 위치 표시 (제목 아래) -->
+        <div style="margin-top: 0.5rem;">
+            <span>📂 현재 위치: </span>
+            <span th:each="parent, stat : ${parentCategories}">
+            <a th:href="@{/admin/categories(parentId=${parent.id})}"
+               th:text="${parent.name}"
+               style="color: #007bff; text-decoration: underline; margin-right: 0.3rem;"></a>
+            <span th:if="${!stat.last}">&gt;</span>
+        </span>
+        </div>
+    </div>
+
+    <!-- 카테고리 추가 폼 + 처음으로 버튼 정렬 -->
+    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+        <!-- 🏠 처음으로 버튼 -->
+        <a th:href="@{/admin/categories}" class="btn btn--secondary">🏠 처음으로</a>
+
+        <!-- ➕ 카테고리 추가 폼 -->
+        <form th:action="@{/admin/categories}" method="post" style="display: flex; align-items: center; gap: 0.3rem;">
+            <input type="hidden" name="parentCategoryId" th:value="${parentId}" />
+            <input type="text" name="name" placeholder="카테고리 이름" required style="padding: 0.3rem 0.5rem;" />
+            <button type="submit" class="btn btn--primary">➕ 추가</button>
+        </form>
+    </div>
+
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>이름</th>
+            <th>작업</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:if="${not #lists.isEmpty(categories.content)}">
+            <tr th:each="category : ${categories.content}">
+                <td th:text="${category.id}"></td>
+
+                <!-- 클릭 시 해당 ID를 부모 ID로 사용해서 새로 요청 -->
+                <td>
+                    <a th:href="@{/admin/categories(parentId=${category.id})}"
+                       th:text="${category.name}" style="text-decoration: underline; color: #333;"></a>
+                </td>
+
+                <td>
+                    <form th:action="@{'/admin/categories/' + ${category.id}}" method="post"
+                          onsubmit="return confirm('정말 삭제하시겠습니까?')" style="display: inline;">
+                        <button type="submit" class="btn btn--danger">삭제</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+        <tr th:if="${#lists.isEmpty(categories)}">
+            <td colspan="3" style="padding: 2rem;">하위 카테고리가 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이징 -->
+    <div class="pagination" th:if="${categories.totalPages > 1}">
+        <a th:if="${categories.hasPrevious()}"
+           th:href="@{/admin/categories(page=${categories.number - 1}, parentId=${parentId})}">&laquo; 이전</a>
+
+        <span th:each="pageNumber : ${#numbers.sequence((categories.number / 10) * 10, T(java.lang.Math).min(((categories.number / 10) + 1) * 10 - 1, categories.totalPages - 1))}">
+            <a th:if="${pageNumber != categories.number}"
+               th:href="@{/admin/categories(page=${pageNumber}, parentId=${parentId})}"
+               th:text="${pageNumber + 1}"></a>
+            <span th:if="${pageNumber == categories.number}"
+                  class="current" th:text="${pageNumber + 1}"></span>
+        </span>
+
+        <a th:if="${categories.hasNext()}"
+           th:href="@{/admin/categories(page=${categories.number + 1}, parentId=${parentId})}">다음 &raquo;</a>
+    </div>
+
+</section>
+</body>
+</html>
