@@ -48,10 +48,15 @@ public class ReviewService {
             request.setFilePath(filePath);
         }
 
-        BookResponse book = bookFeignClient.getBook(request.getIsbn());
-        request.setBookTitle(book.getTitle());
-        request.setMaskedEmail(MaskingUtils.maskEmail(user.getEmail()));
 
+        try {
+            BookResponse book = bookFeignClient.getBook(request.getIsbn());
+            request.setBookTitle(book.getTitle());
+        } catch (Exception e) {
+            request.setBookTitle("도서 정보 없음");
+        }
+
+        request.setMaskedEmail(MaskingUtils.maskEmail(user.getEmail()));
         reviewFeignClient.createReview(request, user.getId());
     }
 
