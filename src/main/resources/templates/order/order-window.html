@@ -648,11 +648,6 @@
                     <input type="hidden"
                            th:name="'items[' + ${iterStat.index} + '].packagingRequest'"
                            value="false"/>
-                    <!-- orderPackagingId는 JavaScript에서 동적 처리 -->
-                    <!--                    <input type="hidden"-->
-                    <!--                           th:name="'items[' + ${iterStat.index} + '].orderPackagingId'"-->
-                    <!--                           th:id="'hiddenPackagingId_' + ${iterStat.index}"-->
-                    <!--                           value="1"/>-->
                     <input type="hidden"
                            th:name="'items[' + ${iterStat.index} + '].bookCouponId'"
                            th:id="'selectedCoupon_' + ${iterStat.index}"

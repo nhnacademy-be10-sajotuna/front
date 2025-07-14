@@ -20,7 +20,6 @@ import shop.nhnteam04.front.account.user.request.EditRequestUser;
 import shop.nhnteam04.front.account.user.response.ResponseUserWithPolicy;
 import shop.nhnteam04.front.coupon.dto.response.UserCouponDetailResponse;
 import shop.nhnteam04.front.coupon.service.CouponService;
-import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
 import shop.nhnteam04.front.order.dto.point.PointHistoryResponse;
 import shop.nhnteam04.front.order.service.OrderService;
@@ -50,11 +49,15 @@ public class MyPageController {
                                       @RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "10") int size) {
         // TODO: html 만들기
-        ModelAndView mav = new ModelAndView("userOrderList");
+        ModelAndView mav = new ModelAndView("mypage/orders");
 
         Pageable pageable = PageRequest.of(page, size);
-        List<OrderInfoResponse> list = orderService.getUserOrders(user.getId(), pageable);
-        mav.addObject("orders", list);
+        Page<OrderInfoResponse> orders = orderService.getUserOrders(user.getId(), pageable);
+
+        mav.addObject("currentPage", orders.getNumber());
+        mav.addObject("totalPages", orders.getTotalPages());
+        mav.addObject("size", orders.getSize());
+        mav.addObject("orders", orders);
 
         return mav;
     }
@@ -80,7 +83,7 @@ public class MyPageController {
         mav.addObject("totalPages", pointHistoryPage.getTotalPages());
         mav.addObject("size", pointHistoryPage.getSize());
         
-        // 페이지 범위 계산 (5개씩 표시)
+        // 페이지 범위 계산 (5개씩 표시)∑
         int startPage = Math.max(0, pointHistoryPage.getNumber() - 2);
         int endPage = Math.min(pointHistoryPage.getTotalPages() - 1, pointHistoryPage.getNumber() + 2);
         mav.addObject("startPage", startPage);

@@ -10,7 +10,7 @@ import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderFormResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
-import shop.nhnteam04.front.order.dto.orders.response.ReturnReason;
+import shop.nhnteam04.front.order.dto.orders.request.ReturnReason;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,13 +30,12 @@ public class OrderService {
     }
 
     // 회원의 주문내역 조회
-    public List<OrderInfoResponse> getUserOrders(Long userId, Pageable pageable) {
+    public Page<OrderInfoResponse> getUserOrders(Long userId, Pageable pageable) {
         if (userId < 0) {
             throw new IllegalArgumentException();
         }
-        Page<OrderInfoResponse> page = orderFeignClient.getUserOrders(userId, pageable);
 
-        return page.getContent();
+        return orderFeignClient.getUserOrders(userId, pageable);
     }
 
     // 주문 조회

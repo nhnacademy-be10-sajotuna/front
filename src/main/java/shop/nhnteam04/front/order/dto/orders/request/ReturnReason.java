@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.order.dto.orders.response;
+package shop.nhnteam04.front.order.dto.orders.request;
 
 import lombok.Getter;
 

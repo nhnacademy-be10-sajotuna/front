@@ -14,7 +14,7 @@ import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
 import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderFormResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
-import shop.nhnteam04.front.order.dto.orders.response.ReturnReason;
+import shop.nhnteam04.front.order.dto.orders.request.ReturnReason;
 import shop.nhnteam04.front.order.service.OrderService;
 import shop.nhnteam04.front.order.service.PaymentService;
 
@@ -85,21 +85,19 @@ public class OrderController {
     // 주문 취소
     @PostMapping("/cancel")
     public String cancelOrder(@AuthenticationPrincipal SecurityUser user,
-                              @RequestParam("orderId") long orderId) {
+                              @RequestParam("order-id") long orderId) {
         orderService.cancelOrder(user.getId(), orderId);
 
-        return "redirect:/order/detail/" + orderId;
+        return "redirect:/my-page/orders";
     }
 
     // 주문 반품
     @PostMapping("/return")
     public String returnOrder(@AuthenticationPrincipal SecurityUser user,
-                              @RequestParam("orderId") long orderId,
-                              @RequestParam("returnReason") String reason) {
-        ReturnReason returnReason = ReturnReason.valueOf(reason.toUpperCase());
+                              @RequestParam("order-id") long orderId,
+                              @RequestParam("returnReason") ReturnReason reason) {
+        orderService.returnOrder(user.getId(), orderId, reason);
 
-        orderService.returnOrder(user.getId(), orderId, returnReason);
-
-        return "redirect:/order/detail/" + orderId;
+        return "redirect:/my-page/orders";
     }
 }
