@@ -1,4 +1,4 @@
-package shop.nhnteam04.front.book.domain;
+package shop.nhnteam04.front.book.domain.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
