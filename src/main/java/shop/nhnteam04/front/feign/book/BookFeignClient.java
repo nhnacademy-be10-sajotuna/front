@@ -5,10 +5,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import shop.nhnteam04.front.book.domain.BookCreateRequest;
-import shop.nhnteam04.front.book.domain.BookResponse;
-import shop.nhnteam04.front.book.domain.CategoryCreateRequest;
-import shop.nhnteam04.front.book.domain.CategoryResponse;
+import shop.nhnteam04.front.book.domain.request.BookCreateRequest;
+import shop.nhnteam04.front.book.domain.request.TagRequest;
+import shop.nhnteam04.front.book.domain.response.BookResponse;
+import shop.nhnteam04.front.book.domain.request.CategoryCreateRequest;
+import shop.nhnteam04.front.book.domain.response.CategoryResponse;
+import shop.nhnteam04.front.book.domain.response.TagResponse;
 
 import java.util.List;
 
@@ -47,4 +49,13 @@ public interface BookFeignClient {
 
     @DeleteMapping("/api/categories/{id}")
     void deleteCategory(@PathVariable String id);
+
+    @GetMapping("/api/tags")
+    Page<TagResponse> getAllTags(Pageable pageable);
+
+    @PostMapping("/api/tags")
+    void createTag(@RequestBody TagRequest tagRequest);
+
+    @DeleteMapping("/api/tags/{id}")
+    void deleteTag(@PathVariable Long id);
 }

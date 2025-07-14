@@ -9,8 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.admin.service.AdminCategoryService;
-import shop.nhnteam04.front.book.domain.CategoryCreateRequest;
-import shop.nhnteam04.front.book.domain.CategoryResponse;
+import shop.nhnteam04.front.book.domain.request.CategoryCreateRequest;
+import shop.nhnteam04.front.book.domain.response.CategoryResponse;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

@@ -10,14 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.nhnteam04.front.admin.service.AdminBookService;
 import shop.nhnteam04.front.admin.service.AdminCategoryService;
-import shop.nhnteam04.front.book.domain.BookCreateRequest;
-import shop.nhnteam04.front.book.domain.BookResponse;
-import shop.nhnteam04.front.book.domain.CategoryResponse;
+import shop.nhnteam04.front.book.domain.request.BookCreateRequest;
+import shop.nhnteam04.front.book.domain.response.BookResponse;
+import shop.nhnteam04.front.book.domain.response.CategoryResponse;
 
 import java.util.List;
 

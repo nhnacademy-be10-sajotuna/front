@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import shop.nhnteam04.front.book.domain.BookCreateRequest;
-import shop.nhnteam04.front.book.domain.BookResponse;
+import shop.nhnteam04.front.book.domain.request.BookCreateRequest;
+import shop.nhnteam04.front.book.domain.response.BookResponse;
 import shop.nhnteam04.front.feign.book.BookFeignClient;
 import shop.nhnteam04.front.review.service.MinioService;
 
