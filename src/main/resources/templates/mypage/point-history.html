@@ -1,303 +1,85 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layouts/mypage-layout}"
+      th:with="activeMenu='points'">
 <head>
     <title>포인트 내역 - 마이페이지</title>
-    <style>
-        /* layout.html의 main 스타일 오버라이드 */
-        main {
-            padding: 0 !important;
-            display: block !important;
-            justify-content: unset !important;
-            align-items: unset !important;
-        }
-        
-        .mypage-container {
-            display: flex;
-            gap: 0;
-            min-height: calc(100vh - 70px);
-            width: 100%;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #fff;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            height: calc(100vh - 70px);
-            position: fixed;
-            left: 0;
-            top: 70px;
-            overflow-y: auto;
-        }
-
-        .sidebar h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #c3cfe2;
-            padding-bottom: 0.5rem;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar-menu a {
-            display: block;
-            padding: 0.8rem 1rem;
-            color: #666;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background-color: #c3cfe2;
-            color: #333;
-        }
-
-        .content-area {
-            flex: 1;
-            background-color: #f8f9fa;
-            padding: 0;
-            margin-left: 250px;
-            min-height: calc(100vh - 70px);
-            width: calc(100% - 250px);
-        }
-
-        .content-header {
-            background-color: #fff;
-            padding: 2rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 0;
-        }
-
-        .content-body {
-            padding: 2rem;
-        }
-
-        .content-header h2 {
-            color: #333;
-            margin-bottom: 0;
-            border-bottom: 2px solid #c3cfe2;
-            padding-bottom: 0.5rem;
-        }
-
-        .point-summary {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #333;
-            padding: 2rem;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .point-summary h3 {
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            color: #666;
-        }
-
-        .point-summary p {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .point-history-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            background-color: #fff;
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .point-history-table th,
-        .point-history-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        .point-history-table th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .point-history-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .point-earned {
-            color: #28a745 !important;
-            font-weight: bold;
-        }
-
-        .point-used {
-            color: #dc3545 !important;
-            font-weight: bold;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #666;
-            background-color: #fff;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .empty-state h3 {
-            color: #c3cfe2;
-            margin-bottom: 1rem;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 2rem;
-            gap: 0.5rem;
-        }
-
-        .pagination a,
-        .pagination span {
-            padding: 0.75rem 1rem;
-            border: 1px solid #ddd;
-            text-decoration: none;
-            color: #333;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .pagination a:hover {
-            background-color: #c3cfe2;
-            color: #333;
-            border-color: #c3cfe2;
-        }
-
-        .pagination .current {
-            background-color: #c3cfe2;
-            color: #333;
-            border-color: #c3cfe2;
-        }
-
-        .pagination .disabled {
-            color: #ccc;
-            cursor: not-allowed;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                position: relative;
-                height: auto;
-                top: 0;
-            }
-            
-            .content-area {
-                margin-left: 0;
-                width: 100%;
-            }
-            
-            .point-history-table {
-                font-size: 0.9rem;
-            }
-
-            .point-summary {
-                position: static;
-            }
-        }
-    </style>
 </head>
 <body>
-<main layout:fragment="content">
-    <div class="mypage-container">
-        <div class="sidebar">
-            <h3>마이페이지</h3>
-            <ul class="sidebar-menu">
-                <li><a href="/my-page">대시보드</a></li>
-                <li><a href="/my-page/profile">회원 정보</a></li>
-                <li><a href="/my-page/order-list">주문 내역</a></li>
-                <li><a href="/my-page/address">주소 관리</a></li>
-                <li><a href="/my-page/point-history" class="active">포인트 내역</a></li>
-                <li><a href="/my-page/coupons">내 쿠폰</a></li>
-            </ul>
-        </div>
+<section layout:fragment="page-content">
+    <h2 class="page-header">포인트 내역</h2>
 
-        <div class="content-area">
-            <div class="content-header">
-                <h2>포인트 내역</h2>
-            </div>
-
-            <div class="content-body">
-                <div class="point-summary">
-                    <h3>현재 보유 포인트</h3>
-                    <p th:text="${availablePoint} + ' P'">0 P</p>
-                </div>
-
-                <div th:if="${pointHistory != null and #lists.size(pointHistory) > 0}">
-                    <table class="point-history-table">
-                        <thead>
-                            <tr>
-                                <th>날짜</th>
-                                <th>내용</th>
-                                <th>포인트</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="point : ${pointHistory}">
-                                <td th:text="${#temporals.format(point.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 12:00</td>
-                                <td th:text="${point.description}">주문 적립</td>
-                                <td th:class="${point.type.name() == 'EARNED'} ? 'point-earned' : 'point-used'">
-                                    <span th:if="${point.type.name() == 'EARNED'}" th:text="'+' + ${point.amount}">+100</span>
-                                    <span th:if="${point.type.name() == 'REDEEMED'}" th:text="'-' + ${point.amount}">-100</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div th:if="${pointHistory == null or #lists.size(pointHistory) == 0}" class="empty-state">
-                    <h3>포인트 내역이 없습니다</h3>
-                    <p>쇼핑몰에서 구매하시면 포인트가 적립됩니다.</p>
-                </div>
-
-                <!-- 페이징 처리 -->
-                <div th:if="${pointHistory != null and #lists.size(pointHistory) > 0}" class="pagination">
-                    <!-- 이전 페이지 -->
-                    <a th:if="${currentPage > 0}" 
-                       th:href="@{/my-page/point-history(page=${currentPage - 1}, size=${size})}">이전</a>
-                    <span th:if="${currentPage == 0}" class="disabled">이전</span>
-
-                    <!-- 페이지 번호들 -->
-                    <th:block th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
-                        <span th:if="${pageNum == currentPage}" class="current" th:text="${pageNum + 1}">1</span>
-                        <a th:if="${pageNum != currentPage}" 
-                           th:href="@{/my-page/point-history(page=${pageNum}, size=${size})}" 
-                           th:text="${pageNum + 1}">1</a>
-                    </th:block>
-
-                    <!-- 다음 페이지 -->
-                    <a th:if="${currentPage < totalPages - 1}" 
-                       th:href="@{/my-page/point-history(page=${currentPage + 1}, size=${size})}">다음</a>
-                    <span th:if="${currentPage >= totalPages - 1}" class="disabled">다음</span>
-                </div>
-            </div>
-        </div>
+    <div class="card point-summary">
+        <h3>현재 보유 포인트</h3>
+        <p th:text="(${availablePoint} ?: 0) + ' P'">0 P</p>
     </div>
-</main>
+
+    <div th:if="${pointHistory != null and !pointHistory.isEmpty()}">
+        <table class="data-table">
+            <thead>
+            <tr><th>날짜</th><th>내용</th><th>포인트</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="point : ${pointHistory}">
+                <td th:text="${#temporals.format(point.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01 12:00</td>
+                <td th:text="${point.description}">주문 적립</td>
+                <td th:classappend="${point.type.name() == 'EARNED'} ? 'point-earned' : 'point-used'">
+                    <span th:if="${point.type.name() == 'EARNED'}" th:text="'+' + ${point.amount}">+100</span>
+                    <span th:if="${point.type.name() == 'REDEEMED'}" th:text="'-' + ${point.amount}">-100</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${pointHistory == null or pointHistory.isEmpty()}" class="empty-state">
+        <h3>포인트 내역이 없습니다</h3>
+        <p>쇼핑몰에서 구매하시면 포인트가 적립됩니다.</p>
+    </div>
+
+    <!-- 페이징 네비게이션 -->
+    <div th:if="${pointHistory != null and !pointHistory.isEmpty() and totalPages > 1}" class="pagination">
+        <!-- 첫 페이지로 -->
+        <a th:if="${currentPage > 0}" 
+           th:href="@{/my-page/point-history(page=0, size=${size})}" 
+           title="첫 페이지">«</a>
+        <span th:if="${currentPage == 0}" class="disabled">«</span>
+        
+        <!-- 이전 페이지 -->
+        <a th:if="${currentPage > 0}" 
+           th:href="@{/my-page/point-history(page=${currentPage - 1}, size=${size})}" 
+           title="이전 페이지">‹</a>
+        <span th:if="${currentPage == 0}" class="disabled">‹</span>
+        
+        <!-- 페이지 번호들 -->
+        <th:block th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
+            <a th:if="${pageNum != currentPage}" 
+               th:href="@{/my-page/point-history(page=${pageNum}, size=${size})}" 
+               th:text="${pageNum + 1}">1</a>
+            <span th:if="${pageNum == currentPage}" 
+                  class="current" 
+                  th:text="${pageNum + 1}">1</span>
+        </th:block>
+        
+        <!-- 다음 페이지 -->
+        <a th:if="${currentPage < totalPages - 1}" 
+           th:href="@{/my-page/point-history(page=${currentPage + 1}, size=${size})}" 
+           title="다음 페이지">›</a>
+        <span th:if="${currentPage >= totalPages - 1}" class="disabled">›</span>
+        
+        <!-- 마지막 페이지로 -->
+        <a th:if="${currentPage < totalPages - 1}" 
+           th:href="@{/my-page/point-history(page=${totalPages - 1}, size=${size})}" 
+           title="마지막 페이지">»</a>
+        <span th:if="${currentPage >= totalPages - 1}" class="disabled">»</span>
+    </div>
+    
+    <!-- 페이지 정보 표시 -->
+    <div th:if="${pointHistory != null and !pointHistory.isEmpty()}" 
+         style="text-align: center; margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        <span th:text="${currentPage + 1} + ' / ' + ${totalPages} + ' 페이지'">1 / 5 페이지</span>
+    </div>
+</section>
 </body>
 </html>

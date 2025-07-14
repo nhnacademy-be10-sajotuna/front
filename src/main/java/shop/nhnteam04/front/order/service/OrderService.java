@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.feign.order.OrderFeignClient;
 import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
 import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
+import shop.nhnteam04.front.order.dto.orders.response.OrderFormResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
 import shop.nhnteam04.front.order.dto.orders.response.ReturnReason;
@@ -86,5 +87,9 @@ public class OrderService {
             throw new IllegalArgumentException();
         }
         orderFeignClient.returnOrder(userId, orderId, returnReason);
+    }
+
+    public OrderFormResponse getOrderForm(Long userId) {
+        return orderFeignClient.getOrderForm(userId);
     }
 }

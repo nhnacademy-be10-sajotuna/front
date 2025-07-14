@@ -21,9 +21,13 @@ public class ReviewService {
     private final ReviewFeignClient reviewFeignClient;
     private final OrderFeignClient orderFeignClient;
     private final MinioService minioService;
-
-    public List<ReviewResponse> getReviews(String isbn) {
-        return reviewFeignClient.getReviews(isbn);
+    
+    public List<ReviewResponse> getReviewsByBook(String isbn) {
+        return reviewFeignClient.getReviewsByBook(isbn);
+    }
+    
+    public List<ReviewResponse> getReviewsByUser(Long userId) {
+        return reviewFeignClient.getReviewsByUser(userId);
     }
 
     public ReviewResponse getReviewById(Long id) {

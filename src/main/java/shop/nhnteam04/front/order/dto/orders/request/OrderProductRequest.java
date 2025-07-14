@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderProductRequest {
-    private long orderPackagingId;
+    private Long orderPackagingId;
 
     @NotBlank
     private String isbn;

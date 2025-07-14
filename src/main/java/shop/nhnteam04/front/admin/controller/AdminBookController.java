@@ -108,7 +108,23 @@ public class AdminBookController {
 
     @PostMapping("/delete/{book-isbn}")
     public String delete(@PathVariable("book-isbn") String isbn) {
-        adminBookService.deleteBook(isbn);
-        return "redirect:/admin/books";
+        try {
+            adminBookService.deleteBook(isbn);
+            return "redirect:/admin/books";
+        } catch (Exception e) {
+            String errorMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+            return "redirect:/admin/books?errorMessage="+errorMessage;
+        }
+    }
+
+    @PostMapping("/import")
+    public String importBook(@RequestParam String keyword) {
+        try {
+            adminBookService.importBook(keyword);
+            return "redirect:/admin/books";
+        } catch (Exception e) {
+            String errorMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+            return "redirect:/admin/books?errorMessage="+errorMessage;
+        }
     }
 }

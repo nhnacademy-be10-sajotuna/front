@@ -8,7 +8,7 @@
 </head>
 <body>
 <section layout:fragment="content">
-  <div class="review-container">
+  <div class="review-container review-list-container">
     <h2 class="review-container__title">리뷰 목록</h2>
 
     <div th:if="${message}" th:text="${message}" class="alert alert--success"></div>
@@ -35,7 +35,7 @@
           </td>
           <td th:text="${review.content}" style="max-width: 400px; white-space: pre-wrap; word-break: break-all;">리뷰 내용입니다.</td>
           <td>
-            <img th:if="${review.filePath}" th:src="@{|/image/${review.filePath}|}" alt="리뷰 이미지" class="review-table__image"/>
+            <img th:if="${review.filePath}" th:src="@{|/images/${review.filePath}|}" alt="리뷰 이미지" class="review-table__image"/>
             <span th:unless="${review.filePath}">-</span>
           </td>
           <td th:text="${review.maskedEmail}">te***@example.com</td>

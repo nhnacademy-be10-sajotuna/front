@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mypage-layout}"
+      th:with="activeMenu='orders'">
+<head>
+    <title>주문 내역</title>
+    <style>
+        .orders-container {
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #5c9ded;
+        }
+
+        .page-title {
+            color: #333;
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .order-item {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .order-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .order-id {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #b8daff;
+        }
+
+        .status-shipping {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .status-delivered {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #5c9ded;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #417fde;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #999;
+        }
+
+        .empty-state p {
+            margin-bottom: 2rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .pagination a {
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            text-decoration: none;
+            color: #5c9ded;
+            border: 1px solid #5c9ded;
+            border-radius: 0.25rem;
+        }
+
+        .pagination a:hover {
+            background-color: #5c9ded;
+            color: white;
+        }
+
+        .pagination .current {
+            background-color: #5c9ded;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .order-details {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .order-actions {
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="page-content">
+    <div class="orders-container">
+        <div class="page-header">
+            <h1 class="page-title">주문 내역</h1>
+        </div>
+
+        <div th:if="${orders != null and !orders.isEmpty()}" class="orders-list">
+            <div th:each="order : ${orders}" class="order-item">
+                <div class="order-header">
+                    <div class="order-info">
+                        <div class="order-id" th:text="'주문번호: ' + ${order.orderNumber}">주문번호: ORD-20241111-001</div>
+                        <div class="order-date" th:text="'주문일시: ' + ${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}">주문일시: 2024-11-11 14:30</div>
+                    </div>
+                    <div class="order-status" th:switch="${order.status}">
+                        <span th:case="'PENDING'" class="status-pending">주문확인중</span>
+                        <span th:case="'CONFIRMED'" class="status-confirmed">주문확인</span>
+                        <span th:case="'SHIPPING'" class="status-shipping">배송중</span>
+                        <span th:case="'DELIVERED'" class="status-delivered">배송완료</span>
+                        <span th:case="'CANCELLED'" class="status-cancelled">주문취소</span>
+                        <span th:case="*" th:text="${order.status}">기타</span>
+                    </div>
+                </div>
+
+                <div class="order-details">
+                    <div class="detail-item">
+                        <span class="detail-label">첫 번째 상품 ISBN</span>
+                        <span class="detail-value" th:text="${order.firstProductIsbn}">9788936434267</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">총 주문금액</span>
+                        <span class="detail-value" th:text="${#numbers.formatInteger(order.finalPrice, 0, 'COMMA')} + '원'">25,000원</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">총 상품 개수</span>
+                        <span class="detail-value" th:text="${order.totalProductCount} + '개'">3개</span>
+                    </div>
+                </div>
+
+                <div class="order-actions">
+                    <a th:href="@{'/order/detail/' + ${order.orderId}}" class="btn btn-primary">주문 상세</a>
+                    <button th:if="${order.status == 'PENDING'}" 
+                            type="button" 
+                            class="btn btn-secondary"
+                            th:onclick="'cancelOrder(' + ${order.orderId} + ')'">주문 취소</button>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${orders == null or orders.isEmpty()}" class="empty-state">
+            <h3>주문 내역이 없습니다</h3>
+            <p>아직 주문하신 상품이 없습니다.</p>
+            <a href="/" class="btn btn-primary">쇼핑하러 가기</a>
+        </div>
+
+        <!-- 페이지네이션은 추후 구현 -->
+        <!--
+        <div class="pagination">
+            <a href="#" class="btn btn-secondary">이전</a>
+            <a href="#" class="current">1</a>
+            <a href="#" class="">2</a>
+            <a href="#" class="">3</a>
+            <a href="#" class="btn btn-secondary">다음</a>
+        </div>
+        -->
+    </div>
+
+    <script>
+        function cancelOrder(orderId) {
+            if (confirm('정말로 주문을 취소하시겠습니까?')) {
+                // 주문 취소 API 호출
+                fetch(`/api/orders/${orderId}/cancel`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('주문이 취소되었습니다.');
+                        location.reload();
+                    } else {
+                        alert('주문 취소에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('주문 취소 중 오류가 발생했습니다.');
+                });
+            }
+        }
+    </script>
+</section>
+</body>
+</html>

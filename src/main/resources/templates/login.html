@@ -3,104 +3,301 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-    <title>로그인</title>
+    <title>로그인 - 북팡문고</title>
     <style>
+        :root {
+            --primary-color: #5c9ded;
+            --primary-dark: #417fde;
+            --secondary-color: #6c757d;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --border-color: #e9ecef;
+            --border-radius: 12px;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
         .login-container {
-            background-color: white;
-            padding: 3rem 2rem;
-            border-radius: 1.2rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            padding: 3rem 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             text-align: center;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .logo {
             display: block;
-            font-size: 2rem;
-            font-weight: bold;
-            color: #333;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-decoration: none;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
             margin-bottom: 2rem;
+            font-weight: 400;
         }
 
         h2 {
-            margin-bottom: 1.5rem;
-            color: #333;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.5rem;
         }
 
         .input-group {
-            margin-bottom: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin-bottom: 1.5rem;
+            text-align: left;
         }
 
         .input-group label {
-            width: 80%;
-            text-align: left;
-            margin-bottom: 0.3rem;
+            display: block;
+            margin-bottom: 0.5rem;
             font-weight: 600;
-            color: #555;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .input-container {
+            position: relative;
         }
 
         .input-group input {
-            width: 80%;
-            padding: 0.8rem;
-            border-radius: 0.5rem;
-            border: 1px solid #ccc;
-            font-size: 1rem;
-        }
-        .payco-btn {
-            margin-top: 1.2rem;
             width: 100%;
-            max-width: 100%;
-            height: auto;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+            color: var(--text-primary);
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(92, 157, 237, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .input-group input::placeholder {
+            color: #adb5bd;
+            font-weight: 400;
         }
 
         .login-button {
-            margin-top: 1.2rem;
+            margin-top: 1.5rem;
             width: 100%;
-            padding: 0.9rem;
-            background-color: #5c9ded;
+            padding: 1.125rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 8px;
             color: white;
             font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .guest-button {
-            margin-top: 1.2rem;
-            width: 100%;
-            padding: 0.9rem;
-            background-color: #bdbdbd;
-            border: none;
-            border-radius: 0.5rem;
-            color: #ffffff;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .login-button:hover {
-            background-color: #417fde;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(92, 157, 237, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            margin: 2rem 0;
+            position: relative;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            padding: 0 1rem;
+        }
+
+        .payco-btn {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: block;
+        }
+
+        .payco-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .social-login {
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .social-login a {
+            display: inline-block;
+        }
+
+        .guest-button {
+            margin-top: 1.5rem;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--secondary-color), #5a6268);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .guest-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
         }
 
         .register-link {
-            margin-top: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
             font-size: 0.95rem;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .register-link a {
-            color: #417fde;
+            color: var(--primary-color);
             text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .register-link a:hover {
-            text-decoration: underline;
+            color: var(--primary-dark);
+        }
+
+        .register-link a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .register-link a:hover::after {
+            width: 100%;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #f8d7da, #f1c2c7);
+            color: var(--danger-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--danger-color);
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+        }
+
+        /* 로딩 애니메이션 */
+        .login-button.loading {
+            pointer-events: none;
+        }
+
+        .login-button.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -109,34 +306,90 @@
 <main layout:fragment="content">
     <div class="login-container">
         <a th:href="@{/}" class="logo">북팡문고</a>
-        <h2>로그인</h2>
-        <form th:action="@{/login}" method="post">
+        <div class="login-subtitle">계정에 로그인하세요</div>
+        
+        <!-- 에러 메시지 -->
+        <div th:if="${errorMessage}" class="error-message">
+            <i>⚠️</i> <span th:text="${errorMessage}">에러 메시지</span>
+        </div>
+        
+        <form th:action="@{/login}" method="post" id="loginForm">
             <div class="input-group">
                 <label for="email">이메일</label>
-                <input type="text" id="email" name="email" required />
+                <div class="input-container">
+                    <input type="text" 
+                           id="email" 
+                           name="email" 
+                           placeholder="이메일을 입력하세요"
+                           required 
+                           autocomplete="email" />
+                </div>
             </div>
+            
             <div class="input-group">
                 <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" required />
+                <div class="input-container">
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           placeholder="비밀번호를 입력하세요"
+                           required 
+                           autocomplete="current-password" />
+                </div>
             </div>
-            <button type="submit" class="login-button">로그인</button>
+            
+            <button type="submit" class="login-button" id="loginBtn">로그인</button>
         </form>
-        <a href="/oauth2/authorization/payco">
-            <img src="/payco/paycoBtn.png" alt="페이코 로그인" class="payco-btn">
-        </a>
+        
+        <div class="divider">
+            <span>또는</span>
+        </div>
+        
+        <div class="social-login">
+            <a href="/oauth2/authorization/payco">
+                <img src="/payco/paycoBtn.png" alt="페이코 로그인" class="payco-btn">
+            </a>
+        </div>
+        
+        <button class="guest-button" onclick="location.href='/guest'">
+            비회원 주문조회
+        </button>
+        
         <div class="register-link">
             계정이 없으신가요? <a th:href="@{/register}">회원가입</a>
         </div>
-        <button class="guest-button" onclick="location.href='/guest'">비회원 주문조회</button>
-
     </div>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
+        // 에러 메시지 처리 (기존 alert 대신 UI로 표시)
         let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
-        if (errorMsg) {
-            alert(errorMsg);
-        }
+        
+        // 폼 제출 시 로딩 상태 표시
+        document.getElementById('loginForm').addEventListener('submit', function() {
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.classList.add('loading');
+            loginBtn.textContent = '로그인 중...';
+        });
+
+        // 엔터 키로 로그인
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').submit();
+            }
+        });
+
+        // 입력 필드 애니메이션
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
         /*]]>*/
     </script>
 </main>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/mypage.css}">
+  <th:block layout:fragment="css"></th:block>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="mypage-container">
+    <aside class="sidebar">
+      <h3>마이페이지</h3>
+      <ul class="sidebar-menu">
+        <li><a href="/my-page" th:classappend="${activeMenu == 'dashboard'} ? 'active'">대시보드</a></li>
+        <li><a href="/my-page/profile" th:classappend="${activeMenu == 'profile'} ? 'active'">회원 정보</a></li>
+        <li><a href="/my-page/orders" th:classappend="${activeMenu == 'orders'} ? 'active'">주문 내역</a></li>
+        <li><a href="/my-page/address" th:classappend="${activeMenu == 'address'} ? 'active'">주소 관리</a></li>
+        <li><a href="/my-page/point-history" th:classappend="${activeMenu == 'points'} ? 'active'">포인트 내역</a></li>
+        <li><a href="/my-page/coupons" th:classappend="${activeMenu == 'coupons'} ? 'active'">내 쿠폰</a></li>
+        <li><a href="/my-page/reviews" th:classappend="${activeMenu == 'reviews'} ? 'active'">내 리뷰</a></li>
+      </ul>
+    </aside>
+
+    <section class="content-area">
+      <th:block layout:fragment="page-content"></th:block>
+    </section>
+  </div>
+
+  <th:block layout:fragment="script"></th:block>
+</main>
+</body>
+</html>

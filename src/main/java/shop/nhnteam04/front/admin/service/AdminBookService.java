@@ -47,4 +47,8 @@ public class AdminBookService {
     public void deleteBook(String isbn) {
         bookFeignClient.deleteBook(isbn);
     }
+
+    public void importBook(String keyword) {
+        bookFeignClient.importBook(keyword, 4);
+    }
 }
