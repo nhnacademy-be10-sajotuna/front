@@ -821,7 +821,7 @@
         </div>
     </div>
 
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
         function execDaumPostcode() {
             new daum.Postcode({
                 oncomplete: function(data) {
@@ -850,9 +850,9 @@
 
         // Thymeleaf에서 전달된 사용자 정보
         const userInfo = {
-            name: '[[${user.name}]]',
-            email: '[[${user.email}]]',
-            phoneNumber: '[[${user.phoneNumber}]]'
+            name: [[${user.name}]],
+            email: [[${user.email}]],
+            phoneNumber: [[${user.phoneNumber}]]
         };
 
         function showCouponModal(isbn, categoryIds) {
@@ -907,7 +907,7 @@
                             : '제한 없음';
 
                         // maxDiscountAmount 정보 추가
-                        const maxDiscountInfo = c.maxDiscountAmount && c.maxDiscountAmount > 0 
+                        const maxDiscountInfo = c.maxDiscountAmount && c.maxDiscountAmount > 0
                             ? ` (최대 ${c.maxDiscountAmount.toLocaleString()}원)`
                             : '';
 
@@ -1013,7 +1013,7 @@
                 // AMOUNT 쿠폰: 1개 상품에만 정액 할인 적용
                 singleItemDiscount = coupon.discountAmount;
             }
-            
+
             // maxDiscountAmount 적용
             if (coupon.maxDiscountAmount && coupon.maxDiscountAmount > 0) {
                 singleItemDiscount = Math.min(singleItemDiscount, coupon.maxDiscountAmount);
@@ -1033,7 +1033,7 @@
                 const couponInfo = appliedCoupons.get(isbn);
                 couponInfo.actualDiscountAmount = totalDiscountAmount;
                 appliedCoupons.set(isbn, couponInfo);
-                
+
                 // 할인 금액 저장 후 결제 요약 업데이트
                 updatePaymentSummary();
             }
@@ -1218,11 +1218,29 @@
                 }
             });
 
+            // 배송비 계산
+            const deliveryPrice = {
+                deliveryPrice: [[${deliveryPrice.deliveryPrice}]],
+                freeDeliveryMinPrice: [[${deliveryPrice.freeDeliveryMinPrice}]]
+            };
+
+            let deliveryFee = 0;
+            if (deliveryPrice && deliveryPrice.deliveryPrice) {
+                // 상품 금액 - 쿠폰 할인 후 금액 기준으로 배송비 계산
+                const discountedProductAmount = totalProductAmount - totalCouponDiscount - orderCouponDiscount;
+                
+                if (deliveryPrice.freeDeliveryMinPrice && discountedProductAmount >= deliveryPrice.freeDeliveryMinPrice) {
+                    deliveryFee = 0; // 무료 배송
+                } else {
+                    deliveryFee = deliveryPrice.deliveryPrice; // 배송비 적용
+                }
+            }
+
             // 포인트 사용량
             const usedPoints = parseInt(document.getElementById('usedPoint').value) || 0;
 
             // 최종 결제 금액
-            const finalAmount = Math.max(0, totalProductAmount - totalCouponDiscount - orderCouponDiscount - usedPoints + totalPackagingCost);
+            const finalAmount = Math.max(0, totalProductAmount - totalCouponDiscount - orderCouponDiscount - usedPoints + totalPackagingCost + deliveryFee);
 
             // UI 업데이트
             document.getElementById('totalProductAmount').textContent = originalTotalAmount.toLocaleString() + '원';
@@ -1230,6 +1248,7 @@
             document.getElementById('totalOrderCouponDiscount').textContent = orderCouponDiscount > 0 ? '-' + orderCouponDiscount.toLocaleString() + '원' : '-0원';
             document.getElementById('totalPointUsed').textContent = usedPoints > 0 ? '-' + usedPoints.toLocaleString() + '원' : '-0원';
             document.getElementById('totalPackagingCost').textContent = totalPackagingCost > 0 ? '+' + totalPackagingCost.toLocaleString() + '원' : '+0원';
+            document.getElementById('deliveryFee').textContent = deliveryFee > 0 ? '+' + deliveryFee.toLocaleString() + '원' : (deliveryPrice && deliveryPrice.freeDeliveryMinPrice ? '무료배송' : '+0원');
             document.getElementById('finalPaymentAmount').textContent = finalAmount.toLocaleString() + '원';
         }
 

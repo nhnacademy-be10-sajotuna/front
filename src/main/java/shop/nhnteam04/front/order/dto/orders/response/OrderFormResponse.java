@@ -18,5 +18,8 @@ public class OrderFormResponse {
 
     //쿠폰
     private List<UserCouponDetailResponse> coupons;
+
+    //배달비
+    private DeliveryPriceResponse deliveryPrice;
 }
 

@@ -40,6 +40,7 @@ public class OrderController {
         mav.addObject("point", orderFormResponse.getPoint());
         mav.addObject("packages", orderFormResponse.getPackages());
         mav.addObject("coupons", orderFormResponse.getCoupons());
+        mav.addObject("deliveryPrice", orderFormResponse.getDeliveryPrice());
         mav.addObject("userId", user.getId());
         mav.addObject("user", user);
 
