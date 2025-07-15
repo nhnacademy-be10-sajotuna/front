@@ -452,7 +452,10 @@
                         <strong id="summaryPayAmount" th:text="${#numbers.formatDecimal(summary.payAmount, 0, 'COMMA', 0, 'POINT')} + '원'">0원</strong>
                     </div>
 
-                    <button type="button" class="order-button" onclick="location.href='/order'">주문하기</button>
+                    <button type="button" class="order-button"
+                            th:onclick="${user != null} ? 'location.href=\'/order\'' : 'location.href=\'/guest/order\''">
+                        주문하기
+                    </button>
                 </aside>
             </div>
         </div>

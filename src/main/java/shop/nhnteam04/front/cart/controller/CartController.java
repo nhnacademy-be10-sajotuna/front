@@ -31,6 +31,7 @@ public class CartController {
 
         model.addAttribute("cart", cart);
         model.addAttribute("summary", CartSummaryResponse.of(cart));
+        model.addAttribute("user", user);
         return "cart/cart";
     }
 
