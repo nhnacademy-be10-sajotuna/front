@@ -15,6 +15,7 @@ import shop.nhnteam04.front.account.user.request.RegisterRequestUser;
 import shop.nhnteam04.front.account.user.response.LoginResponse;
 import shop.nhnteam04.front.account.user.response.ResponseUser;
 import shop.nhnteam04.front.account.user.response.ResponseUserWithPolicy;
+import shop.nhnteam04.front.feign.cart.CartFeignClient;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class LoginService {
 
     private final AccountFeignClient accountFeignClient;
     private final CookieService cookieService;
+    private final CartFeignClient cartFeignClient;
 
     public void login(LoginRequestUser loginRequestUser, HttpServletResponse response) {
        LoginResponse loginResponse = accountFeignClient.login(loginRequestUser);
@@ -31,8 +33,11 @@ public class LoginService {
         ResponseCookie accessTokenCookie = cookieService.getAccessTokenCookie(loginResponse.getAccessToken());
         ResponseCookie refreshTokenCookie = cookieService.getRefreshTokenCookie(loginResponse.getRefreshToken());
 
+        ResponseCookie deleteGuestCartCookie = cookieService.deleteGuestCartCookie();
+
         response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, deleteGuestCartCookie.toString());
     }
 
     public ResponseUser me(long userId) {

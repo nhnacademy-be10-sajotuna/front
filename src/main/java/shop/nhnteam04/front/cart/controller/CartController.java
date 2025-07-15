@@ -6,10 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.account.user.dto.SecurityUser;
-import shop.nhnteam04.front.cart.dto.CartItemRequest;
-import shop.nhnteam04.front.cart.dto.CartItemResponse;
-import shop.nhnteam04.front.cart.dto.CartResponse;
-import shop.nhnteam04.front.cart.dto.CartSummaryResponse;
+import shop.nhnteam04.front.cart.dto.request.CartItemRequest;
+import shop.nhnteam04.front.cart.dto.response.CartItemResponse;
+import shop.nhnteam04.front.cart.dto.response.CartResponse;
+import shop.nhnteam04.front.cart.dto.response.CartSummaryResponse;
 import shop.nhnteam04.front.cart.service.CartItemService;
 import shop.nhnteam04.front.cart.service.CartService;
 
@@ -22,23 +22,25 @@ public class CartController {
 
     @GetMapping
     public String cart(@AuthenticationPrincipal SecurityUser user,
-                       @CookieValue String cartId, Model model) {
-        CartResponse cart = (user.getId() != null)
+                       @CookieValue(required = false, name = "guestCartId") String cartId, Model model) {
+
+
+        CartResponse cart = (user != null && user.getId() != null)
                 ? cartService.getUserCart(user.getId())
                 : cartService.getGuestCart(cartId);
 
         model.addAttribute("cart", cart);
         model.addAttribute("summary", CartSummaryResponse.of(cart));
-        return "cart/cart";
+        return "/cart/cart";
     }
 
     @PostMapping
     public String addBookToCart(@AuthenticationPrincipal SecurityUser user,
-                                @CookieValue String cartId,
+                                @CookieValue(required = false, name = "guestCartId") String cartId,
                                 @ModelAttribute CartItemRequest request, Model model) {
         CartItemResponse response;
 
-        if (user.getId() != null) {
+        if (user != null && user.getId() != null) {
             response = cartItemService.addUserCartItem(user.getId(), request);
         } else {
             response = cartItemService.addGuestCartItem(request, cartId);
@@ -47,15 +49,30 @@ public class CartController {
         return "book"; // 원래 페이지 그대로
     }
 
+    @PostMapping("/update")
+    public String updateBookQuantity(@AuthenticationPrincipal SecurityUser user,
+                                     @CookieValue(required = false, name = "guestCartId") String cartId,
+                                     @ModelAttribute CartItemRequest request) {
+        CartItemResponse response;
+
+        if (user != null && user.getId() != null) {
+            response = cartItemService.updateUserCartItem(request.getCartItemId(), request);
+        } else {
+            response = cartItemService.updateGuestCartItem(request, cartId);
+        }
+        return "redirect:/cart";
+    }
+
     @PostMapping("/delete")
     public String deleteBookFromCart(@AuthenticationPrincipal SecurityUser user,
-                                     @CookieValue String cartId,
+                                     @CookieValue(required = false, name = "guestCartId") String cartId,
                                      @RequestParam String isbn,
-                                     @RequestParam Long cartItemId
+                                     @RequestParam(required = false) Long cartItemId
                                      ) {
-        if(user.getId() != null && cartItemId != null) {
+
+        if(user != null && cartItemId != null) {
             cartItemService.deleteUserCartItem(cartItemId);
-        } else if (user.getId() == null && isbn != null) {
+        } else if (isbn != null) {
             cartItemService.deleteGuestCartItem(isbn, cartId);
         }
         return "redirect:/cart";

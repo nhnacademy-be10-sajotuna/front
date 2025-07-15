@@ -2,8 +2,8 @@ package shop.nhnteam04.front.cart.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import shop.nhnteam04.front.cart.dto.CartItemRequest;
-import shop.nhnteam04.front.cart.dto.CartItemResponse;
+import shop.nhnteam04.front.cart.dto.request.CartItemRequest;
+import shop.nhnteam04.front.cart.dto.response.CartItemResponse;
 import shop.nhnteam04.front.feign.cart.CartFeignClient;
 
 @Service
@@ -36,16 +36,16 @@ public class CartItemService {
         return cartFeignClient.addGuestCartItem(request,cartId);
     }
     // 비회원 장바구니 책 단건조회
-    public CartItemResponse getGuestCartItem(String bookId, String cartId) {
-        return cartFeignClient.getGuestCartItem(bookId, cartId);
+    public CartItemResponse getGuestCartItem(String isbn, String cartId) {
+        return cartFeignClient.getGuestCartItem(isbn, cartId);
     }
     // 비회원 장바구니 책 수량 변경
     public CartItemResponse updateGuestCartItem(CartItemRequest request, String cartId) {
         return cartFeignClient.updateGuestCartItem(request,cartId);
     }
     // 비회원 장바구니 책 삭제(단건 삭제)
-    public void deleteGuestCartItem(String bookId, String cartId) {
-        cartFeignClient.deleteGuestCartItem(bookId,cartId);
+    public void deleteGuestCartItem(String isbn, String cartId) {
+        cartFeignClient.deleteGuestCartItem(isbn, cartId);
     }
     // 비회원 장바구니 비우기
     public void clearGuestCartItems(String cartId) {

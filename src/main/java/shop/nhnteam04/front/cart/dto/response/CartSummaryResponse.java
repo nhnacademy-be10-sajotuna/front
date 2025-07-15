@@ -1,8 +1,7 @@
-package shop.nhnteam04.front.cart.dto;
+package shop.nhnteam04.front.cart.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor

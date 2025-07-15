@@ -2,9 +2,9 @@ package shop.nhnteam04.front.feign.cart;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
-import shop.nhnteam04.front.cart.dto.CartItemRequest;
-import shop.nhnteam04.front.cart.dto.CartItemResponse;
-import shop.nhnteam04.front.cart.dto.CartResponse;
+import shop.nhnteam04.front.cart.dto.request.CartItemRequest;
+import shop.nhnteam04.front.cart.dto.response.CartItemResponse;
+import shop.nhnteam04.front.cart.dto.response.CartResponse;
 
 
 // 불필요한거 나중에 지우기
@@ -34,7 +34,7 @@ public interface CartFeignClient {
     CartItemResponse getUserCartItem(@RequestHeader(value = "X-User-Id") Long userId,
                                      @PathVariable Long cartItemId);
 
-    @PatchMapping("/api/user-cart-items/{cartItemId}")
+    @PostMapping("/api/user-cart-items/update/{cartItemId}")
     CartItemResponse updateUserCartItem(@PathVariable Long cartItemId,
                                         @RequestBody CartItemRequest request);
 
@@ -48,16 +48,16 @@ public interface CartFeignClient {
     CartItemResponse addGuestCartItem(@RequestBody CartItemRequest request,
                                       @RequestHeader(value = "X-Guest-Cart-Id")String cartId);
 
-    @GetMapping("/api/guest-cart-items/{bookId}")
-    CartItemResponse getGuestCartItem(@PathVariable String bookId,
+    @GetMapping("/api/guest-cart-items/{isbn}")
+    CartItemResponse getGuestCartItem(@PathVariable String isbn,
                                       @RequestHeader(value = "X-Guest-Cart-Id")String cartId);
 
-    @PatchMapping("/api/guest-cart-items")
+    @PostMapping("/api/guest-cart-items/update")
     CartItemResponse updateGuestCartItem(@RequestBody CartItemRequest request,
                                          @RequestHeader(value = "X-Guest-Cart-Id")String cartId);
 
-    @DeleteMapping("/api/guest-cart-items/{bookId}")
-    void deleteGuestCartItem(@PathVariable String bookId,
+    @DeleteMapping("/api/guest-cart-items/{isbn}")
+    void deleteGuestCartItem(@PathVariable String isbn,
                              @RequestHeader(value = "X-Guest-Cart-Id")String cartId);
 
     @DeleteMapping("/api/guest-cart-items")

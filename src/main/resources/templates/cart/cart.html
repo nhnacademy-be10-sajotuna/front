@@ -1,10 +1,555 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>장바구니 - 마이페이지</title>
+    <style>
+        /* 주소관리 페이지 스타일과 동일하게 유지 */
+        main {
+            padding: 0 !important;
+            display: block !important;
+            justify-content: unset !important;
+            align-items: unset !important;
+        }
+        .mypage-container {
+            display: flex;
+            gap: 0;
+            min-height: calc(100vh - 70px);
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            height: calc(100vh - 70px);
+            position: fixed;
+            left: 0;
+            top: 70px;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #c3cfe2;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: #666;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: #c3cfe2;
+            color: #333;
+        }
+
+        .content-area {
+            flex: 1;
+            background-color: #f8f9fa;
+            padding: 0;
+            margin-left: 250px;
+            min-height: calc(100vh - 70px);
+            width: calc(100% - 250px);
+        }
+
+        .content-header {
+            background-color: #fff;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-header h2 {
+            color: #333;
+            margin-bottom: 0;
+            border-bottom: 2px solid #c3cfe2;
+            padding-bottom: 0.5rem;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .add-address-section {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-address-section h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #c3cfe2;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #c3cfe2;
+            box-shadow: 0 0 0 2px rgba(195, 207, 226, 0.2);
+        }
+
+        .empty-state h3 {
+            color: #c3cfe2;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+                top: 0;
+            }
+
+            .content-area {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        .cart-table th, .cart-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        .cart-table th {
+            background-color: #c3cfe2;
+            color: #333;
+            font-weight: bold;
+        }
+        .cart-table tr:last-child td {
+            border-bottom: none;
+        }
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .cart-item-box {
+            display: flex;
+            justify-content: space-between;
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            align-items: center;
+        }
+
+        .cart-item-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1; /* 왼쪽 박스 넓이 */
+        }
+
+        .book-image {
+            width: 100px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .book-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .book-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .book-prices {
+            font-size: 1rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .selling-price {
+            color: #e63946;
+            font-weight: 700;
+        }
+
+        .original-price {
+            color: #999;
+            text-decoration: line-through;
+            font-weight: 400;
+        }
+
+        .divider {
+            color: #ccc;
+            font-weight: 700;
+        }
+
+        .cart-item-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1rem;
+            min-width: 150px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .qty-btn {
+            background-color: #c3cfe2;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 0.3rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .qty-btn:hover {
+            background-color: #95a9c3;
+        }
+
+        .qty-input {
+            width: 50px;
+            text-align: center;
+            font-size: 1rem;
+            border-radius: 0.3rem;
+            border: 1px solid #ccc;
+            padding: 0.2rem;
+        }
+
+        .total-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .cart-summary-box h3 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 0.6rem;
+        }
+
+        .summary-row.total-amount {
+            font-size: 1.3rem;
+            color: #e63946;
+        }
+
+        .order-button {
+            width: 100%;
+            background-color: #e63946;
+            color: white;
+            border: none;
+            padding: 1rem 0;
+            font-size: 1.1rem;
+            border-radius: 0.8rem;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .order-button:hover {
+            background-color: #b53037;
+        }
+
+
+
+    </style>
 </head>
 <body>
+<main layout:fragment="content">
+    <div class="mypage-container">
+        <div class="sidebar">
+            <h3>마이페이지</h3>
+            <ul class="sidebar-menu">
+                <li><a href="/my-page">대시보드</a></li>
+                <li><a href="/my-page/profile">회원 정보</a></li>
+                <li><a href="/my-page/order-list">주문 내역</a></li>
+                <li><a href="/my-page/address">주소 관리</a></li>
+                <li><a href="/my-page/point-history">포인트 내역</a></li>
+                <li><a href="/my-page/coupons">내 쿠폰</a></li>
+            </ul>
+        </div>
 
+        <div class="content-area">
+            <div class="content-header">
+                <h2>장바구니</h2>
+            </div>
+
+            <div class="content-body" style="display: flex; gap: 2rem;">
+
+                <!-- 왼쪽 영역: 장바구니 리스트 or 빈 상태 -->
+                <div style="flex: 1;">
+                    <!-- 장바구니가 비어있지 않을 때 -->
+                    <div th:if="${cart.items != null and #lists.size(cart.items) > 0}" class="cart-list">
+                        <div th:each="item : ${cart.items}" class="cart-item-box">
+                            <!-- 기존 장바구니 아이템 렌더링 코드 -->
+                            <div class="cart-item-left">
+                                <img th:src="${item.imageUrl}" alt="책 이미지" class="book-image" />
+                                <div class="book-info">
+                                    <div class="book-title" th:text="${item.title}">책 제목</div>
+                                    <div class="book-prices">
+                                       <span class="selling-price"
+                                             th:data-selling-price="${item.sellingPrice}"
+                                             th:text="${#numbers.formatDecimal(item.sellingPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></span>
+                                        <span class="divider">|</span>
+                                        <span class="original-price"
+                                              th:data-original-price="${item.originalPrice}"
+                                              th:text="${#numbers.formatDecimal(item.originalPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cart-item-right">
+                                <div class="quantity-control">
+                                    <button type="button" class="qty-btn decrease">-</button>
+
+                                    <form th:action="@{/cart/update}" method="post" style="display: inline;">
+                                        <input type="hidden" name="cartItemId" th:value="${item.cartItemId}" />
+                                        <input type="hidden" name="isbn" th:value="${item.isbn}" />
+                                        <input type="number" name="quantity" min="1" th:value="${item.quantity}" class="qty-input" />
+                                        <button type="submit" class="qty-btn update-btn">변경</button>
+                                    </form>
+
+                                    <button type="button" class="qty-btn increase">+</button>
+                                </div>
+
+                                <div class="total-price" data-selling-price="10000">10,000원</div>
+
+                                <form th:action="@{/cart/delete}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                                    <input type="hidden" name="cartItemId" th:value="${item.cartItemId}" />
+                                    <input type="hidden" name="isbn" th:value="${item.isbn}" />
+                                    <button type="submit" class="delete-button">삭제</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 장바구니가 비어있을 때 -->
+                    <div th:unless="${cart.items != null and #lists.size(cart.items) > 0}" class="empty-state" style="text-align: center; padding: 4rem; background: #fff; border-radius: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                        <h3>장바구니가 비어있습니다.</h3>
+                        <p>상품을 담아보세요.</p>
+                    </div>
+                </div>
+
+                <aside class="cart-summary-box" style="width: 320px; background: #fff; border-radius: 1rem; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1); height: fit-content;">
+                    <h3>주문 요약</h3>
+                    <hr style="margin: 1rem 0;" />
+
+                    <div class="summary-row">
+                        <span>상품금액</span>
+                        <span id="summaryProductTotal" th:text="${#numbers.formatDecimal(summary.productTotal, 0, 'COMMA', 0, 'POINT')} + '원'">0원</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>배송비</span>
+                        <span id="deliveryFee">무료</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>할인금액</span>
+                        <span id="summaryDiscountTotal" th:text="${#numbers.formatDecimal(summary.discountTotal, 0, 'COMMA', 0, 'POINT')} + '원'">0원</span>
+                    </div>
+                    <hr style="margin: 1rem 0;" />
+                    <div class="summary-row total-amount">
+                        <strong>결제 예정 금액</strong>
+                        <strong id="summaryPayAmount" th:text="${#numbers.formatDecimal(summary.payAmount, 0, 'COMMA', 0, 'POINT')} + '원'">0원</strong>
+                    </div>
+
+                    <button type="button" class="order-button" onclick="location.href='/order'">주문하기</button>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let errorMsg = [[${errorMessage != null}]] ? [[${errorMessage}]] : null;
+        if (errorMsg) {
+            alert(errorMsg);
+        }
+        /*]]>*/
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const cartItems = document.querySelectorAll(".cart-item-box");
+
+            // id 선택자를 사용하도록 수정
+            const productTotalSpan = document.getElementById("summaryProductTotal");
+            const discountTotalSpan = document.getElementById("summaryDiscountTotal");
+            const payAmountSpan = document.getElementById("summaryPayAmount");
+            const deliveryFeeSpan = document.getElementById("deliveryFee");
+
+            function updateSummary() {
+                let productTotal = 0;
+                let discountTotal = 0;
+                let payAmount = 0;
+                let deliveryFee = 0;
+
+                cartItems.forEach(item => {
+                    const quantity = parseInt(item.querySelector(".qty-input").value) || 1;
+
+                    const originalPriceStr = item.querySelector(".original-price").dataset.originalPrice || "0";
+                    const sellingPriceStr = item.querySelector(".selling-price").dataset.sellingPrice || "0";
+
+                    const originalPrice = parseInt(originalPriceStr.replace(/,/g, "")) || 0;
+                    const sellingPrice = parseInt(sellingPriceStr.replace(/,/g, "")) || 0;
+
+                    productTotal += originalPrice * quantity;
+                    discountTotal += (originalPrice - sellingPrice) * quantity;
+                    payAmount += sellingPrice * quantity;
+                });
+
+                if (payAmount >= 30000) {
+                    deliveryFee = 0;
+                    deliveryFeeSpan.textContent = "무료";
+                } else {
+                    deliveryFee = 5000;
+                    deliveryFeeSpan.textContent = "+5,000원";
+                }
+
+                // 결제 예정 금액에 배송비 더하기
+                const finalPayAmount = payAmount + deliveryFee;
+
+                if(productTotalSpan) productTotalSpan.textContent = productTotal.toLocaleString() + "원";
+                if(discountTotalSpan) discountTotalSpan.textContent = "-" + discountTotal.toLocaleString() + "원";
+                if(payAmountSpan) payAmountSpan.textContent = finalPayAmount.toLocaleString() + "원";
+            }
+
+            cartItems.forEach(item => {
+                const decreaseBtn = item.querySelector(".qty-btn.decrease");
+                const increaseBtn = item.querySelector(".qty-btn.increase");
+                const input = item.querySelector(".qty-input");
+                const totalPrice = item.querySelector(".total-price");
+                const sellingPriceSpan = item.querySelector(".selling-price");
+                const sellingPrice = parseInt(sellingPriceSpan.dataset.sellingPrice);
+
+                function updateTotal() {
+                    let quantity = parseInt(input.value);
+                    if (isNaN(quantity) || quantity < 1) {
+                        quantity = 1;
+                        input.value = quantity;
+                    }
+                    const total = quantity * sellingPrice;
+                    totalPrice.textContent = total.toLocaleString() + "원";
+                    updateSummary();
+                }
+
+                updateTotal();
+
+                decreaseBtn.addEventListener("click", () => {
+                    let quantity = parseInt(input.value);
+                    if (quantity > 1) {
+                        input.value = --quantity;
+                    }
+                });
+
+                increaseBtn.addEventListener("click", () => {
+                    let quantity = parseInt(input.value);
+                    input.value = ++quantity;
+                });
+
+                input.addEventListener("input", () => {
+
+                });
+            });
+        });
+    </script>
+</main>
 </body>
 </html>
