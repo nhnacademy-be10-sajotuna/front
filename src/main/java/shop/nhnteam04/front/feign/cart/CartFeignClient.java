@@ -8,7 +8,7 @@ import shop.nhnteam04.front.cart.dto.response.CartResponse;
 
 
 // 불필요한거 나중에 지우기
-@FeignClient(name = "CART-API")
+@FeignClient(name = "gateway/cart-api")
 public interface CartFeignClient {
     @PostMapping("/api/carts/merge")
     CartResponse mergeCarts(@RequestHeader(value = "X-User-Id") Long userId,
