@@ -26,13 +26,14 @@ public class LoginService {
     private final CookieService cookieService;
     private final CartFeignClient cartFeignClient;
 
-    public void login(LoginRequestUser loginRequestUser, HttpServletResponse response) {
+    public void login(LoginRequestUser loginRequestUser, HttpServletResponse response, String cartId) {
        LoginResponse loginResponse = accountFeignClient.login(loginRequestUser);
        log.info("login response: {}", loginResponse);
 
+       cartFeignClient.mergeCarts(loginResponse.getId(), cartId);
+
         ResponseCookie accessTokenCookie = cookieService.getAccessTokenCookie(loginResponse.getAccessToken());
         ResponseCookie refreshTokenCookie = cookieService.getRefreshTokenCookie(loginResponse.getRefreshToken());
-
         ResponseCookie deleteGuestCartCookie = cookieService.deleteGuestCartCookie();
 
         response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());

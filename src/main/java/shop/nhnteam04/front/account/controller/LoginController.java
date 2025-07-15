@@ -27,12 +27,13 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginRequestUser loginRequestUser, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
+    public String login(@Valid @ModelAttribute LoginRequestUser loginRequestUser, BindingResult bindingResult, HttpServletResponse httpServletResponse,
+                        @CookieValue(required = false, name = "guestCartId") String cartId ) {
         try {
             if (bindingResult.hasErrors()) {
                 throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
             }
-            loginService.login(loginRequestUser, httpServletResponse);
+            loginService.login(loginRequestUser, httpServletResponse, cartId);
             return "redirect:/";
         } catch (Exception e) {
             String errorMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);

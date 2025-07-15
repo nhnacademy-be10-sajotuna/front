@@ -54,6 +54,7 @@ public class PaycoOAuth2UserService implements OAuth2UserService<OAuth2UserReque
 
         attributes.put("accessToken", user.getAccessToken());
         attributes.put("refreshToekn", user.getRefreshToken());
+        attributes.put("userId", user.getId());
 
         Collection<? extends GrantedAuthority> authorities =
                 List.of(new SimpleGrantedAuthority("ROLE_USER"));
