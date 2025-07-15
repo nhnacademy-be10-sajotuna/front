@@ -27,7 +27,10 @@ public class GuestController {
         try{
             String orderNumber = req.getParameter("orderNumber");
 
-            orderService.getGuestOrder(orderNumber);
+            OrderDetailResponse response = orderService.getGuestOrder(orderNumber);
+            if(response.getUserId() != null){
+                return "redirect:/guest";
+            }
 
             re.addAttribute("orderNumber", orderNumber);
 
