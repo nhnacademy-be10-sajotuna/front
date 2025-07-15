@@ -31,7 +31,7 @@ public class CartController {
 
         model.addAttribute("cart", cart);
         model.addAttribute("summary", CartSummaryResponse.of(cart));
-        return "/cart/cart";
+        return "cart/cart";
     }
 
     @PostMapping
