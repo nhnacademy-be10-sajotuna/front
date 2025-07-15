@@ -30,9 +30,10 @@ public class OrderController {
     // 주문서 작성
     @GetMapping
     public ModelAndView orderForm(@AuthenticationPrincipal SecurityUser user){
-        ModelAndView mav = new ModelAndView("order/order-window");
 
         // 장바구니에 있는 상품들 가져오기
+        ModelAndView mav = new ModelAndView("order/order-form");
+
         CartResponse userCart = cartService.getUserCart(user.getId());
         mav.addObject("cartItems", userCart.getItems());
 
@@ -69,6 +70,12 @@ public class OrderController {
             return "redirect:/order";
         }
     }
+
+//    @PostMapping("/guest")
+//    public String guestOrder(CreateGuestOrderRequest request,
+//                             RedirectAttributes redirectAttributes) {
+//        OrderResponse orderResponse = orderService.createOrder(null, request);
+//    }
 
     @GetMapping("/detail/{order-id}")
     public ModelAndView OrderDetail(@PathVariable("order-id") Long orderId, @AuthenticationPrincipal SecurityUser user) {
