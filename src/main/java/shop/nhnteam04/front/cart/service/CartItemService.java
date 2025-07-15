@@ -15,10 +15,6 @@ public class CartItemService {
     public CartItemResponse addUserCartItem(Long userId, CartItemRequest request) {
         return cartFeignClient.adduserCartItem(userId, request);
     }
-    // 장바구니 책 단건조회(책 상세 조회 페이지)
-    public CartItemResponse getUserCartItems(Long userId, Long cartItemId) {
-        return cartFeignClient.getUserCartItem(userId, cartItemId);
-    }
     // 장바구니 책 수량 변경
     public CartItemResponse updateUserCartItem(Long cartItemId, CartItemRequest request) {
         return cartFeignClient.updateUserCartItem(cartItemId, request);
@@ -27,17 +23,9 @@ public class CartItemService {
     public void deleteUserCartItem(Long cartItemId) {
         cartFeignClient.deleteUserCartItem(cartItemId);
     }
-    // 장바구니 비우기
-    public void clearUserCartItems(Long userId){
-        cartFeignClient.clearUserCartItem(userId);
-    }
     // 비회원 장바구니에 책담기(해당세션의 장바구니가 없을경우 장바구니 생성)
     public CartItemResponse addGuestCartItem(CartItemRequest request, String cartId) {
         return cartFeignClient.addGuestCartItem(request,cartId);
-    }
-    // 비회원 장바구니 책 단건조회
-    public CartItemResponse getGuestCartItem(String isbn, String cartId) {
-        return cartFeignClient.getGuestCartItem(isbn, cartId);
     }
     // 비회원 장바구니 책 수량 변경
     public CartItemResponse updateGuestCartItem(CartItemRequest request, String cartId) {
@@ -46,9 +34,5 @@ public class CartItemService {
     // 비회원 장바구니 책 삭제(단건 삭제)
     public void deleteGuestCartItem(String isbn, String cartId) {
         cartFeignClient.deleteGuestCartItem(isbn, cartId);
-    }
-    // 비회원 장바구니 비우기
-    public void clearGuestCartItems(String cartId) {
-        cartFeignClient.clearGuestCartItems(cartId);
     }
 }
