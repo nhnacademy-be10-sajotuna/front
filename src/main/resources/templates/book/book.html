@@ -6,182 +6,276 @@
     <title th:text="${book.title} + ' - 북팡문고'">도서 상세</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/review.css}">
     <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-bg: #f8f9fa;
+            --border-color: #dee2e6;
+            --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            --shadow-md: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --border-radius: 0.75rem;
+            --transition: all 0.3s ease;
+        }
+
         .book-page-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 2.5rem;
             width: 100%;
             max-width: 1200px;
-        }
-        .book-description-wrapper {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: var(--box-shadow);
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
 
         .book-detail-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            background: #fff;
-            padding: 2.5rem;
-            border-radius: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            padding: 3rem;
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
         }
 
         .book-image {
-            flex: 1 1 40%;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
         }
 
         .book-image img {
             max-width: 100%;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
+            width: 320px;
+            height: auto;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease;
+        }
+
+        .book-image img:hover {
+            transform: scale(1.05);
         }
 
         .book-info {
-            flex: 1 1 55%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
         .book-info h1 {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--text-primary);
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 0;
+            line-height: 1.2;
         }
 
         .book-meta {
-            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            color: var(--secondary-color);
+            font-size: 1rem;
+        }
+
+        .book-meta p {
+            margin: 0;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .book-meta p:last-child {
+            border-bottom: none;
+        }
+
+        .book-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
             margin: 1rem 0;
-            font-size: 0.95rem;
-        }
-
-        .book-price {
-            margin: 1.5rem 0;
-        }
-
-        .book-price del {
-            color: #888;
-            margin-right: 1rem;
-        }
-
-        .book-price strong {
-            color: var(--primary-color);
-            font-size: 1.5rem;
         }
 
         .tag {
             display: inline-block;
-            background: #eef1f6;
-            padding: 0.3rem 0.6rem;
-            margin: 0.2rem;
-            border-radius: 6px;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .tag:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .book-price {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .book-price del {
+            color: rgba(255, 255, 255, 0.7);
+            margin-right: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .book-price strong {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .book-price .discount-rate {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            margin-left: 1rem;
+            font-weight: 600;
         }
 
         .actions {
-            margin-top: 2rem;
             display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cart-form {
+            display: flex;
+            flex-direction: column;
             gap: 1rem;
         }
 
-        .actions button {
-            padding: 0.9rem 1.5rem;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .book-description {
-            margin-top: 2rem;
-            line-height: 1.7;
-            font-size: 1rem;
-            color: var(--text-primary);
-        }
-        .btn-cart {
-            background-color: #ff7f50;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .book-detail-container,
-        .book-description-wrapper,
-        .review-container {
-            max-width: 1200px;
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            box-sizing: border-box; /* 패딩 있을 경우 포함 */
-        }
         .quantity-selector {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            justify-content: center;
+            gap: 1rem;
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .quantity-selector label {
+            font-weight: 600;
+            color: var(--secondary-color);
         }
 
         .quantity-selector input[type="number"] {
-            width: 60px;
+            width: 80px;
             text-align: center;
-            padding: 0.4rem;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            background: #f9f9f9;
+            padding: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: white;
+            transition: var(--transition);
+        }
+
+        .quantity-selector input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
         }
 
         .qty-btn {
-            padding: 0.4rem 0.8rem;
-            font-size: 1.2rem;
+            padding: 0.75rem 1rem;
+            font-size: 1.25rem;
+            font-weight: 700;
             border: none;
-            background: #ddd;
+            background: var(--primary-color);
+            color: white;
             cursor: pointer;
-            border-radius: 6px;
-            font-weight: bold;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
         }
 
         .qty-btn:hover {
-            background: #ccc;
+            background: #0056b3;
+            transform: scale(1.1);
+        }
+
+        .btn-cart {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 1.25rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         .btn-coupon {
-            padding: 0.5rem 1rem;
-            background: #6c757d;
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
             color: white;
             border: none;
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            white-space: nowrap;
-        }
-        .btn-coupon-remove {
-            padding: 0.5rem 1rem;
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            white-space: nowrap;
-            margin-top: 0.5rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
         }
 
-        .btn-coupon-remove:hover {
-            background-color: #c82333;
+        .btn-coupon:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
-        /* 쿠폰 모달 스타일 */
+        .book-description-wrapper {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .book-description h2 {
+            color: #2d3748;
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .book-description p {
+            line-height: 1.8;
+            font-size: 1.125rem;
+            color: #4a5568;
+            margin: 0;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -190,93 +284,175 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            background-color: #fff;
-            margin: 10% auto;
-            padding: 2rem;
-            border-radius: 1rem;
-            width: 80%;
-            max-width: 600px;
-            max-height: 70vh;
+            background: white;
+            margin: 5% auto;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
             overflow-y: auto;
+            box-shadow: var(--shadow-lg);
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #5c9ded;
+            margin-bottom: 2rem;
             padding-bottom: 1rem;
+            border-bottom: 3px solid var(--primary-color);
         }
 
         .modal-title {
-            color: #5c9ded;
-            font-size: 1.5rem;
-            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .close {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close:hover {
+            color: var(--danger-color);
         }
 
         .coupon-item {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 0.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
             margin-bottom: 1rem;
-            border: 1px solid #e9ecef;
+            border: 2px solid var(--border-color);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .coupon-item:hover {
-            background-color: #e9ecef;
-            border-color: #5c9ded;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .coupon-item.selected {
-            background-color: #f0f8ff;
-            border-color: #5c9ded;
-            border-width: 2px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+            border-color: var(--primary-color);
+            border-width: 3px;
         }
 
         .coupon-name {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
         }
 
         .coupon-discount {
-            color: #5c9ded;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
         }
 
         .coupon-condition {
-            color: #666;
-            font-size: 0.9rem;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
         }
 
         .modal-actions {
             display: flex;
             gap: 1rem;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
             justify-content: flex-end;
         }
 
-        .btn-modal { padding: 0.8rem 1.5rem; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease; }
-        .btn-modal-primary { background-color: #5c9ded; color: white; }
-        .btn-modal-primary:hover { background-color: #417fde; }
-        .btn-modal-secondary { background-color: #6c757d; color: white; }
-        .btn-modal-secondary:hover { background-color: #5a6268; }
+        .btn-modal {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .btn-modal-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%);
+            color: white;
+        }
+
+        .btn-modal-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-modal-secondary {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #495057 100%);
+            color: white;
+        }
+
+        .btn-modal-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (max-width: 992px) {
+            .book-detail-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 2rem;
+            }
+            
+            .book-image {
+                order: -1;
+            }
+            
+            .book-info h1 {
+                font-size: 1.875rem;
+            }
+        }
 
         @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .product-info { grid-template-columns: 1fr; }
-            .address-group { flex-direction: column; align-items: stretch; }
-            .product-header { flex-direction: column; align-items: center; text-align: center; }
-            .product-actions { align-items: center; }
-            .modal-content { width: 95%; margin: 5% auto; }
+            .book-page-wrapper {
+                padding: 1rem;
+            }
+            
+            .book-detail-container,
+            .book-description-wrapper {
+                padding: 1.5rem;
+            }
+            
+            .book-info h1 {
+                font-size: 1.5rem;
+            }
+            
+            .book-price {
+                padding: 1.5rem;
+            }
+            
+            .book-price strong {
+                font-size: 1.5rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 1.5rem;
+            }
+            
+            .actions {
+                gap: 1rem;
+            }
         }
     </style>
     <script defer>
@@ -302,22 +478,29 @@
                 <h1 th:text="${book.title}"></h1>
 
                 <!-- ✅ 카테고리 표시 -->
-                <div class="book-categories" style="margin: 0.5rem 0;">
+                <div class="book-categories">
                     <span th:each="categoryList : ${book.categories}">
                         <span th:each="category : ${categoryList}" class="tag" th:text="${category.name}"></span>
                     </span>
                 </div>
 
-                <p th:text="'저자: ' + ${book.author}"></p>
-                <p th:text="'출판사: ' + ${book.publisher}"></p>
-                <p th:text="'출판일: ' + ${#temporals.format(book.publicationDate, 'yyyy-MM-dd')}"></p>
+                <div class="book-meta">
+                    <p><strong>저자:</strong> <span th:text="${book.author}"></span></p>
+                    <p><strong>출판사:</strong> <span th:text="${book.publisher}"></span></p>
+                    <p><strong>출판일:</strong> <span th:text="${#temporals.format(book.publicationDate, 'yyyy-MM-dd')}"></span></p>
+                </div>
 
                 <div class="book-price">
-                    <del th:text="${#numbers.formatDecimal(book.originalPrice, 0, 0)} + '원'"></del>
-                    <strong th:text="${#numbers.formatDecimal(book.sellingPrice, 0, 0)} + '원'"></strong>
-                    <span th:if="${book.discountRate > 0}" style="margin-left: 1rem; color: #dc3545; font-weight: bold;">
-                        (-<span th:text="${book.discountRate}"></span>%)
-                    </span>
+                    <div th:if="${book.discountRate > 0}">
+                        <del th:text="${#numbers.formatDecimal(book.originalPrice, 0, 0)} + '원'"></del>
+                        <strong th:text="${#numbers.formatDecimal(book.sellingPrice, 0, 0)} + '원'"></strong>
+                        <span class="discount-rate">
+                            <span th:text="${#numbers.formatDecimal(book.discountRate, 0, 1)}"></span>% 할인
+                        </span>
+                    </div>
+                    <div th:unless="${book.discountRate > 0}">
+                        <strong th:text="${#numbers.formatDecimal(book.sellingPrice, 0, 0)} + '원'"></strong>
+                    </div>
                 </div>
 
                 <div class="actions">
@@ -326,6 +509,7 @@
 
                         <!-- 수량 선택 -->
                         <div class="quantity-selector">
+                            <label for="quantity">수량:</label>
                             <button type="button" class="qty-btn" onclick="changeQty(-1)">-</button>
                             <input type="number" id="quantity" name="quantity" value="1" min="1" readonly />
                             <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
