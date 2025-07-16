@@ -31,21 +31,22 @@ public interface BookFeignClient {
     @PostMapping("/api/admin/books")
     void createBook(@RequestBody BookCreateRequest bookCreateRequest);
 
-    @GetMapping("/api/search/keyword")
+    @GetMapping("/api/search")
     Page<BookSearchResponse> searchByKeyword(
      @RequestParam("keyword") String keyword,
+     @RequestParam("category") String category,
      @RequestParam("sort") String sort,
      @RequestParam("page") int page,
      @RequestParam("size") int size
     );
 
-    @GetMapping("/api/search/categories")
-    Page<BookSearchResponse> searchByCategory(
-            @RequestParam("category") String category,
-            @RequestParam("sort") String sort,
-            @RequestParam("page") int page,
-            @RequestParam("size") int size
-    );
+//    @GetMapping("/api/search/categories")
+//    Page<BookSearchResponse> searchByCategory(
+//            @RequestParam("category") String category,
+//            @RequestParam("sort") String sort,
+//            @RequestParam("page") int page,
+//            @RequestParam("size") int size
+//    );
 
     @GetMapping("/api/search/autocomplete")
     List<String> autoComplete(@RequestParam("keyword") String keyword);
@@ -82,4 +83,7 @@ public interface BookFeignClient {
 
     @DeleteMapping("/api/tags/{id}")
     void deleteTag(@PathVariable Long id);
+
+    @GetMapping("/api/categories/{id}/subcategories")
+    List<CategoryResponse> getAllSubCategories(@PathVariable Long id);
 }
