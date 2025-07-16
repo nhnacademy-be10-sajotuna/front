@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${book.title} + ' - 북팡문고'">도서 상세</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/review.css}">
+    <style>
+        .book-page-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .book-description-wrapper {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .book-detail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .book-image {
+            flex: 1 1 40%;
+            text-align: center;
+        }
+
+        .book-image img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .book-info {
+            flex: 1 1 55%;
+        }
+
+        .book-info h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .book-meta {
+            color: var(--text-secondary);
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .book-price {
+            margin: 1.5rem 0;
+        }
+
+        .book-price del {
+            color: #888;
+            margin-right: 1rem;
+        }
+
+        .book-price strong {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #eef1f6;
+            padding: 0.3rem 0.6rem;
+            margin: 0.2rem;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .actions button {
+            padding: 0.9rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .book-description {
+            margin-top: 2rem;
+            line-height: 1.7;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+        .btn-cart {
+            background-color: #ff7f50;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .book-detail-container,
+        .book-description-wrapper,
+        .review-container {
+            max-width: 1200px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box; /* 패딩 있을 경우 포함 */
+        }
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quantity-selector input[type="number"] {
+            width: 60px;
+            text-align: center;
+            padding: 0.4rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #f9f9f9;
+        }
+
+        .qty-btn {
+            padding: 0.4rem 0.8rem;
+            font-size: 1.2rem;
+            border: none;
+            background: #ddd;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .qty-btn:hover {
+            background: #ccc;
+        }
+
+        .btn-coupon {
+            padding: 0.5rem 1rem;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+        .btn-coupon-remove {
+            padding: 0.5rem 1rem;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+            margin-top: 0.5rem;
+        }
+
+        .btn-coupon-remove:hover {
+            background-color: #c82333;
+        }
+
+        /* 쿠폰 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 80%;
+            max-width: 600px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #5c9ded;
+            padding-bottom: 1rem;
+        }
+
+        .modal-title {
+            color: #5c9ded;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .coupon-item {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .coupon-item:hover {
+            background-color: #e9ecef;
+            border-color: #5c9ded;
+        }
+
+        .coupon-item.selected {
+            background-color: #f0f8ff;
+            border-color: #5c9ded;
+            border-width: 2px;
+        }
+
+        .coupon-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .coupon-discount {
+            color: #5c9ded;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .coupon-condition {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: flex-end;
+        }
+
+        .btn-modal { padding: 0.8rem 1.5rem; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: bold; transition: background-color 0.3s ease; }
+        .btn-modal-primary { background-color: #5c9ded; color: white; }
+        .btn-modal-primary:hover { background-color: #417fde; }
+        .btn-modal-secondary { background-color: #6c757d; color: white; }
+        .btn-modal-secondary:hover { background-color: #5a6268; }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .product-info { grid-template-columns: 1fr; }
+            .address-group { flex-direction: column; align-items: stretch; }
+            .product-header { flex-direction: column; align-items: center; text-align: center; }
+            .product-actions { align-items: center; }
+            .modal-content { width: 95%; margin: 5% auto; }
+        }
+    </style>
+    <script defer>
+        function changeQty(amount) {
+            const qtyInput = document.getElementById("quantity");
+            let current = parseInt(qtyInput.value) || 1;
+            current += amount;
+            if (current < 1) current = 1;
+            qtyInput.value = current;
+        }
+    </script>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="book-page-wrapper">
+        <!-- 책 상세 정보 (flex) -->
+        <div class="book-detail-container">
+            <div class="book-image">
+                <img th:src="${book.imageUrl}" alt="책 이미지" class="book-image" style="max-width: 100%; width: 320px; height: auto; box-shadow: var(--shadow-md); border-radius: 12px;" />
+            </div>
+
+            <div class="book-info">
+                <h1 th:text="${book.title}"></h1>
+
+                <!-- ✅ 카테고리 표시 -->
+                <div class="book-categories" style="margin: 0.5rem 0;">
+                    <span th:each="categoryList : ${book.categories}">
+                        <span th:each="category : ${categoryList}" class="tag" th:text="${category.name}"></span>
+                    </span>
+                </div>
+
+                <p th:text="'저자: ' + ${book.author}"></p>
+                <p th:text="'출판사: ' + ${book.publisher}"></p>
+                <p th:text="'출판일: ' + ${#temporals.format(book.publicationDate, 'yyyy-MM-dd')}"></p>
+
+                <div class="book-price">
+                    <del th:text="${#numbers.formatDecimal(book.originalPrice, 0, 0)} + '원'"></del>
+                    <strong th:text="${#numbers.formatDecimal(book.sellingPrice, 0, 0)} + '원'"></strong>
+                    <span th:if="${book.discountRate > 0}" style="margin-left: 1rem; color: #dc3545; font-weight: bold;">
+                        (-<span th:text="${book.discountRate}"></span>%)
+                    </span>
+                </div>
+
+                <div class="actions">
+                    <form th:action="@{/cart}" method="post" class="cart-form">
+                        <input type="hidden" name="isbn" th:value="${book.isbn}" />
+
+                        <!-- 수량 선택 -->
+                        <div class="quantity-selector">
+                            <button type="button" class="qty-btn" onclick="changeQty(-1)">-</button>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" readonly />
+                            <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                        </div>
+
+                        <!-- 장바구니 버튼 -->
+                        <button type="submit" class="btn-cart">🛒 장바구니 담기</button>
+                    </form>
+                    <button type="button"
+                            class="btn-coupon"
+                            th:data-isbn="${book.isbn}"
+                            th:data-category-ids="${#strings.listJoin(categoryIds, ',')}">
+                        🏷️ 쿠폰 확인
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 책 설명: flex 밖에서 -->
+        <div class="book-description-wrapper">
+            <div class="book-description">
+                <h2>책 소개</h2>
+                <p th:text="${book.description}"></p>
+            </div>
+        </div>
+
+        <!-- 리뷰 목록: flex 밖에서 -->
+        <div class="review-container review-list-container">
+            <h2 class="review-container__title">리뷰 목록</h2>
+
+            <div th:if="${message}" th:text="${message}" class="alert alert--success"></div>
+            <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert--error"></div>
+
+            <div class="review-table-wrapper">
+                <table class="review-table">
+                    <thead>
+                    <tr>
+                        <th>평점</th>
+                        <th>내용</th>
+                        <th>사진</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="review : ${reviews}">
+                        <td>
+                            <div class="review-table__stars" aria-label="평점" th:aria-label="|${review.rating}점|">
+                                <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                      th:text="${i <= review.rating} ? '★' : '☆'"></span>
+                            </div>
+                        </td>
+                        <td th:text="${review.content}" style="max-width: 400px; white-space: pre-wrap; word-break: break-word;"></td>
+                        <td>
+                            <img th:if="${review.filePath}" th:src="@{|/images/${review.filePath}|}" alt="리뷰 이미지"
+                                 class="review-table__image" />
+                            <span th:unless="${review.filePath}">-</span>
+                        </td>
+                        <td th:text="${review.maskedEmail}"></td>
+                        <td th:text="${#temporals.format(review.postedAt, 'yyyy-MM-dd')}"></td>
+                        <td>
+                            <a th:if="${review.userId == #authentication.principal.id}"
+                               th:href="@{|/reviews/${review.id}/edit?isbn=${isbn}|}"
+                               class="btn btn--secondary">수정</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(reviews)}">
+                        <td colspan="6" style="padding: 2.5rem; text-align: center;">등록된 리뷰가 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="list-actions">
+                <a th:href="@{|/reviews/create?isbn=${isbn}|}" class="btn btn--primary">리뷰 작성</a>
+            </div>
+        </div>
+    </div>
+    <!-- 쿠폰 선택 모달 -->
+    <div id="couponModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">발급 가능한 쿠폰</h2>
+                <span class="close" onclick="closeCouponModal()">&times;</span>
+            </div>
+            <div id="couponList"><!-- 동적 생성 --></div>
+            <div class="modal-actions">
+                <button type="button"
+                        class="btn-modal btn-modal-secondary"
+                        onclick="closeCouponModal()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        const appliedCoupons = new Map();
+
+        document.querySelectorAll('.btn-coupon').forEach(button => {
+            button.addEventListener('click', function() {
+                const isbn = this.dataset.isbn;
+                const categoryIds = this.dataset.categoryIds;
+                showCouponModal(isbn, categoryIds);
+            });
+        });
+
+        function showCouponModal(isbn, categoryIds) {
+            currentIsbn = isbn;
+            document.querySelectorAll('input[name*=".isbn"]').forEach((inp, i) => {
+                if (inp.value === isbn) currentProductIndex = i;
+            });
+            loadAvailableCoupons(isbn, categoryIds);
+            document.getElementById('couponModal').style.display = 'block';
+        }
+        function loadAvailableCoupons(isbn, categoryIds) {
+            const list = document.getElementById('couponList');
+            list.innerHTML = '<div style="text-align:center;padding:2rem;">쿠폰 목록을 불러오는 중...</div>';
+
+            // API 호출로 실제 쿠폰 데이터 가져오기
+            const params = new URLSearchParams({
+                isbn: isbn,
+                categoryIds: categoryIds
+            });
+
+            fetch(`/api/coupons/book?${params}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('쿠폰 조회에 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(coupons => {
+                    if (coupons.length === 0) {
+                        list.innerHTML = '<div style="text-align:center;padding:2rem;color:#666;">적용 가능한 쿠폰이 없습니다.</div>';
+                        return;
+                    }
+
+                    // 이미 적용된 쿠폰 ID들 수집
+                    const appliedCouponIds = Array.from(appliedCoupons.values()).map(c => c.couponId);
+
+                    let html = '';
+                    coupons.forEach(c => {
+                        console.log('Coupon data:', c); // 쿠폰 데이터 로그
+                        const dt = c.policyType === 'RATE'
+                            ? `${c.discountAmount / 10}% 할인`
+                            : `${c.discountAmount.toLocaleString()}원 할인`;
+
+                        const condition = c.minOrderAmount
+                            ? `${c.minOrderAmount.toLocaleString()}원 이상 구매시`
+                            : '제한 없음';
+
+                        // maxDiscountAmount 정보 추가
+                        const maxDiscountInfo = c.maxDiscountAmount && c.maxDiscountAmount > 0
+                            ? ` (최대 ${c.maxDiscountAmount.toLocaleString()}원)`
+                            : '';
+
+                        const isApplied = appliedCouponIds.includes(c.id);
+                        const appliedClass = isApplied ? ' style="opacity: 0.5; background-color: #f8f9fa;"' : '';
+                        const appliedText = isApplied ? ' (이미 적용됨)' : '';
+                        const onclick = isApplied ? '' : `onclick="selectCoupon(this, ${c.id}, '${c.name}', '${dt}', ${c.discountAmount}, '${c.policyType}', ${c.maxDiscountAmount || 0})"`;
+
+                        html += `
+                            <div class="coupon-item"${appliedClass} ${onclick}>
+                                <div class="coupon-name">${c.name}${appliedText}</div>
+                                <div class="coupon-discount">${dt}${maxDiscountInfo}</div>
+                                <div class="coupon-condition">${condition}</div>
+                            </div>
+                        `;
+                    });
+                    list.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('쿠폰 조회 실패:', error);
+                    list.innerHTML = '<div style="text-align:center;padding:2rem;color:#dc3545;">쿠폰 조회에 실패했습니다.</div>';
+                });
+        }
+
+        function selectCoupon(el, couponId, name, discountText, discountAmount, policyType, maxDiscountAmount) {
+            // 발급 요청
+            fetch(`/api/coupons/issue/${couponId}`, {
+                method: 'POST'
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error('쿠폰 발급 실패');
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('발급 성공:', data);
+
+                    // 발급된 쿠폰 표시용 Map 저장
+                    appliedCoupons.set(currentIsbn, {
+                        couponId,
+                        name,
+                        discountText,
+                        discountAmount,
+                        policyType,
+                        maxDiscountAmount
+                    });
+
+                    // UI 변경: 회색 처리 + "이미 적용됨" 텍스트 추가
+                    el.style.opacity = '0.5';
+                    el.style.backgroundColor = '#f8f9fa';
+                    el.onclick = null;
+
+                    const nameElem = el.querySelector('.coupon-name');
+                    if (nameElem && !nameElem.innerText.includes('이미 적용됨')) {
+                        nameElem.innerText += ' (이미 적용됨)';
+                    }
+                })
+                .catch(err => {
+                    console.error('쿠폰 발급 오류:', err);
+                    alert('쿠폰 발급에 실패했습니다.');
+                });
+        }
+        function closeCouponModal() {
+            document.getElementById('couponModal').style.display = 'none';
+            selectedCouponId = '';
+        }
+
+        window.onclick = function(e) {
+            if (e.target.id === 'couponModal') closeCouponModal();
+            if (e.target.id === 'orderCouponModal') closeOrderCouponModal();
+        };
+
+    </script>
+</main>
+</body>
+</html>

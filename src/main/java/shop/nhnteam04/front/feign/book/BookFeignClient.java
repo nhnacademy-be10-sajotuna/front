@@ -82,4 +82,7 @@ public interface BookFeignClient {
 
     @DeleteMapping("/api/tags/{id}")
     void deleteTag(@PathVariable Long id);
+
+    @GetMapping("/api/books/{isbn}")
+    BookResponse getBookByIsbn(@PathVariable String isbn);
 }
