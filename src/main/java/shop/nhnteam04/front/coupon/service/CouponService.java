@@ -29,4 +29,13 @@ public class CouponService {
             return List.of(); // 빈 리스트 반환
         }
     }
+
+    public List<CouponResponse> getBookCoupons(String isbn, Set<Long> categoryIds) {
+        try {
+            return couponFeignClient.getBookCoupons(isbn, categoryIds);
+        } catch (Exception e) {
+            log.error("Failed to get available book coupons for isbn: {}, categoryIds: {}", isbn, categoryIds, e);
+            return List.of(); // 빈 리스트 반환
+        }
+    }
 }
