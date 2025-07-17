@@ -16,7 +16,6 @@ import shop.nhnteam04.front.order.dto.orders.response.OrderFormResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
 import shop.nhnteam04.front.order.dto.orders.request.ReturnReason;
 import shop.nhnteam04.front.order.service.OrderService;
-import shop.nhnteam04.front.order.service.PaymentService;
 
 @Slf4j
 @Controller
@@ -24,7 +23,6 @@ import shop.nhnteam04.front.order.service.PaymentService;
 @RequestMapping("/order")
 public class OrderController {
     private final OrderService orderService;
-    private final PaymentService paymentService;
     private final CartService cartService;
 
     // 주문서 작성
@@ -35,6 +33,10 @@ public class OrderController {
         ModelAndView mav = new ModelAndView("order/order-form");
 
         CartResponse userCart = cartService.getUserCart(user.getId());
+
+        if(userCart.getItems().isEmpty()){
+            return new ModelAndView("redirect:/cart");
+        }
         mav.addObject("cartItems", userCart.getItems());
 
         OrderFormResponse orderFormResponse = orderService.getOrderForm(user.getId());
