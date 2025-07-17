@@ -20,37 +20,29 @@ public class BookSearchController {
     private final BookSearchService bookSearchService;
     private final CategoryService categoryService;
 
-    @GetMapping("/keyword")
-    public String searchByKeyword(@RequestParam String keyword,
+    @GetMapping
+    public String search(@RequestParam(required = false) String keyword,
+                                  @RequestParam(required = false) String category,
                                   @RequestParam(defaultValue = "popularity") String sort,
                                   @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int size,
                                   Model model) {
-        Page<BookSearchResponse> bookPage = bookSearchService.searchByKeyword(keyword, sort, page, size);
+        Page<BookSearchResponse> bookPage = bookSearchService.search(keyword,category, sort, page, size);
 
         model.addAttribute("books",bookPage.getContent());
         model.addAttribute("page",bookPage);
         model.addAttribute("keyword",keyword);
-        model.addAttribute("sort",sort);
-
-        List<CategoryResponse> categories = categoryService.getAll();
-        model.addAttribute("categories", categories);
-
-        return "book/search";
-    }
-
-    @GetMapping("category")
-    public String searchByCategory(@RequestParam String category,
-                                   @RequestParam(defaultValue = "popularity") String sort,
-                                   @RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "10") int size,
-                                   Model model) {
-        Page<BookSearchResponse> bookPage = bookSearchService.searchByCategory(category, sort, page, size);
-
-        model.addAttribute("books",bookPage.getContent());
-        model.addAttribute("page",bookPage);
         model.addAttribute("category",category);
         model.addAttribute("sort",sort);
+
+        int currentPage = bookPage.getNumber() + 1; // 0-indexed → 1-indexed
+        int startPage = Math.max(1, currentPage - 2);
+        int endPage = Math.min(bookPage.getTotalPages(), currentPage + 2);
+
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("currentPage", currentPage);
+
 
         List<CategoryResponse> categories = categoryService.getAll();
         model.addAttribute("categories", categories);

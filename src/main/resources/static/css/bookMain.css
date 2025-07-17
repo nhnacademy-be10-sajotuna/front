@@ -1,0 +1,234 @@
+.main-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 카테고리 드롭다운 스타일 */
+.category-dropdown {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+.category-dropdown-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.category-dropdown-btn:hover {
+    background: #0056b3;
+}
+
+.category-dropdown-content {
+    display: none;
+    position: absolute;
+    background: white;
+    min-width: 600px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-radius: 8px;
+    padding: 20px;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.category-dropdown:hover .category-dropdown-content {
+    display: block;
+}
+
+.category-section {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.category-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.parent-category-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.child-category-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.child-category-menu li {
+    margin: 0;
+}
+
+.child-category-menu a {
+    display: block;
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #666;
+    background: #f8f9fa;
+    border-radius: 5px;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.child-category-menu a:hover {
+    background: #007bff;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* 도서 섹션 스타일 */
+.book-section {
+    width: 100%;
+}
+
+/* 도서 섹션 스타일 */
+.popular-section, .newest-section {
+    margin-bottom: 40px;
+}
+
+.popular-section h2, .newest-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+/* 캐러셀 스타일 */
+.book-carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.book-carousel-inner {
+    display: flex;
+    transition: transform 0.3s ease;
+    gap: 20px;
+}
+
+.book-item {
+    flex: 0 0 calc(33.333% - 14px); /* 3개씩 표시 */
+    min-width: 200px;
+    max-width: 300px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.book-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.book-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.book-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+}
+
+.book-title {
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.3;
+    height: 50px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 캐러셀 네비게이션 버튼 */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s ease;
+}
+
+.carousel-nav:hover {
+    background: rgba(0,0,0,0.7);
+}
+
+.carousel-nav.prev {
+    left: -20px;
+}
+
+.carousel-nav.next {
+    right: -20px;
+}
+
+.carousel-nav:disabled {
+    background: rgba(0,0,0,0.2);
+    cursor: not-allowed;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+    .book-item {
+        flex: 0 0 calc(50% - 10px); /* 2개씩 표시 */
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .book-item {
+        flex: 0 0 calc(50% - 10px); /* 2개씩 표시 */
+    }
+}
+
+@media (max-width: 480px) {
+    .book-item {
+        flex: 0 0 100%; /* 1개씩 표시 */
+    }
+}

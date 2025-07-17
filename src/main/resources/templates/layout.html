@@ -28,7 +28,6 @@
             height: 70px;
             background-color: #fff;
             display: flex;
-            justify-content: space-between;
             align-items: center;
             padding: 0 2rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -37,6 +36,20 @@
             left: 0;
             right: 0;
             z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            flex: 0 0 auto;
+            min-width: 150px;
         }
 
         header h1 a {
@@ -50,17 +63,83 @@
             color: #007bff;
         }
 
-        main {
+        .search-section {
             flex: 1;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            overflow-y: auto;
-            min-height: calc(100vh - 70px);
-            margin-top: 70px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding: 2rem;
-            padding-top: 4rem;
+            padding: 0 2rem;
+        }
+
+        .search-form {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: #007bff;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        #searchInput::placeholder {
+            color: #999;
+        }
+
+        #autocomplete-list {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none; /* 기본적으로 숨김 */
+        }
+
+        #autocomplete-list:not(:empty) {
+            display: block; /* 내용이 있을 때만 표시 */
+        }
+
+        #autocomplete-list li {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            list-style: none;
+        }
+
+        #autocomplete-list li:hover {
+            background-color: #f1f3f5;
+        }
+
+        #autocomplete-list li:first-child {
+            border-radius: 12px 12px 0 0;
+        }
+
+        #autocomplete-list li:last-child {
+            border-radius: 0 0 12px 12px;
+        }
+
+        .nav-section {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         nav {
@@ -81,6 +160,7 @@
             border-radius: 0.5rem;
             transition: all 0.3s ease;
             font-weight: 500;
+            white-space: nowrap;
         }
 
         nav a:hover {
@@ -104,6 +184,19 @@
             text-decoration: underline;
         }
 
+        main {
+            flex: 1;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-y: auto;
+            min-height: calc(100vh - 70px);
+            margin-top: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+            padding-top: 4rem;
+        }
+
         .user-info {
             display: flex;
             align-items: center;
@@ -114,54 +207,93 @@
         .welcome-text {
             font-weight: 500;
         }
+
+        /* 반응형 디자인 */
+        @media (max-width: 1024px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+
+            .search-section {
+                padding: 0 1rem;
+            }
+
+            .logo-section h1 a {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                height: auto;
+                padding: 1rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-section {
+                width: 100%;
+                padding: 0;
+            }
+
+            .nav-section {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
 
 <!-- ✅ 공통 헤더 -->
 <header>
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <div>
+    <div class="header-container">
+        <div class="logo-section">
             <h1><a th:href="@{/}">북팡문고</a></h1>
         </div>
-        <nav>
-            <!-- 로그인 상태일 때 -->
-            <span th:if="${#authentication != null and #authentication.authenticated and #authorization.expression('isAuthenticated()')}">
-                <span th:text="${#authentication.name} + '님 환영합니다!'"></span>
-                <span th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                    <a th:href="@{/admin}">관리자 페이지</a>
-                </span>
-                <a th:href="@{/my-page}">내 정보</a>
-                <a th:href="@{/cart}">장바구니</a>
-                <form th:action="@{/logout}" method="post" style="display: inline;">
-                    <button type="submit" style="background: none; border: none; color: #007bff; cursor: pointer; font-size: 1rem; padding: 0; margin-left: 1rem;">
-                        로그아웃
-                    </button>
-                </form>
-            </span>
 
-            <!-- 비로그인 상태일 때 -->
-            <span th:unless="${#authentication != null and #authentication.authenticated and #authorization.expression('isAuthenticated()')}">
-                <a th:href="@{/login}" style="margin-right: 1rem;">로그인</a>
-                <a th:href="@{/register}">회원가입</a>
-                <a th:href="@{/cart}">장바구니</a>
-            </span>
-        </nav>
+        <div class="search-section">
+            <!-- 🔍 검색창 + 자동완성 -->
+            <form th:action="@{/book/search}" method="get" class="search-form" autocomplete="off">
+                <input type="text" id="searchInput" name="keyword" placeholder="도서명, 저자 검색" th:value="${keyword}" />
+                <ul id="autocomplete-list"></ul>
+            </form>
+        </div>
+
+        <div class="nav-section">
+            <nav>
+                <!-- 로그인 상태일 때 -->
+                <span th:if="${#authentication != null and #authentication.authenticated and #authorization.expression('isAuthenticated()')}">
+                    <span th:text="${#authentication.name} + '님 환영합니다!'"></span>
+                    <span th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a th:href="@{/admin}">관리자 페이지</a>
+                    </span>
+                    <a th:href="@{/my-page}">내 정보</a>
+                    <a th:href="@{/cart}">장바구니</a>
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit">로그아웃</button>
+                    </form>
+                </span>
+
+                <!-- 비로그인 상태일 때 -->
+                <span th:unless="${#authentication != null and #authentication.authenticated and #authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/login}">로그인</a>
+                    <a th:href="@{/register}">회원가입</a>
+                    <a th:href="@{/cart}">장바구니</a>
+                </span>
+            </nav>
+        </div>
     </div>
 </header>
 
 <!-- ✅ 본문 -->
-<main layout:fragment="content"
-      style="
-        flex: 1;
-        overflow-y: auto;
-        min-height: 100%;
-        padding: 2rem 0;
-        box-sizing: border-box;
-        background: linear-gradient(135deg, #f5f7fa, #dbe9f4);
-      ">
+<main layout:fragment="content">
     <!-- 자식 템플릿에서 내용이 들어올 자리 -->
 </main>
 
+<script src="/js/search.js"></script>
 </body>
 </html>
