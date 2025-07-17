@@ -102,7 +102,7 @@
                 <tbody>
                 <tr th:each="item : ${bookProducts}">
                     <td><img th:src="${#strings.isEmpty(item.getImageUrl())} ? '/image/default.png' : ${item.getImageUrl()}" alt="책 표지" /></td>
-                    <td th:text="${item.getTitle()()}"></td>
+                    <td th:text="${item.getTitle()}"></td>
                     <td th:text="${item.getQty()}"></td>
                     <td th:text="${item.getAmount()}"></td>
                 </tr>
