@@ -55,7 +55,7 @@ public class ReviewController {
             redirectAttributes.addFlashAttribute("errorMessage", "리뷰 등록 실패: " + e.getMessage());
         }
 
-        return "redirect:/reviews?isbn=" + reviewCreateRequest.getIsbn();
+        return "redirect:/book/detail/" + reviewCreateRequest.getIsbn();
     }
 
     @GetMapping("/{id}/edit")
@@ -103,6 +103,6 @@ public class ReviewController {
             redirectAttributes.addFlashAttribute("errorMessage", "리뷰 수정 실패: " + e.getMessage());
         }
 
-        return "redirect:/reviews?isbn=" + isbn;
+        return "redirect:/book/detail/" + isbn;
     }
 }
