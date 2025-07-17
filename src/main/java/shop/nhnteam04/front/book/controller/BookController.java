@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/books")
+@RequestMapping("/book/detail")
 public class BookController {
 
     private final BookService bookService;
