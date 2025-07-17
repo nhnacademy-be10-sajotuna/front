@@ -47,7 +47,7 @@ public class CartController {
             response = cartItemService.addGuestCartItem(request, cartId);
         }
         model.addAttribute("message", "장바구니에 담았습니다. 장바구니로 이동하시겠습니까?");
-        return "redirect:/books/" + request.getIsbn(); // 원래 페이지 그대로
+        return "redirect:/book/detail/" + request.getIsbn(); // 원래 페이지 그대로
     }
 
     @PostMapping("/update")
