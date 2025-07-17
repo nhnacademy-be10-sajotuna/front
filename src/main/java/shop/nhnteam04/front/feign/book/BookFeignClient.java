@@ -40,14 +40,6 @@ public interface BookFeignClient {
      @RequestParam("size") int size
     );
 
-//    @GetMapping("/api/search/categories")
-//    Page<BookSearchResponse> searchByCategory(
-//            @RequestParam("category") String category,
-//            @RequestParam("sort") String sort,
-//            @RequestParam("page") int page,
-//            @RequestParam("size") int size
-//    );
-
     @GetMapping("/api/search/autocomplete")
     List<String> autoComplete(@RequestParam("keyword") String keyword);
 
@@ -83,6 +75,9 @@ public interface BookFeignClient {
 
     @DeleteMapping("/api/tags/{id}")
     void deleteTag(@PathVariable Long id);
+
+    @GetMapping("/api/books/{isbn}")
+    BookResponse getBookByIsbn(@PathVariable String isbn);
 
     @GetMapping("/api/categories/{id}/subcategories")
     List<CategoryResponse> getAllSubCategories(@PathVariable Long id);

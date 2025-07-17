@@ -870,9 +870,16 @@
 
             // API 호출로 실제 쿠폰 데이터 가져오기
             const params = new URLSearchParams({
-                isbn: isbn,
-                categoryIds: categoryIds
+                isbn: isbn
             });
+
+            if (categoryIds && categoryIds.length > 0) {
+                if (Array.isArray(categoryIds)) {
+                    params.append('categoryIds', categoryIds.join(','));
+                } else {
+                    params.append('categoryIds', categoryIds);
+                }
+            }
 
             fetch(`/api/coupons/available-coupons/book?${params}`)
                 .then(response => {

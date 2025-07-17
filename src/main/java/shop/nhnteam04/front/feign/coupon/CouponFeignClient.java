@@ -24,4 +24,9 @@ public interface CouponFeignClient {
 
     @GetMapping("/api/coupons/{coupon-id}")
     CouponResponse getCouponById(@PathVariable(name = "coupon-id") Long couponId);
+
+
+    @GetMapping("/api/coupons/book-coupons")
+    List<CouponResponse> getBookCoupons(@RequestParam("isbn") String isbn,
+                                        @RequestParam("categoryIds") Set<Long> categoryIds);
 }

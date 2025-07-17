@@ -3,12 +3,10 @@ package shop.nhnteam04.front.order.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.cart.dto.response.CartResponse;
 import shop.nhnteam04.front.cart.service.CartService;
 import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
@@ -54,6 +52,10 @@ public class GuestController {
         ModelAndView mav = new ModelAndView("order/guest-order-form");
 
         CartResponse guestCart = cartService.getGuestCart(cartId);
+
+        if(guestCart.getItems().isEmpty()){
+            return new ModelAndView("redirect:/cart");
+        }
         mav.addObject("cartItems", guestCart.getItems());
 
         OrderFormResponse orderForm = orderService.getOrderForm(null);
