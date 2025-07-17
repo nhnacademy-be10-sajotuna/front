@@ -318,8 +318,14 @@
                     <div class="order-info">
                         <div class="order-id" th:text="'주문번호: ' + ${order.orderNumber}">주문번호: ORD-20241111-001</div>
                         <div class="order-date" th:text="'주문일시: ' + ${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}">주문일시: 2024-11-11 14:30</div>
+                        <div th:if="${order.status.name() == 'BEFORE_PAYMENT'}" class="payment-deadline" 
+                             th:text="'결제 마감: ' + ${#temporals.format(order.createdAt.plusHours(1), 'yyyy-MM-dd HH:mm')} + ' (남은 시간: ' + 
+                             ${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), order.createdAt.plusHours(1)).toMinutes()} + '분)'">
+                             결제 마감: 2024-11-11 15:30 (남은 시간: 45분)
+                        </div>
                     </div>
                     <div class="order-status" th:switch="${order.status.name()}">
+                        <span th:case="BEFORE_PAYMENT" class="status-pending">결제대기</span>
                         <span th:case="'PENDING'" class="status-pending">주문확인중</span>
                         <span th:case="'SHIPPED'" class="status-shipping">배송중</span>
                         <span th:case="'DELIVERED'" class="status-delivered">배송완료</span>
@@ -346,6 +352,9 @@
 
                 <div class="order-actions">
                     <a th:href="@{'/order/detail/' + ${order.orderId}}" class="btn btn-primary">주문 상세</a>
+                    <a th:if="${order.status.name() == 'BEFORE_PAYMENT'}" 
+                       th:href="@{'/payment?orderNumber=' + ${order.orderNumber}}" 
+                       class="btn btn-primary">결제하기</a>
                     <form th:if="${order.status.name() == 'PENDING'}"
                           th:action="@{'/order/cancel?order-id=' + ${order.orderId}}"
                           method="post">

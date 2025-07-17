@@ -23,7 +23,7 @@ public class CouponController {
     public ResponseEntity<List<CouponResponse>> getAvailableBookCoupons(
             @AuthenticationPrincipal SecurityUser user,
             @RequestParam String isbn,
-            @RequestParam Set<Long> categoryIds) {
+            @RequestParam(required = false) Set<Long> categoryIds) {
         
         List<CouponResponse> availableCoupons = couponService.getAvailableBookCoupons(user.getId(), isbn, categoryIds);
         return ResponseEntity.ok(availableCoupons);
