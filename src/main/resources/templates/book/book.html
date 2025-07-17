@@ -428,7 +428,8 @@
             }
             
             .book-detail-container,
-            .book-description-wrapper {
+            .book-description-wrapper
+            {
                 padding: 1.5rem;
             }
             
@@ -520,6 +521,7 @@
                     </form>
                     <button type="button"
                             class="btn-coupon"
+                            th:if="${user != null}"
                             th:data-isbn="${book.isbn}"
                             th:data-category-ids="${#strings.listJoin(categoryIds, ',')}">
                         🏷️ 쿠폰 확인
@@ -585,7 +587,7 @@
             </div>
 
             <div class="list-actions">
-                <a th:href="@{|/reviews/create?isbn=${isbn}|}" class="btn btn--primary">리뷰 작성</a>
+                <a th:if="${user != null}" th:href="@{|/reviews/create?isbn=${isbn}|}" class="btn btn--primary">리뷰 작성</a>
             </div>
         </div>
     </div>
