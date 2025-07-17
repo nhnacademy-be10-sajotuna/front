@@ -61,37 +61,37 @@
 
             <button class="payment-button" onclick="tossPayment()">토스 결제하기</button>
         </div>
+
+        <script type="text/javascript">
+            const num = document.getElementById('orderNumber').value;
+            const price = document.getElementById('amount').value;
+
+            function tossPayment() {
+                const clientKey = "test_ck_yZqmkKeP8gWj1B0QjXRB8bQRxB9l";
+                const tossPayments = TossPayments(clientKey);
+                const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
+
+                // 토스 결제
+                payment.requestPayment({
+                    method: "CARD",
+                    amount: {
+                        currency: "KRW",
+                        value: Number(price),
+                    },
+                    orderId: num,
+                    orderName: "책",
+                    successUrl: window.location.origin + "/payment/toss/success",
+                    failUrl: window.location.origin + "/payment/fail",
+                    customerName: "",
+                    card: {
+                        useEscrow: false,
+                        flowMode: "DEFAULT",
+                        useCardPoint: false,
+                        useAppCardOnly: false,
+                    },
+                });
+            }
+        </script>
     </main>
-
-    <script type="text/javascript">
-        const num = document.getElementById('orderNumber').value;
-        const price = document.getElementById('amount').value;
-
-        function tossPayment() {
-            const clientKey = "test_ck_yZqmkKeP8gWj1B0QjXRB8bQRxB9l";
-            const tossPayments = TossPayments(clientKey);
-            const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
-
-            // 토스 결제
-            payment.requestPayment({
-                method: "CARD",
-                amount: {
-                    currency: "KRW",
-                    value: Number(price),
-                },
-                orderId: num,
-                orderName: "책",
-                successUrl: window.location.origin + "/payment/toss/success",
-                failUrl: window.location.origin + "/payment/fail",
-                customerName: "",
-                card: {
-                    useEscrow: false,
-                    flowMode: "DEFAULT",
-                    useCardPoint: false,
-                    useAppCardOnly: false,
-                },
-            });
-        }
-    </script>
 </body>
 </html>
