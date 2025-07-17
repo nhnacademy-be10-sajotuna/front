@@ -24,14 +24,6 @@ public class ReviewController {
     private final ReviewService reviewService;
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-    @GetMapping
-    public String list(@RequestParam("isbn") String isbn, Model model) {
-        List<ReviewResponse> reviews = reviewService.getReviewsByBook(isbn);
-        model.addAttribute("reviews", reviews);
-        model.addAttribute("isbn", isbn);
-        return "review/list";
-    }
-
     @GetMapping("/create")
     public String createForm(@RequestParam("isbn") String isbn, Model model) {
         ReviewCreateRequest req = new ReviewCreateRequest();
