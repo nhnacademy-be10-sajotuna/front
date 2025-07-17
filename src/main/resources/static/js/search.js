@@ -54,16 +54,21 @@ async function loadSubcategories() {
             throw new Error('하위 카테고리를 불러올 수 없습니다');
         }
         
-        const subcategories = await response.json();
+        const allSubcategories = await response.json();
         const categoryTree = document.getElementById('category-tree');
         
-        if (subcategories.length === 0) {
+        // 현재 카테고리의 직접 하위 카테고리들만 필터링
+        const directSubcategories = allSubcategories.filter(cat => 
+            cat.parentId && cat.parentId.toString() === categoryId
+        );
+        
+        if (directSubcategories.length === 0) {
             categoryTree.innerHTML = '<p>하위 카테고리가 없습니다</p>';
             return;
         }
         
-        // 현재 카테고리의 하위 카테고리들을 트리 구조로 렌더링
-        renderCategoryTree(subcategories, categoryTree);
+        // 직접 하위 카테고리들을 트리 구조로 렌더링
+        renderCategoryTree(directSubcategories, categoryTree);
         
     } catch (error) {
         console.error('하위 카테고리 로드 실패:', error);
@@ -115,8 +120,12 @@ async function toggleCategory(categoryId, toggleButton) {
             try {
                 const response = await fetch(`/categories/${categoryId}/subcategories`);
                 if (response.ok) {
-                    const subcategories = await response.json();
-                    renderSubcategories(subcategories, subcategoryContainer);
+                    const allSubcategories = await response.json();
+                    // 해당 카테고리의 직접 하위 카테고리들만 필터링
+                    const directSubcategories = allSubcategories.filter(cat => 
+                        cat.parentId && cat.parentId.toString() === categoryId.toString()
+                    );
+                    renderSubcategories(directSubcategories, subcategoryContainer);
                 }
             } catch (error) {
                 console.error('하위 카테고리 로드 실패:', error);

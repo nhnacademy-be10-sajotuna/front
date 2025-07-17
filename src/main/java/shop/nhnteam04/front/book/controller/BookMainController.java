@@ -17,7 +17,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class BookController {
+public class BookMainController {
 
     private final LoginService loginService;
     private final BookService bookService;
@@ -44,7 +44,8 @@ public class BookController {
     @GetMapping("/categories/{id}/subcategories")
     @ResponseBody
     public List<CategoryResponse> getAllSubCategories(@PathVariable Long id) {
-        return bookService.getAllSubCategories(id);
+        List<CategoryResponse> allSubCategories = bookService.getAllSubCategories(id);
+        return allSubCategories;
     }
 
 }
