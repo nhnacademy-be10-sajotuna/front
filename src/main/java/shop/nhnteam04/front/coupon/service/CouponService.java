@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.coupon.dto.response.CouponResponse;
 import shop.nhnteam04.front.coupon.dto.response.UserCouponDetailResponse;
 import shop.nhnteam04.front.feign.coupon.CouponFeignClient;
+import shop.nhnteam04.front.order.dto.coupon.CouponEvent;
 
 import java.util.List;
 import java.util.Set;
@@ -37,5 +38,9 @@ public class CouponService {
             log.error("Failed to get available book coupons for isbn: {}, categoryIds: {}", isbn, categoryIds, e);
             return List.of(); // 빈 리스트 반환
         }
+    }
+
+    public void getBookCoupon(CouponEvent couponEvent) {
+        couponFeignClient.userGetBookCoupon(couponEvent);
     }
 }

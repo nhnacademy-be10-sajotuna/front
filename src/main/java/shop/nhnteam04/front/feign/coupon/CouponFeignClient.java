@@ -1,12 +1,10 @@
 package shop.nhnteam04.front.feign.coupon;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.coupon.dto.response.CouponResponse;
 import shop.nhnteam04.front.coupon.dto.response.UserCouponDetailResponse;
+import shop.nhnteam04.front.order.dto.coupon.CouponEvent;
 
 import java.util.List;
 import java.util.Set;
@@ -29,4 +27,7 @@ public interface CouponFeignClient {
     @GetMapping("/api/coupons/book-coupons")
     List<CouponResponse> getBookCoupons(@RequestParam("isbn") String isbn,
                                         @RequestParam("categoryIds") Set<Long> categoryIds);
+
+    @PostMapping("/api/coupons/users")
+    void userGetBookCoupon(@RequestBody CouponEvent couponEvent);
 }

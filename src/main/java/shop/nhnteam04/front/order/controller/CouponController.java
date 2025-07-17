@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.coupon.dto.response.CouponResponse;
 import shop.nhnteam04.front.coupon.service.CouponService;
+import shop.nhnteam04.front.order.dto.coupon.CouponEvent;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -34,5 +37,16 @@ public class CouponController {
         List<CouponResponse> couponResponseList = couponService.getBookCoupons(isbn, categoryIds);
 
         return ResponseEntity.ok(couponResponseList);
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<Map<String, Object>> getBookCoupon(@RequestBody CouponEvent couponEvent) {
+        couponService.getBookCoupon(couponEvent);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("message", "쿠폰 발급 성공");
+
+        return ResponseEntity.ok(result);
     }
 }

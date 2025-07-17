@@ -610,7 +610,7 @@
     <script type="text/javascript" th:inline="javascript">
 
         const appliedCoupons = new Map();
-
+        const userId = /*[[${user} != null ? ${user.id} : null]]*/ null;
         document.querySelectorAll('.btn-coupon').forEach(button => {
             button.addEventListener('click', function() {
                 const isbn = this.dataset.isbn;
@@ -692,8 +692,15 @@
 
         function selectCoupon(el, couponId, name, discountText, discountAmount, policyType, maxDiscountAmount) {
             // 발급 요청
-            fetch(`/api/coupons/issue/${couponId}`, {
-                method: 'POST'
+            fetch(`/api/coupons/users`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    couponId: couponId
+                })
             })
                 .then(res => {
                     if (!res.ok) throw new Error('쿠폰 발급 실패');
@@ -703,14 +710,6 @@
                     console.log('발급 성공:', data);
 
                     // 발급된 쿠폰 표시용 Map 저장
-                    appliedCoupons.set(currentIsbn, {
-                        couponId,
-                        name,
-                        discountText,
-                        discountAmount,
-                        policyType,
-                        maxDiscountAmount
-                    });
 
                     // UI 변경: 회색 처리 + "이미 적용됨" 텍스트 추가
                     el.style.opacity = '0.5';
