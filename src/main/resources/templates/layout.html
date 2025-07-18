@@ -78,7 +78,7 @@
 
         #searchInput {
             width: 100%;
-            padding: 0.75rem 1.25rem;
+            padding: 0.75rem 50px 0.75rem 1.25rem;
             border: 2px solid #e0e0e0;
             border-radius: 25px;
             font-size: 1rem;
@@ -95,6 +95,37 @@
 
         #searchInput::placeholder {
             color: #999;
+        }
+
+        .search-button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: #666;
+            font-size: 18px;
+            padding: 0;
+            outline: none;
+        }
+
+        .search-button:hover {
+            color: #007bff;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .search-button:active {
+            transform: translateY(-50%) scale(0.9);
+        }
+        
+        .search-button:focus {
+            outline: none;
         }
 
         #autocomplete-list {
@@ -259,6 +290,7 @@
             <!-- 🔍 검색창 + 자동완성 -->
             <form th:action="@{/book/search}" method="get" class="search-form" autocomplete="off">
                 <input type="text" id="searchInput" name="keyword" placeholder="도서명, 저자 검색" th:value="${keyword}" />
+                <button type="submit" class="search-button">🔍</button>
                 <ul id="autocomplete-list"></ul>
             </form>
         </div>

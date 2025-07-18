@@ -48,4 +48,10 @@ public class BookMainController {
         return allSubCategories;
     }
 
+    @GetMapping("/api/categories/all")
+    @ResponseBody
+    public List<CategoryResponse> getAllCategories() {
+        return categoryService.getAll();
+    }
+
 }

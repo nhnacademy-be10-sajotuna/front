@@ -17,7 +17,7 @@
             --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
             --shadow-md: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            --border-radius: 0.75rem;
+            --border-radius: 0;
             --transition: all 0.3s ease;
         }
 
@@ -56,6 +56,25 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-lg);
             transition: transform 0.3s ease;
+            
+            /* 이미지 화질 최적화 */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            
+            /* 이미지 스케일링 최적화 */
+            object-fit: contain;
+            object-position: center;
+            
+            /* 안티에일리어싱 */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            
+            /* 고해상도 디스플레이 지원 */
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-crisp-edges;
+            
+            /* 이미지 품질 우선 */
+            image-rendering: high-quality;
         }
 
         .book-image img:hover {
@@ -103,18 +122,17 @@
 
         .tag {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
+            background: none;
+            color: #007bff;
+            padding: 0.3rem 0.8rem;
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 600;
             transition: var(--transition);
         }
 
         .tag:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            color: #0056b3;
+            transform: scale(1.05);
         }
 
         .book-price {
@@ -140,11 +158,12 @@
 
         .book-price .discount-rate {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
             padding: 0.5rem 1rem;
-            border-radius: 2rem;
+            border-radius: 4px;
             margin-left: 1rem;
             font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .actions {
@@ -202,7 +221,7 @@
             background: var(--primary-color);
             color: white;
             cursor: pointer;
-            border-radius: 50%;
+            border-radius: 0;
             width: 45px;
             height: 45px;
             display: flex;
@@ -472,7 +491,7 @@
         <!-- 책 상세 정보 (flex) -->
         <div class="book-detail-container">
             <div class="book-image">
-                <img th:src="${book.imageUrl}" alt="책 이미지" class="book-image" style="max-width: 100%; width: 320px; height: auto; box-shadow: var(--shadow-md); border-radius: 12px;" />
+                <img th:src="${book.imageUrl}" onerror="this.src='/image/logo.png'" alt="책 이미지" class="book-image" style="max-width: 100%; width: 250px; height: auto; box-shadow: var(--shadow-md); border-radius: 12px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;" />
             </div>
 
             <div class="book-info">
@@ -481,7 +500,7 @@
                 <!-- ✅ 카테고리 표시 -->
                 <div class="book-categories">
                     <span th:each="categoryList : ${book.categories}">
-                        <span th:each="category : ${categoryList}" class="tag" th:text="${category.name}"></span>
+                        <span th:each="category : ${categoryList}" class="tag" th:text="'#' + ${category.name}"></span>
                     </span>
                 </div>
 
@@ -534,7 +553,7 @@
         <div class="book-description-wrapper">
             <div class="book-description">
                 <h2>책 소개</h2>
-                <p th:text="${book.description}"></p>
+                <p th:utext="${book.description}"></p>
             </div>
         </div>
 
