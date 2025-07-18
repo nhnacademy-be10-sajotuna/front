@@ -38,7 +38,7 @@
             <label>기존 이미지</label>
             <div>
                 <img th:if="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}"
-                     th:src="${book.imageUrl}" alt="기존 이미지" style="max-height: 150px; border: 1px solid #ddd; border-radius: 4px;" />
+                     th:src="${book.imageUrl}" alt="기존 이미지" style="max-height: 150px; border: 1px solid #ddd; border-radius: 4px;" onerror="this.src='/image/logo.png'" />
                 <span th:unless="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}">이미지 없음</span>
             </div>
             <input type="hidden" name="imageUrl" th:value="${book.imageUrl}" />

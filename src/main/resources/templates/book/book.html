@@ -57,24 +57,9 @@
             box-shadow: var(--shadow-lg);
             transition: transform 0.3s ease;
             
-            /* 이미지 화질 최적화 */
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-            
             /* 이미지 스케일링 최적화 */
             object-fit: contain;
             object-position: center;
-            
-            /* 안티에일리어싱 */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            
-            /* 고해상도 디스플레이 지원 */
-            image-rendering: -moz-crisp-edges;
-            image-rendering: -o-crisp-edges;
-            
-            /* 이미지 품질 우선 */
-            image-rendering: high-quality;
         }
 
         .book-image img:hover {
@@ -491,7 +476,7 @@
         <!-- 책 상세 정보 (flex) -->
         <div class="book-detail-container">
             <div class="book-image">
-                <img th:src="${book.imageUrl}" onerror="this.src='/image/logo.png'" alt="책 이미지" class="book-image" style="max-width: 100%; width: 250px; height: auto; box-shadow: var(--shadow-md); border-radius: 12px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;" />
+                <img th:src="${book.imageUrl}" onerror="this.src='/image/logo.png'" alt="책 이미지" class="book-image" />
             </div>
 
             <div class="book-info">
@@ -512,14 +497,14 @@
 
                 <div class="book-price">
                     <div th:if="${book.discountRate > 0}">
-                        <del th:text="${#numbers.formatDecimal(book.originalPrice, 0, 0)} + '원'"></del>
-                        <strong th:text="${#numbers.formatDecimal(book.sellingPrice, 0, 0)} + '원'"></strong>
+                        <del th:text="${#numbers.formatDecimal(book.originalPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></del>
+                        <strong th:text="${#numbers.formatDecimal(book.sellingPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></strong>
                         <span class="discount-rate">
-                            <span th:text="${#numbers.formatDecimal(book.discountRate, 0, 1)}"></span>% 할인
+                            <span th:text="${#numbers.formatDecimal(book.discountRate, 0, 0)}"></span>% 할인
                         </span>
                     </div>
                     <div th:unless="${book.discountRate > 0}">
-                        <strong th:text="${#numbers.formatDecimal(book.sellingPrice, 0, 0)} + '원'"></strong>
+                        <strong th:text="${#numbers.formatDecimal(book.sellingPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></strong>
                     </div>
                 </div>
 
@@ -587,13 +572,13 @@
                         <td th:text="${review.content}" style="max-width: 400px; white-space: pre-wrap; word-break: break-word;"></td>
                         <td>
                             <img th:if="${review.filePath}" th:src="@{|/images/${review.filePath}|}" alt="리뷰 이미지"
-                                 class="review-table__image" />
+                                 class="review-table__image" onerror="this.src='/image/logo.png'" />
                             <span th:unless="${review.filePath}">-</span>
                         </td>
                         <td th:text="${review.maskedEmail}"></td>
                         <td th:text="${#temporals.format(review.postedAt, 'yyyy-MM-dd')}"></td>
                         <td>
-                            <a th:if="${review.userId == #authentication.principal.id}"
+                            <a th:if="${#authentication != null and #authentication.principal != null and review.userId == #authentication.principal.id}"
                                th:href="@{|/reviews/${review.id}/edit?isbn=${isbn}|}"
                                class="btn btn--secondary">수정</a>
                         </td>

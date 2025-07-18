@@ -397,7 +397,8 @@
                     <div class="product-header">
                         <div class="product-image">
                             <img th:src="${item.imageUrl}" alt="상품 이미지"
-                                 style="width: 80px; height: 100px; object-fit: cover;">
+                                 style="width: 80px; height: 100px; object-fit: cover;"
+                                 onerror="this.src='/image/logo.png'">
                         </div>
                         <div class="product-details">
                             <div class="product-title" th:text="${item.title}">도서명</div>
