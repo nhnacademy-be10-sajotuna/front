@@ -38,7 +38,7 @@
 
         <ul class="book-list">
             <li th:each="book : ${books}">
-                <a th:href="@{'/books/' + ${book.isbn}}">
+                <a th:href="@{'/book/detail/' + ${book.isbn}}">
                     <img th:src="${book.imageUrl}" onerror="this.src='/image/logo.png'" alt="책 이미지" style="width:100px; height:auto; border-radius: 4px;"/>
                     <div>
                         <div class="book-title" th:text="${book.title}">도서 제목</div>
@@ -47,20 +47,20 @@
 
                         <!-- 할인율이 존재할 경우 -->
                         <span th:if="${book.originalPrice != null and book.originalPrice > 0 and ((book.originalPrice - book.sellingPrice) / book.originalPrice * 100.0) > 0.0}"
-                              th:text="${#numbers.formatDecimal(book.originalPrice, 1, 0)} + '원 → '
-                               + ${#numbers.formatDecimal(book.sellingPrice, 1, 0)} + '원 ('
-                               + ${#numbers.formatDecimal((book.originalPrice - book.sellingPrice) / book.originalPrice * 100.0, 1, 1)} + '% 할인)'">
+                              th:text="${#numbers.formatDecimal(book.originalPrice, 1, 'COMMA', 0, 'POINT')} + '원 → '
+                               + ${#numbers.formatDecimal(book.sellingPrice, 1, 'COMMA', 0, 'POINT')} + '원 ('
+                               + ${#numbers.formatDecimal((book.originalPrice - book.sellingPrice) / book.originalPrice * 100.0, 1, 0)} + '% 할인)'">
                         </span>
 
                         <!-- 할인율이 0일 경우 -->
                         <span th:if="${book.originalPrice != null and book.originalPrice > 0 and ((book.originalPrice - book.sellingPrice) / book.originalPrice * 100.0) <= 0.0}"
-                              th:text="${#numbers.formatDecimal(book.originalPrice, 1, 0)} + '원 → '
-                               + ${#numbers.formatDecimal(book.sellingPrice, 1, 0)} + '원'">
+                              th:text="${#numbers.formatDecimal(book.originalPrice, 1, 'COMMA', 0, 'POINT')} + '원 → '
+                               + ${#numbers.formatDecimal(book.sellingPrice, 1, 'COMMA', 0, 'POINT')} + '원'">
                         </span>
 
                         <!-- 원가 자체가 없는 경우 (즉, 원가 없이 판매가만 있는 경우) -->
                         <span th:if="${book.originalPrice == null or book.originalPrice == 0}"
-                              th:text="'판매가: ' + ${#numbers.formatDecimal(book.sellingPrice, 1, 0)} + '원'">
+                              th:text="'판매가: ' + ${#numbers.formatDecimal(book.sellingPrice, 1, 'COMMA', 0, 'POINT')} + '원'">
                         </span><br/>
 
                         <span th:text="'평점: ' + ${book.averageRating} + '점'"></span><br/>

@@ -382,7 +382,7 @@
                         <div th:each="item : ${cart.items}" class="cart-item-box">
                             <!-- 기존 장바구니 아이템 렌더링 코드 -->
                             <div class="cart-item-left">
-                                <img th:src="${item.imageUrl}" alt="책 이미지" class="book-image" />
+                                <img th:src="${item.imageUrl}" alt="책 이미지" class="book-image" onerror="this.src='/image/logo.png'" />
                                 <div class="book-info">
                                     <div class="book-title" th:text="${item.title}">책 제목</div>
                                     <div class="book-prices">

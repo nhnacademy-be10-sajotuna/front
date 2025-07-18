@@ -34,7 +34,7 @@
                     <button class="carousel-nav prev" onclick="moveCarousel('popular-carousel', -1)">‹</button>
                     <div class="book-carousel-inner" id="popular-carousel-inner">
                         <div class="book-item" th:each="book : ${popularBooks}">
-                            <a th:href="@{'/books/' + ${book.isbn}}">
+                            <a th:href="@{'/book/detail/' + ${book.isbn}}">
                                 <img th:src="${book.imageUrl}" onerror="this.src='/image/logo.png'" alt="도서 이미지"/>
                                 <div class="book-title" th:text="${book.title}"></div>
                             </a>
@@ -51,7 +51,7 @@
                     <button class="carousel-nav prev" onclick="moveCarousel('newest-carousel', -1)">‹</button>
                     <div class="book-carousel-inner" id="newest-carousel-inner">
                         <div class="book-item" th:each="book : ${newestBooks}">
-                            <a th:href="@{'/books/' + ${book.isbn}}">
+                            <a th:href="@{'/book/detail/' + ${book.isbn}}">
                                 <img th:src="${book.imageUrl}" onerror="this.src='/image/logo.png'" alt="도서 이미지"/>
                                 <div class="book-title" th:text="${book.title}"></div>
                             </a>
