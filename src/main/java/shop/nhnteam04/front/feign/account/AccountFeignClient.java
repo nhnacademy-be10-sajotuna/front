@@ -53,4 +53,6 @@ public interface AccountFeignClient {
     @PostMapping("/api/users/oauth2/{outId}")
     public LoginResponse findByOutId(@PathVariable("outId") String outId, @RequestBody RequestOauth2 requestOauth2);
 
+    @GetMapping("/api/token/validate")
+    public ResponseUser validate(@RequestHeader("Authorization") String token);
 }

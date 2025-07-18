@@ -1,7 +1,5 @@
 package shop.nhnteam04.front.handler;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,9 +12,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import shop.nhnteam04.front.account.service.CookieService;
-import shop.nhnteam04.front.account.user.request.LoginRequestUser;
-import shop.nhnteam04.front.account.user.response.LoginResponse;
-import shop.nhnteam04.front.feign.account.AccountFeignClient;
 import shop.nhnteam04.front.feign.cart.CartFeignClient;
 
 import java.io.IOException;
@@ -33,7 +28,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String accessToken = (String) oAuth2User.getAttributes().get("accessToken");
         String refreshToken = (String) oAuth2User.getAttributes().get("refreshToken");
-        String userId = (String) oAuth2User.getAttributes().get("userId");
+        Long userId = (Long) oAuth2User.getAttributes().get("userId");
 
         String guestCartId = null;
 
@@ -47,7 +42,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             }
         }
 
-        cartFeignClient.mergeCarts(Long.valueOf(userId), guestCartId);
+        cartFeignClient.mergeCarts(userId, guestCartId);
 
         ResponseCookie accessTokenCookie = cookieService.getAccessTokenCookie(accessToken);
         ResponseCookie refreshTokenCookie = cookieService.getRefreshTokenCookie(refreshToken);
