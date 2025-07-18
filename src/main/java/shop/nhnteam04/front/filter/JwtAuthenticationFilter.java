@@ -17,7 +17,6 @@ import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.account.user.response.ResponseAccessToken;
 import shop.nhnteam04.front.account.user.response.ResponseUser;
 import shop.nhnteam04.front.feign.account.AccountFeignClient;
-import shop.nhnteam04.front.tokenParser.JwtTokenValidator;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenValidator jwtTokenValidator;
     private final LoginService loginService;
     private final AccountFeignClient accountFeignClient;
     private final CookieService cookieService;
@@ -36,27 +34,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = resolveAccessTokenFromCookie(request);
         String refreshToken = resolveRefreshTokenFromCookie(request);
 
-        if (jwtTokenValidator.validate(accessToken)) {
-            String userId = jwtTokenValidator.getIdFromToken(accessToken);
-            ResponseUser responseUser = loginService.me(Long.parseLong(userId));
-            SecurityUser securityUser = SecurityUser.from(responseUser);
-            UsernamePasswordAuthenticationToken authentication =
+        if (accessToken != null) {
+            String bearAccessToken = "Bearer " + accessToken;
+            ResponseUser responseUser = accountFeignClient.validate(bearAccessToken);
+            if (responseUser != null) {
+                SecurityUser securityUser = SecurityUser.from(responseUser);
+                UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else if (jwtTokenValidator.validateRefreshToken(refreshToken)) {
-            String bearToken = "Bearer " + refreshToken;
-            ResponseAccessToken newAccessToken = accountFeignClient.refreshToken(bearToken);
-            ResponseCookie cookie = cookieService.getAccessTokenCookie(newAccessToken.getAccessToken());
-            response.addHeader("Set-Cookie", cookie.toString());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String userId = jwtTokenValidator.getIdFromToken(newAccessToken.getAccessToken());
-            ResponseUser responseUser = loginService.me(Long.parseLong(userId));
-            SecurityUser securityUser = SecurityUser.from(responseUser);
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
 
+        if (refreshToken != null) {
+            String bearRefreshToken = "Bearer " + refreshToken;
+            ResponseAccessToken responseAccessToken = accountFeignClient.refreshToken(bearRefreshToken);
+            if (responseAccessToken != null) {
+                ResponseCookie cookie = cookieService.getAccessTokenCookie(responseAccessToken.getAccessToken());
+                response.addHeader("Set-Cookie", cookie.toString());
+
+                SecurityUser securityUser = SecurityUser.from(responseAccessToken.getResponseUser());
+                UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }
         filterChain.doFilter(request, response);
     }
 
