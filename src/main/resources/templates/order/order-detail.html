@@ -77,11 +77,11 @@
                     <div class="meta-item">
                         <strong>주문 상태:</strong>
                         <span th:switch="${orderDetail.status.name()}">
-                            <span th:case="'PENDING'">결제완료</span>
-                            <span th:case="'SHIPPED'">배송중</span>
-                            <span th:case="'DELIVERED'">배송완료</span>
-                            <span th:case="'RETURNED'">주문반품</span>
-                            <span th:case="'CANCELLED'">주문취소</span>
+                            <span th:case="'PENDING'" class="status-pending">주문확인중</span>
+                            <span th:case="'SHIPPED'" class="status-shipping">배송중</span>
+                            <span th:case="'DELIVERED'" class="status-delivered">배송완료</span>
+                            <span th:case="'RETURNED'" class="status-cancelled">반품완료</span>
+                            <span th:case="'CANCELLED'" class="status-cancelled">주문취소</span>
                             <span th:case="*">기타</span>
                         </span>
                     </div>
