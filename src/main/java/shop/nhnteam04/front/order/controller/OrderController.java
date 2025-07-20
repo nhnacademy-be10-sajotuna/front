@@ -11,11 +11,14 @@ import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.cart.dto.response.CartResponse;
 import shop.nhnteam04.front.cart.service.CartService;
 import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
+import shop.nhnteam04.front.order.dto.orders.response.BookProductResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderFormResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
 import shop.nhnteam04.front.order.dto.orders.request.ReturnReason;
 import shop.nhnteam04.front.order.service.OrderService;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -73,12 +76,6 @@ public class OrderController {
         }
     }
 
-//    @PostMapping("/guest")
-//    public String guestOrder(CreateGuestOrderRequest request,
-//                             RedirectAttributes redirectAttributes) {
-//        OrderResponse orderResponse = orderService.createOrder(null, request);
-//    }
-
     @GetMapping("/detail/{order-id}")
     public ModelAndView OrderDetail(@PathVariable("order-id") Long orderId, @AuthenticationPrincipal SecurityUser user) {
         ModelAndView mav = new ModelAndView("order/order-detail");
@@ -87,6 +84,9 @@ public class OrderController {
 
         mav.addObject("user", user);
         mav.addObject("orderDetail", response);
+
+        List<BookProductResponse> list = orderService.getBookProducts(response.getItems());
+        mav.addObject("bookProducts", list);
 
         return mav;
     }

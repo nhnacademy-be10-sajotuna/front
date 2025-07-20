@@ -10,10 +10,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.nhnteam04.front.cart.dto.response.CartResponse;
 import shop.nhnteam04.front.cart.service.CartService;
 import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
+import shop.nhnteam04.front.order.dto.orders.response.BookProductResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderFormResponse;
 import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
 import shop.nhnteam04.front.order.service.OrderService;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -88,8 +91,10 @@ public class GuestController {
         ModelAndView mav = new ModelAndView("order/order-detail");
 
         OrderDetailResponse response = orderService.getGuestOrder(orderNumber);
-
         mav.addObject("orderDetail", response);
+
+        List<BookProductResponse> list = orderService.getBookProducts(response.getItems());
+        mav.addObject("bookProducts", list);
 
         return mav;
     }

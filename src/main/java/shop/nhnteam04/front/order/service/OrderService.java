@@ -4,16 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import shop.nhnteam04.front.book.dto.response.BookResponse;
+import shop.nhnteam04.front.book.service.BookService;
 import shop.nhnteam04.front.feign.order.OrderFeignClient;
 import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
-import shop.nhnteam04.front.order.dto.orders.response.OrderDetailResponse;
-import shop.nhnteam04.front.order.dto.orders.response.OrderFormResponse;
-import shop.nhnteam04.front.order.dto.orders.response.OrderInfoResponse;
-import shop.nhnteam04.front.order.dto.orders.response.OrderResponse;
+import shop.nhnteam04.front.order.dto.orders.response.*;
 import shop.nhnteam04.front.order.dto.orders.request.ReturnReason;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +19,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderFeignClient orderFeignClient;
+    private final BookService bookService;
 
     public OrderInfoResponse getOrderInfo(String orderNumber) {
         if (orderNumber == null) {
@@ -61,17 +60,6 @@ public class OrderService {
         return orderFeignClient.createOrder(userId, request);
     }
 
-    // localdatetime 형태 변환
-    public String convertTime(String dateTime) {
-        DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDateTime ldt = LocalDateTime.parse(dateTime, parser);
-        ldt.withSecond(0);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-
-        return ldt.format(formatter);
-    }
-
     // 주문 취소 처리
     public void cancelOrder(long userId, long orderId) {
         if (userId < 0 || orderId < 0) {
@@ -90,5 +78,16 @@ public class OrderService {
 
     public OrderFormResponse getOrderForm(Long userId) {
         return orderFeignClient.getOrderForm(userId);
+    }
+
+    public List<BookProductResponse> getBookProducts(List<OrderProductResponse> orderProductResponseList) {
+        List<BookProductResponse> bookProductResponseList = new ArrayList<>();
+
+        orderProductResponseList.forEach(orderProductResponse -> {
+            BookResponse bookResponse = bookService.getBookByIsbn(orderProductResponse.getIsbn());
+            bookProductResponseList.add(new BookProductResponse(bookResponse, orderProductResponse));
+        });
+
+        return bookProductResponseList;
     }
 }
