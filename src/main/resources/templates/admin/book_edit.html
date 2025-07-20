@@ -5,12 +5,16 @@
       th:with="activeMenu='books'">
 <head>
     <title>도서 수정</title>
+
+    <!-- Toast UI Editor CSS -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 </head>
 <body>
 <section layout:fragment="page-content">
     <div class="form-container">
         <h2 style="text-align: center;">📚 도서 수정</h2>
-        <form th:action="@{'/admin/books/edit/' + ${book.isbn}}" method="post" enctype="multipart/form-data">
+        <form th:action="@{'/admin/books/edit/' + ${book.isbn}}" method="post" enctype="multipart/form-data"
+              onsubmit="return submitEditorContent();">
 
             <label for="isbn">ISBN</label>
             <input type="text" id="isbn" name="isbn" th:value="${book.isbn}" readonly />
@@ -25,7 +29,8 @@
             <input type="text" id="publisher" name="publisher" th:value="${book.publisher}" required />
 
             <label for="publicationDate">출판일</label>
-            <input type="date" id="publicationDate" name="publicationDate" th:value="${#temporals.format(book.publicationDate, 'yyyy-MM-dd')}" required />
+            <input type="date" id="publicationDate" name="publicationDate"
+                   th:value="${#temporals.format(book.publicationDate, 'yyyy-MM-dd')}" required />
 
             <label for="pageCount">페이지 수</label>
             <input type="number" id="pageCount" name="pageCount" th:value="${book.pageCount}" min="0" />
@@ -33,7 +38,7 @@
             <label>기존 이미지</label>
             <div>
                 <img th:if="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}"
-                     th:src="${book.imageUrl}" alt="기존 이미지" style="max-height: 150px; border: 1px solid #ddd; border-radius: 4px;" />
+                     th:src="${book.imageUrl}" alt="기존 이미지" style="max-height: 150px; border: 1px solid #ddd; border-radius: 4px;" onerror="this.src='/image/logo.png'" />
                 <span th:unless="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}">이미지 없음</span>
             </div>
             <input type="hidden" name="imageUrl" th:value="${book.imageUrl}" />
@@ -41,8 +46,9 @@
             <label for="imageFile">이미지 변경 (선택)</label>
             <input type="file" id="imageFile" name="imageFile" accept="image/*" />
 
-            <label for="description">설명</label>
-            <textarea id="description" name="description" rows="4" th:text="${book.description}"></textarea>
+            <label for="editor">설명</label>
+            <div id="editor"></div>
+            <input type="hidden" name="description" id="description" />
 
             <label for="originalPrice">정가</label>
             <input type="number" id="originalPrice" name="originalPrice" th:value="${book.originalPrice}" step="0.01" required />
@@ -63,7 +69,8 @@
             <input type="hidden" name="categories" id="categories" />
 
             <label for="tagNames">태그 (쉼표로 구분)</label>
-            <input type="text" id="tagNames" name="tagNames" th:value="${#strings.listJoin(book.getTags(), ',')}" placeholder="예: Java, Spring, Backend" />
+            <input type="text" id="tagNames" name="tagNames"
+                   th:value="${#strings.listJoin(book.getTags(), ',')}" placeholder="예: Java, Spring, Backend" />
 
             <button type="submit" class="btn btn--primary">도서 수정</button>
         </form>
@@ -71,26 +78,45 @@
 </section>
 
 <th:block layout:fragment="script">
+    <!-- Toast UI Editor JS -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
     <script id="all-categories-data" type="application/json" th:text="${allCategoriesJson}"></script>
     <script id="existing-categories-data" type="application/json" th:text="${existingCategoriesJson}"></script>
-
     <script th:src="@{/js/admin-category-selector.js}"></script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-        document.addEventListener('DOMContentLoaded', function() {
-            // 공통 카테고리 매니저 초기화 (기존 카테고리 데이터 추가)
+        let editor;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            //  Toast UI Editor 초기화
+            editor = new toastui.Editor({
+                el: document.querySelector('#editor'),
+                height: '400px',
+                initialEditType: 'wysiwyg',
+                previewStyle: 'vertical',
+                language: 'ko',
+                initialValue: /*[[${book.description}]]*/ ''
+            });
+
+            //  카테고리 셀렉터 초기화
             setupCategorySelector({
                 allCategoriesJson: /*[[${allCategoriesJson}]]*/ '[]',
                 existingCategoriesJson: /*[[${existingCategoriesJson}]]*/ '[]'
             });
 
-            // 에러 메시지 처리
             const errorMsg = /*[[${errorMessage}]]*/ null;
             if (errorMsg) {
                 alert(errorMsg);
             }
         });
+
+        //  폼 제출 시 에디터 내용 전송
+        function submitEditorContent() {
+            document.getElementById('description').value = editor.getHTML();
+            return true;
+        }
         /*]]>*/
     </script>
 </th:block>

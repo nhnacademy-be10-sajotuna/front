@@ -5,12 +5,16 @@
       th:with="activeMenu='books'">
 <head>
     <title>도서 추가</title>
+
+    <!--  Toast UI Editor CSS -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 </head>
 <body>
 <section layout:fragment="page-content">
     <div class="form-container">
         <h2 style="text-align: center;">📚 새 도서 추가</h2>
-        <form th:action="@{/admin/books}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/admin/books}" method="post" enctype="multipart/form-data"
+              onsubmit="return submitEditorContent();">
 
             <label for="isbn">ISBN</label>
             <input type="text" id="isbn" name="isbn" required />
@@ -33,8 +37,9 @@
             <label for="imageFile">이미지 업로드</label>
             <input type="file" id="imageFile" name="imageFile" accept="image/*" />
 
-            <label for="description">설명</label>
-            <textarea id="description" name="description" rows="4"></textarea>
+            <label for="editor">설명</label>
+            <div id="editor"></div>
+            <input type="hidden" name="description" id="description" />
 
             <label for="originalPrice">정가</label>
             <input type="number" id="originalPrice" name="originalPrice" step="0.01" required />
@@ -63,27 +68,43 @@
 </section>
 
 <th:block layout:fragment="script">
-    <script id="all-categories-data" type="application/json" th:text="${allCategoriesJson}"></script>
+    <!--Toast UI Editor JS -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
-    <script th:src="@{/js/admin-category-selector.js}"></script>
+    <!-- 에디터 초기화 및 전송 처리 -->
+    <script>
+        let editor;
 
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        document.addEventListener('DOMContentLoaded', function() {
-            // 공통 카테고리 매니저 초기화
+        document.addEventListener("DOMContentLoaded", function () {
+            editor = new toastui.Editor({
+                el: document.querySelector('#editor'),
+                height: '400px',
+                initialEditType: 'wysiwyg',
+                previewStyle: 'vertical',
+                language: 'ko'
+            });
+
+            // 카테고리 초기화
             setupCategorySelector({
                 allCategoriesJson: /*[[${allCategoriesJson}]]*/ '[]'
             });
 
-            // 에러 메시지 처리
             const errorMsg = /*[[${errorMessage}]]*/ null;
             if (errorMsg) {
                 alert(errorMsg);
             }
         });
-        /*]]>*/
+
+        function submitEditorContent() {
+            const htmlContent = editor.getHTML();
+            document.getElementById('description').value = htmlContent;
+            return true;
+        }
     </script>
 
+    <!--  카테고리 선택 JS -->
+    <script id="all-categories-data" type="application/json" th:text="${allCategoriesJson}"></script>
+    <script th:src="@{/js/admin-category-selector.js}"></script>
 </th:block>
 </body>
 </html>

@@ -12,19 +12,18 @@
 }
 
 .category-dropdown-btn {
-    background: #007bff;
-    color: white;
+    background: none;
     border: none;
-    padding: 15px 25px;
-    border-radius: 8px;
+    color: #007bff;
     cursor: pointer;
     font-size: 16px;
     font-weight: 500;
-    transition: background 0.2s ease;
+    transition: color 0.2s ease;
+    padding: 0;
 }
 
 .category-dropdown-btn:hover {
-    background: #0056b3;
+    color: #0056b3;
 }
 
 .category-dropdown-content {
@@ -42,7 +41,7 @@
     border: 1px solid #e9ecef;
 }
 
-.category-dropdown:hover .category-dropdown-content {
+.category-dropdown.active .category-dropdown-content {
     display: block;
 }
 
@@ -100,6 +99,11 @@
 /* 도서 섹션 스타일 */
 .book-section {
     width: 100%;
+    background: white;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    margin-top: 20px;
 }
 
 /* 도서 섹션 스타일 */
@@ -119,6 +123,7 @@
 .book-carousel {
     position: relative;
     overflow: hidden;
+    margin: 0 50px;
 }
 
 .book-carousel-inner {
@@ -128,19 +133,15 @@
 }
 
 .book-item {
-    flex: 0 0 calc(33.333% - 14px); /* 3개씩 표시 */
+    flex: 0 0 calc(25% - 15px); /* 4개씩 표시 */
     min-width: 200px;
     max-width: 300px;
-    background: white;
-    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: transform 0.2s ease;
 }
 
 .book-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
 .book-item a {
@@ -151,14 +152,13 @@
 
 .book-item img {
     width: 100%;
-    height: 180px;
+    height: 250px;
     object-fit: contain;
-    background-color: #f8f9fa;
 }
 
 .book-title {
     padding: 12px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     color: #333;
     line-height: 1.3;
@@ -167,6 +167,7 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-align: center;
 }
 
 /* 캐러셀 네비게이션 버튼 */
@@ -194,11 +195,11 @@
 }
 
 .carousel-nav.prev {
-    left: -20px;
+    left: 10px;
 }
 
 .carousel-nav.next {
-    right: -20px;
+    right: 10px;
 }
 
 .carousel-nav:disabled {
@@ -209,7 +210,7 @@
 /* 반응형 */
 @media (max-width: 1024px) {
     .book-item {
-        flex: 0 0 calc(50% - 10px); /* 2개씩 표시 */
+        flex: 0 0 calc(33.333% - 14px); /* 3개씩 표시 */
     }
 }
 

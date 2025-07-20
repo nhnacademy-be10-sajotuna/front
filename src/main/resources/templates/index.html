@@ -11,8 +11,8 @@
 <main layout:fragment="content">
     <div class="main-container">
         <!-- 📂 상단 카테고리 드롭다운 -->
-        <div class="category-dropdown">
-            <button class="category-dropdown-btn">📚 분야별 카테고리</button>
+        <div class="category-dropdown" id="categoryDropdown">
+            <button class="category-dropdown-btn" onclick="toggleCategoryDropdown()">📚 분야별 카테고리</button>
             <div class="category-dropdown-content">
                 <div th:each="parent : ${categories}" th:if="${parent.parentId == null}" class="category-section">
                     <div class="parent-category-title" th:text="${parent.name}"></div>
@@ -27,9 +27,9 @@
 
         <!-- 📘 도서 영역 -->
         <section class="book-section">
-            <!-- 🌟 인기 도서 -->
+            <!-- 🌟 베스트셀러 -->
             <div class="popular-section">
-                <h2>인기 도서</h2>
+                <h2>베스트셀러</h2>
                 <div class="book-carousel" id="popular-carousel">
                     <button class="carousel-nav prev" onclick="moveCarousel('popular-carousel', -1)">‹</button>
                     <div class="book-carousel-inner" id="popular-carousel-inner">
@@ -64,7 +64,22 @@
     </div>
 
     <script src="/js/bookMain.js"></script>
+    <script src="/js/category.js"></script>
+    <script>
+        // 카테고리 드롭다운 토글 함수
+        function toggleCategoryDropdown() {
+            const dropdown = document.getElementById('categoryDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // 외부 클릭 시 드롭다운 닫기
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('categoryDropdown');
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+    </script>
 </main>
-<script src="/js/search.js"></script>
 </body>
 </html>

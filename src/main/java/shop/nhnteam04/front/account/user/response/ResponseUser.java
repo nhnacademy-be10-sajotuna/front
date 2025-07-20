@@ -2,12 +2,14 @@ package shop.nhnteam04.front.account.user.response;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ResponseUser {
     private long id;
 

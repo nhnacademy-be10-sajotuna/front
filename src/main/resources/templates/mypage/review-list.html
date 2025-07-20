@@ -35,7 +35,7 @@
         </td>
         <td th:text="${review.content}" style="max-width: 400px; white-space: pre-wrap; word-break: break-all;"></td>
         <td>
-          <img th:if="${review.filePath}" th:src="@{|/images/${review.filePath}|}" alt="리뷰 이미지" class="review-table__image"/>
+          <img th:if="${review.filePath}" th:src="@{|/images/${review.filePath}|}" alt="리뷰 이미지" class="review-table__image" onerror="this.src='/image/logo.png'"/>
           <span th:unless="${review.filePath}">-</span>
         </td>
         <td th:text="${#temporals.format(review.postedAt, 'yyyy-MM-dd')}"></td>

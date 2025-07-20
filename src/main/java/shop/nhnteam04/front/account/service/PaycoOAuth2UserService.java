@@ -53,7 +53,7 @@ public class PaycoOAuth2UserService implements OAuth2UserService<OAuth2UserReque
         LoginResponse user = accountFeignClient.findByOutId(idNo, new RequestOauth2(email, name));
 
         attributes.put("accessToken", user.getAccessToken());
-        attributes.put("refreshToekn", user.getRefreshToken());
+        attributes.put("refreshToken", user.getRefreshToken());
         attributes.put("userId", user.getId());
 
         Collection<? extends GrantedAuthority> authorities =
