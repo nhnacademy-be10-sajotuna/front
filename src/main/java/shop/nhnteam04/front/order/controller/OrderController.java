@@ -95,9 +95,15 @@ public class OrderController {
     @PostMapping("/cancel")
     public String cancelOrder(@AuthenticationPrincipal SecurityUser user,
                               @RequestParam("order-id") long orderId) {
-        orderService.cancelOrder(user.getId(), orderId);
+        try{
+            orderService.cancelOrder(user.getId(), orderId);
 
-        return "redirect:/my-page/orders";
+            return "redirect:/my-page/orders";
+        } catch (Exception e){
+            log.error(e.getMessage());
+
+            return "redirect:/my-page/orders";
+        }
     }
 
     // 주문 반품
@@ -105,8 +111,14 @@ public class OrderController {
     public String returnOrder(@AuthenticationPrincipal SecurityUser user,
                               @RequestParam("order-id") long orderId,
                               @RequestParam("returnReason") ReturnReason reason) {
-        orderService.returnOrder(user.getId(), orderId, reason);
+        try{
+            orderService.returnOrder(user.getId(), orderId, reason);
 
-        return "redirect:/my-page/orders";
+            return "redirect:/my-page/orders";
+        } catch (Exception e){
+            log.error(e.getMessage());
+
+            return "redirect:/my-page/orders";
+        }
     }
 }
