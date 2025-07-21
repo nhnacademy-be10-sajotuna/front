@@ -578,9 +578,11 @@
                         <td th:text="${review.maskedEmail}"></td>
                         <td th:text="${#temporals.format(review.postedAt, 'yyyy-MM-dd')}"></td>
                         <td>
-                            <a th:if="${#authentication != null and #authentication.principal != null and review.userId == #authentication.principal.id}"
-                               th:href="@{|/reviews/${review.id}/edit?isbn=${isbn}|}"
-                               class="btn btn--secondary">수정</a>
+                            <div th:if="${user != null}">
+                                <a th:if="${review.userId == user.id}"
+                                   th:href="@{|/reviews/${review.id}/edit?isbn=${isbn}|}"
+                                   class="btn btn--secondary">수정</a>
+                            </div>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(reviews)}">
