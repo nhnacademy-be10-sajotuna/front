@@ -98,6 +98,122 @@
             border-bottom: none;
         }
 
+        .rating-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .star-filled {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        .star-empty {
+            color: #dee2e6;
+            font-size: 1.2rem;
+        }
+
+        .rating-number {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1.1rem;
+        }
+
+        .review-count {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        .like-section {
+            margin-bottom: 1rem;
+        }
+
+        .btn-like {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            background: linear-gradient(135deg, #e91e63 0%, #ad1457 100%);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-like:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-like.liked {
+            background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+        }
+
+        .btn-like.liked .like-icon {
+            content: '♥';
+        }
+
+        .like-icon {
+            font-size: 1.2rem;
+        }
+
+        .like-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .like-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-like-simple {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: none;
+            border: none;
+            color: #e91e63;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .btn-like-simple:hover {
+            background: rgba(233, 30, 99, 0.1);
+            transform: scale(1.05);
+        }
+
+        .btn-like-simple.liked .like-icon {
+            color: #e91e63;
+        }
+
+        .btn-like-simple .like-icon {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
+        .btn-like-simple .like-count {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
         .book-categories {
             display: flex;
             flex-wrap: wrap;
@@ -493,6 +609,40 @@
                     <p><strong>저자:</strong> <span th:text="${book.author}"></span></p>
                     <p><strong>출판사:</strong> <span th:text="${book.publisher}"></span></p>
                     <p><strong>출판일:</strong> <span th:text="${#temporals.format(book.publicationDate, 'yyyy-MM-dd')}"></span></p>
+                    <p th:if="${book.averageRating != null}">
+                        <strong>평점:</strong> 
+                        <span class="rating-display">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                  th:text="${i <= book.averageRating} ? '★' : '☆'"
+                                  th:class="${i <= book.averageRating} ? 'star-filled' : 'star-empty'"></span>
+                            <span th:text="${#numbers.formatDecimal(book.averageRating, 1, 1)}" class="rating-number"></span>
+                            <span th:text="'(' + ${book.reviewCount} + '개 리뷰)'" class="review-count"></span>
+                        </span>
+                    </p>
+
+                    <!-- 좋아요 표시 -->
+                    <p>
+                        <strong>좋아요:</strong>
+                        <span class="like-display">
+                            <button th:if="${user != null}" 
+                                    type="button" 
+                                    class="btn-like-simple" 
+                                    th:classappend="${isLike} ? ' liked' : ''"
+                                    th:data-isbn="${book.isbn}"
+                                    th:data-user-id="${user.id}"
+                                    th:data-is-liked="${isLike}"
+                                    onclick="toggleLike(this)"
+                                    style="border: none; background: none; font-size: 1.5rem; cursor: pointer;">
+                                <span class="like-icon" th:text="${isLike} ? '♥' : '♡'"></span>
+                                <span class="like-count" th:text="${book.likes}">0</span>
+                            </button>
+                            <span th:if="${user == null}" class="like-display-readonly">
+                                <span class="like-icon" style="color: #ccc;">♡</span>
+                                <span class="like-count" th:text="${book.likes}" style="margin-left: 0.3rem;">0</span>
+                            </span>
+                        </span>
+                    </p>
+
                 </div>
 
                 <div class="book-price">
@@ -741,6 +891,70 @@
             if (e.target.id === 'couponModal') closeCouponModal();
             if (e.target.id === 'orderCouponModal') closeOrderCouponModal();
         };
+
+        // 좋아요 토글 함수
+        function toggleLike(button) {
+            const isbn = button.dataset.isbn;
+            const userId = button.dataset.userId;
+            const isLiked = button.dataset.isLiked === 'true';
+            
+            // 버튼 비활성화 (중복 클릭 방지)
+            button.disabled = true;
+            
+            // API 호출
+            const url = isLiked ? '/api/likes' : '/api/likes';
+            const method = isLiked ? 'DELETE' : 'POST';
+            
+            const requestOptions = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-User-Id': userId
+                }
+            };
+            
+            if (!isLiked) {
+                requestOptions.body = JSON.stringify({ bookIsbn: isbn });
+            } else {
+                requestOptions.headers['X-Requested-With'] = 'XMLHttpRequest';
+            }
+            
+            fetch(url + (isLiked ? `?bookIsbn=${isbn}` : ''), requestOptions)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('좋아요 처리에 실패했습니다.');
+                    }
+                    
+                    // UI 업데이트
+                    const likeIcon = button.querySelector('.like-icon');
+                    const likeCount = button.querySelector('.like-count');
+                    const currentCount = parseInt(likeCount.textContent);
+                    
+                    if (isLiked) {
+                        // 좋아요 취소
+                        likeIcon.textContent = '♡';
+                        likeIcon.style.color = '#ccc';
+                        likeCount.textContent = currentCount - 1;
+                        button.classList.remove('liked');
+                        button.dataset.isLiked = 'false';
+                    } else {
+                        // 좋아요 추가
+                        likeIcon.textContent = '♥';
+                        likeIcon.style.color = '#e91e63';
+                        likeCount.textContent = currentCount + 1;
+                        button.classList.add('liked');
+                        button.dataset.isLiked = 'true';
+                    }
+                })
+                .catch(error => {
+                    console.error('좋아요 처리 오류:', error);
+                    alert('좋아요 처리에 실패했습니다. 다시 시도해주세요.');
+                })
+                .finally(() => {
+                    // 버튼 다시 활성화
+                    button.disabled = false;
+                });
+        }
 
     </script>
 </main>

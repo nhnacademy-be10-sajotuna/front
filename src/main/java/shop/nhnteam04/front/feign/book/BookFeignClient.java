@@ -15,7 +15,9 @@ import shop.nhnteam04.front.book.dto.response.CategoryResponse;
 import org.springframework.web.bind.annotation.*;
 import shop.nhnteam04.front.book.dto.request.TagRequest;
 import shop.nhnteam04.front.book.dto.request.CategoryCreateRequest;
+import shop.nhnteam04.front.book.dto.request.LikeRequest;
 import shop.nhnteam04.front.book.dto.response.TagResponse;
+import shop.nhnteam04.front.book.dto.response.LikeResponse;
 
 import java.util.List;
 
@@ -81,4 +83,17 @@ public interface BookFeignClient {
 
     @GetMapping("/api/categories/{id}/subcategories")
     List<CategoryResponse> getAllSubCategories(@PathVariable Long id);
+
+    // 좋아요 관련 API
+    @PostMapping("/api/likes")
+    LikeResponse addLike(@RequestHeader("X-User-Id") Long userId, @RequestBody LikeRequest likeRequest);
+
+    @DeleteMapping("/api/likes")
+    void removeLike(@RequestHeader("X-User-Id") Long userId, @RequestParam String bookIsbn);
+
+    @GetMapping("/api/likes/check")
+    Boolean checkLikeStatus(@RequestHeader("X-User-Id") Long userId, @RequestParam String bookIsbn);
+
+    @GetMapping("/api/likes/user")
+    List<BookResponse> getLikedBooksByUserId(@RequestHeader("X-User-Id") Long userId);
 }
