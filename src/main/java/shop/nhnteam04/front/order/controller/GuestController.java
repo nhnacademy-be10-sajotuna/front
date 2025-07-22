@@ -70,9 +70,10 @@ public class GuestController {
 
     @PostMapping("/order")
     public String order(CreateOrderRequest request,
-                        RedirectAttributes redirectAttributes) {
+                        RedirectAttributes redirectAttributes,
+                        @CookieValue(value = "guestCartId") String cartId) {
         try {
-            OrderResponse orderResponse = orderService.createOrder(null, request);
+            OrderResponse orderResponse = orderService.createGuestCartOrder(request, cartId);
 
             redirectAttributes.addAttribute("orderNumber", orderResponse.getOrderNumber());
             redirectAttributes.addAttribute("finalPrice", orderResponse.getFinalPrice());

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shop.nhnteam04.front.book.dto.response.BookResponse;
 import shop.nhnteam04.front.book.service.BookService;
+import shop.nhnteam04.front.feign.cart.CartFeignClient;
 import shop.nhnteam04.front.feign.order.OrderFeignClient;
 import shop.nhnteam04.front.order.dto.orders.request.CreateOrderRequest;
 import shop.nhnteam04.front.order.dto.orders.response.*;
@@ -20,6 +21,7 @@ public class OrderService {
 
     private final OrderFeignClient orderFeignClient;
     private final BookService bookService;
+    private final CartFeignClient cartFeignClient;
 
     public OrderInfoResponse getOrderInfo(String orderNumber) {
         if (orderNumber == null) {
@@ -53,11 +55,20 @@ public class OrderService {
     }
 
     // 상품 주문 생성
-    public OrderResponse createOrder(Long userId, CreateOrderRequest request) {
+    public OrderResponse createUserOrder(Long userId, CreateOrderRequest request) {
         if (request == null) {
             throw new IllegalArgumentException("Request cannot be null");
         }
+        cartFeignClient.clearUserCartItem(userId);
         return orderFeignClient.createOrder(userId, request);
+    }
+
+    public OrderResponse createGuestCartOrder(CreateOrderRequest request, String cartId) {
+        if (request == null) {
+            throw new IllegalArgumentException("Request cannot be null");
+        }
+        cartFeignClient.clearGuestCartItems(cartId);
+        return orderFeignClient.createOrder(null, request);
     }
 
     // 주문 취소 처리

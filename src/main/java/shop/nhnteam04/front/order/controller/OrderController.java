@@ -63,7 +63,7 @@ public class OrderController {
         }
 
         try {
-            OrderResponse orderResponse = orderService.createOrder(user.getId(), request);
+            OrderResponse orderResponse = orderService.createUserOrder(user.getId(), request);
 
             redirectAttributes.addAttribute("orderNumber", orderResponse.getOrderNumber());
             redirectAttributes.addAttribute("finalPrice", orderResponse.getFinalPrice());
