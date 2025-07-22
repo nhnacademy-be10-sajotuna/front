@@ -29,7 +29,7 @@
         <div class="unified-book-card">
             <!-- ♥️ 독자 추천도서 섹션 -->
             <div th:if="${mostLikedBooks != null and not #lists.isEmpty(mostLikedBooks)}" class="recommended-section">
-                <h2>독자 추천도서</h2>
+                <h2>독자들이 좋아하는 도서</h2>
                 <div class="slide-container" id="slideContainer">
                     <div class="slide-item" th:each="book, iterStat : ${mostLikedBooks}" th:classappend="${iterStat.index == 0} ? ' active'">
                         <a th:href="@{'/book/detail/' + ${book.isbn}}" class="slide-link">
