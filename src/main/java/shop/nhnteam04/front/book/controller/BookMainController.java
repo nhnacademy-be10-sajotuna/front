@@ -28,22 +28,22 @@ public class BookMainController {
     @GetMapping("/")
     public String bookMain(Model model) {
 
-    List<BookSearchResponse> popularBooks = bookService.getPopularBooks();
+        List<BookSearchResponse> popularBooks = bookService.getPopularBooks();
 
-    List<BookSearchResponse> newewstBooks = bookService.getNewestBooks();
-
-
-    List<BookResponse> mostLikedBooks = bookService.getMostLikedBooks();
-
-    List<CategoryResponse> categories = categoryService.getAll();
+        List<BookSearchResponse> newewstBooks = bookService.getNewestBooks();
 
 
-    model.addAttribute("categories", categories);
-    model.addAttribute("popularBooks", popularBooks);
-    model.addAttribute("newestBooks", newewstBooks);
-    model.addAttribute("mostLikedBooks", mostLikedBooks);
+        List<BookResponse> mostLikedBooks = bookService.getMostLikedBooks();
 
-    return "index";
+        List<CategoryResponse> categories = categoryService.getAll();
+
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("popularBooks", popularBooks);
+        model.addAttribute("newestBooks", newewstBooks);
+        model.addAttribute("mostLikedBooks", mostLikedBooks);
+
+        return "index";
     }
 
     @GetMapping("/categories/{id}/subcategories")
