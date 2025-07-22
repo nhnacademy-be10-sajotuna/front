@@ -25,9 +25,27 @@
             </div>
         </div>
 
-        <!-- 📘 도서 영역 -->
-        <section class="book-section">
-            <!-- 🌟 베스트셀러 -->
+        <!-- 📘 통합 도서 카드 -->
+        <div class="unified-book-card">
+            <!-- ♥️ 독자 추천도서 섹션 -->
+            <div th:if="${mostLikedBooks != null and not #lists.isEmpty(mostLikedBooks)}" class="recommended-section">
+                <h2>독자 추천도서</h2>
+                <div class="slide-container" id="slideContainer">
+                    <div class="slide-item" th:each="book, iterStat : ${mostLikedBooks}" th:classappend="${iterStat.index == 0} ? ' active'">
+                        <a th:href="@{'/book/detail/' + ${book.isbn}}" class="slide-link">
+                            <div class="slide-content">
+                                <img th:src="${book.imageUrl}" onerror="this.src='/image/logo.png'" th:alt="${book.title} + ' 책 이미지'"/>
+                                <div class="slide-book-title">
+                                    <span class="book-rank" th:text="${iterStat.index + 1}"></span>
+                                    <span th:text="${book.title}"></span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🌟 베스트셀러 섹션 -->
             <div class="popular-section">
                 <h2>베스트셀러</h2>
                 <div class="book-carousel" id="popular-carousel">
@@ -44,7 +62,7 @@
                 </div>
             </div>
 
-            <!-- 🆕 신간 도서 -->
+            <!-- 🆕 신간 도서 섹션 -->
             <div class="newest-section">
                 <h2>신간 도서</h2>
                 <div class="book-carousel" id="newest-carousel">
@@ -60,7 +78,7 @@
                     <button class="carousel-nav next" onclick="moveCarousel('newest-carousel', 1)">›</button>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
 
     <script src="/js/bookMain.js"></script>
@@ -77,6 +95,52 @@
             const dropdown = document.getElementById('categoryDropdown');
             if (!dropdown.contains(event.target)) {
                 dropdown.classList.remove('active');
+            }
+        });
+
+        // 자동 슬라이드 배너 JavaScript
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.slide-item');
+            
+            if (slides.length === 0) return;
+            
+            // 모든 슬라이드에서 active 클래스 제거
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            // 현재 슬라이드에 active 클래스 추가
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            const slides = document.querySelectorAll('.slide-item');
+            if (slides.length === 0) return;
+            
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+            
+            // 자동 슬라이드 리셋
+            clearInterval(slideInterval);
+            startAutoSlide();
+        }
+
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 4000); // 4초마다 자동 슬라이드
+        }
+
+
+        // 페이지 로드 시 자동 슬라이드 시작
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide-item');
+            if (slides.length > 1) {
+                startAutoSlide();
             }
         });
     </script>

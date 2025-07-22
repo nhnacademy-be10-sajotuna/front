@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import shop.nhnteam04.front.account.service.LoginService;
+import shop.nhnteam04.front.book.dto.response.BookResponse;
 import shop.nhnteam04.front.book.dto.response.BookSearchResponse;
 import shop.nhnteam04.front.book.dto.response.CategoryResponse;
 import shop.nhnteam04.front.book.service.BookSearchService;
@@ -31,12 +32,16 @@ public class BookMainController {
 
     List<BookSearchResponse> newewstBooks = bookService.getNewestBooks();
 
+
+    List<BookResponse> mostLikedBooks = bookService.getMostLikedBooks();
+
     List<CategoryResponse> categories = categoryService.getAll();
 
 
     model.addAttribute("categories", categories);
     model.addAttribute("popularBooks", popularBooks);
     model.addAttribute("newestBooks", newewstBooks);
+    model.addAttribute("mostLikedBooks", mostLikedBooks);
 
     return "index";
     }

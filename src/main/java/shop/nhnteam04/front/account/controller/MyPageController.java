@@ -26,6 +26,8 @@ import shop.nhnteam04.front.order.service.OrderService;
 import shop.nhnteam04.front.point.service.PointService;
 import shop.nhnteam04.front.review.response.ReviewResponse;
 import shop.nhnteam04.front.review.service.ReviewService;
+import shop.nhnteam04.front.book.service.LikeService;
+import shop.nhnteam04.front.book.dto.response.BookResponse;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -42,6 +44,7 @@ public class MyPageController {
     private final AddressService addressService;
     private final CouponService couponService;
     private final ReviewService reviewService;
+    private final LikeService likeService;
 
     // 유저 주문 내역
     @GetMapping("/orders")
@@ -64,8 +67,22 @@ public class MyPageController {
 
     // 마이페이지 메인
     @GetMapping
-    public ModelAndView myPageMain() {
-        return new ModelAndView("mypage/main");
+    public ModelAndView myPageMain(@AuthenticationPrincipal SecurityUser user) {
+        ModelAndView mav = new ModelAndView("mypage/main");
+        
+        if (user != null) {
+            // 찜한 책 개수 조회
+            List<BookResponse> likedBooks = likeService.getLikedBooks(user.getId());
+            mav.addObject("likedBooksCount", likedBooks.size());
+            
+            // 최근 찜한 책 3개만 가져오기 (대시보드에 표시용)
+            List<BookResponse> recentLikedBooks = likedBooks.stream()
+                    .limit(3)
+                    .toList();
+            mav.addObject("recentLikedBooks", recentLikedBooks);
+        }
+        
+        return mav;
     }
 
     // 포인트 적립/사용 내역
@@ -168,5 +185,15 @@ public class MyPageController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("user", user);
         return "mypage/review-list";
+    }
+
+    // 좋아요 책 목록
+    @GetMapping("/liked-books")
+    public ModelAndView likedBooks(@AuthenticationPrincipal SecurityUser user) {
+        ModelAndView mav = new ModelAndView("mypage/liked-books");
+        List<BookResponse> likedBooks = likeService.getLikedBooks(user.getId());
+        mav.addObject("likedBooks", likedBooks);
+        mav.addObject("user", user);
+        return mav;
     }
 }

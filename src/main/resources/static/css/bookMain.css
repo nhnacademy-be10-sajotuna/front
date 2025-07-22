@@ -1,7 +1,9 @@
 .main-container {
-    padding: 20px;
+    padding: 60px 40px;
     max-width: 1200px;
     margin: 0 auto;
+    background: #ffffff;
+    min-height: 100vh;
 }
 
 /* 카테고리 드롭다운 스타일 */
@@ -108,15 +110,31 @@
 
 /* 도서 섹션 스타일 */
 .popular-section, .newest-section {
-    margin-bottom: 40px;
+    margin-bottom: 80px;
 }
 
 .popular-section h2, .newest-section h2 {
     font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 10px;
+    font-weight: 400;
+    margin-bottom: 48px;
+    color: #000000;
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+    position: relative;
+    padding-bottom: 16px;
+}
+
+.popular-section h2::after, .newest-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: #3b82f6;
+    border-radius: 1px;
 }
 
 /* 캐러셀 스타일 */
@@ -133,15 +151,22 @@
 }
 
 .book-item {
-    flex: 0 0 calc(25% - 15px); /* 4개씩 표시 */
+    flex: 0 0 calc(25% - 40px); /* 4개씩 표시 */
     min-width: 200px;
     max-width: 300px;
     overflow: hidden;
-    transition: transform 0.2s ease;
+    background: transparent;
+    backdrop-filter: none;
+    border-radius: 0;
+    padding: 0;
+    transition: all 0.2s ease;
+    border: none;
+    margin: 0 20px;
 }
 
 .book-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+    box-shadow: none;
 }
 
 .book-item a {
@@ -154,6 +179,12 @@
     width: 100%;
     height: 250px;
     object-fit: contain;
+    border-radius: 0;
+    transition: transform 0.2s ease;
+}
+
+.book-item:hover img {
+    transform: none;
 }
 
 .book-title {
@@ -232,4 +263,319 @@
     .book-item {
         flex: 0 0 100%; /* 1개씩 표시 */
     }
+}
+
+/* 독자 추천도서 섹션 스타일 */
+.recommended-section {
+    margin-top: 0;
+    margin-bottom: 80px;
+    padding: 0;
+}
+
+.recommended-section h2 {
+    color: #000000;
+    font-size: 24px;
+    font-weight: 400;
+    text-align: left;
+    margin-bottom: 48px;
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+    position: relative;
+    padding-bottom: 16px;
+}
+
+.recommended-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: #3b82f6;
+    border-radius: 1px;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+.recommended-carousel {
+    background: transparent;
+}
+
+.recommended-book {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(214, 51, 132, 0.15);
+    transition: all 0.3s ease;
+    border: 1px solid #ffcccb;
+}
+
+.recommended-book:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(214, 51, 132, 0.25);
+}
+
+.book-image-container {
+    position: relative;
+    padding: 15px;
+}
+
+.like-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(238, 90, 36, 0.3);
+}
+
+.like-badge .heart {
+    font-size: 14px;
+    color: #fff;
+    animation: heartbeat 2s infinite;
+}
+
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.recommended-book .book-image-container {
+    padding: 0;
+}
+
+.recommended-book img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.recommended-book:hover img {
+    transform: scale(1.05);
+}
+
+/* 통합 도서 카드 스타일 */
+.unified-book-card {
+    background: #ffffff;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    margin: 60px 0;
+    padding: 0;
+    transition: none;
+}
+
+.unified-book-card:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+.banner-title {
+    text-align: left;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 25px;
+    padding: 20px 30px 0;
+    position: relative;
+}
+
+.banner-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 30px;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, #ff6b6b, #ee5a24);
+    border-radius: 2px;
+}
+
+.slide-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.slide-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.slide-item.active {
+    opacity: 1;
+}
+
+.slide-content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.slide-content img {
+    width: 280px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.slide-content:hover {
+    transform: translateY(-5px);
+}
+
+.slide-content:hover img {
+    transform: scale(1.03);
+}
+
+/* 추가 배너 스타일 */
+.banner-header {
+    padding: 0 0 15px 0;
+}
+
+.banner-subtitle {
+    color: #6b7280;
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 15px;
+}
+
+.highlight {
+    color: #ff6b6b;
+    font-weight: 700;
+}
+
+.slide-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* 독자 추천도서 제목은 그대로 두고, 슬라이드 부분만 파란색 배경 */
+.recommended-section {
+    margin-top: 0;
+    margin-bottom: 80px;
+    padding: 0;
+}
+
+.recommended-section h2 {
+    color: #000000;
+    font-size: 24px;
+    font-weight: 400;
+    text-align: left;
+    margin-bottom: 48px;
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+    position: relative;
+    padding-bottom: 16px;
+}
+
+.recommended-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: #3b82f6;
+    border-radius: 1px;
+}
+
+
+.slide-container {
+    position: relative;
+    width: calc(100% + 80px);
+    height: 500px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-radius: 0;
+    margin: 0 -40px;
+}
+
+.slide-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.slide-content img {
+    width: 280px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.slide-book-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #1e293b;
+    max-width: 400px;
+    line-height: 1.4;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.book-rank {
+    background: #f1f5f9;
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.slide-content:hover {
+    transform: translateY(-5px);
+}
+
+.slide-content:hover img {
+    transform: scale(1.03);
 }

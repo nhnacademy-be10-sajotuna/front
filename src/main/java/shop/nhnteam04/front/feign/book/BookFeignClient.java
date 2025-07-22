@@ -96,4 +96,8 @@ public interface BookFeignClient {
 
     @GetMapping("/api/likes/user")
     List<BookResponse> getLikedBooksByUserId(@RequestHeader("X-User-Id") Long userId);
+
+    // 좋아요 많은 순으로 책 조회 (메인 배너용)
+    @GetMapping("/api/books/likes")
+    Page<BookResponse> getBooksByLikesDesc(Pageable pageable);
 }
