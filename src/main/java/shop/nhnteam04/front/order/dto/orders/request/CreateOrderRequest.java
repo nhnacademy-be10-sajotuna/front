@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,8 +41,8 @@ public class CreateOrderRequest {
     private String recipientAddress;
 
     @Future
-    @JsonFormat(pattern = "yyyyMMddHHmmss")
-    private LocalDateTime expectedDeliveryDate;
+    @JsonFormat(pattern = "yyyyMMdd")
+    private LocalDate expectedDeliveryDate;
 
     private Long orderCouponId;
 

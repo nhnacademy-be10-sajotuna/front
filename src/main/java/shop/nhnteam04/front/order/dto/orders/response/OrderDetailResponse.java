@@ -3,6 +3,7 @@ package shop.nhnteam04.front.order.dto.orders.response;
 import lombok.*;
 import shop.nhnteam04.front.order.dto.payment.PaymentMethod;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class OrderDetailResponse {
     private String recipientPhoneNumber;
     private String recipientEmail;
     private String recipientAddress;
-    private LocalDateTime expectedDeliveryDate;
+    private LocalDate expectedDeliveryDate;
     private LocalDateTime shippingStartDate;
     private LocalDateTime shippingEndDate;
 
