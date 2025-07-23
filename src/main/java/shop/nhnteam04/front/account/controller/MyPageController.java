@@ -73,13 +73,16 @@ public class MyPageController {
         if (user != null) {
             // 찜한 책 개수 조회
             List<BookResponse> likedBooks = likeService.getLikedBooks(user.getId());
-            mav.addObject("likedBooksCount", likedBooks.size());
-            
-            // 최근 찜한 책 3개만 가져오기 (대시보드에 표시용)
-            List<BookResponse> recentLikedBooks = likedBooks.stream()
-                    .limit(3)
-                    .toList();
-            mav.addObject("recentLikedBooks", recentLikedBooks);
+
+            if(likedBooks != null){
+                mav.addObject("likedBooksCount", likedBooks.size());
+
+                // 최근 찜한 책 3개만 가져오기 (대시보드에 표시용)
+                List<BookResponse> recentLikedBooks = likedBooks.stream()
+                        .limit(3)
+                        .toList();
+                mav.addObject("recentLikedBooks", recentLikedBooks);
+            }
         }
         
         return mav;

@@ -40,7 +40,7 @@
         </td>
         <td th:text="${#temporals.format(review.postedAt, 'yyyy-MM-dd')}"></td>
         <td>
-          <a th:href="@{|/reviews?isbn=${review.getIsbn()}|}" class="btn btn--primary" style="padding: 0.5rem 1rem;">리뷰 목록</a>
+          <a th:href="@{|/book/detail/${review.getIsbn()}|}" class="btn btn--primary" style="padding: 0.5rem 1rem;">상세페이지</a>
         </td>
       </tr>
       <tr th:if="${#lists.isEmpty(reviews)}">
