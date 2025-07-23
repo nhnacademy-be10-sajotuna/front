@@ -518,7 +518,13 @@
 
             <!-- 배송지 섹션 -->
             <div class="form-section">
-                <h3>배송지</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>배송지</h3>
+                    <button type="button" onclick="showAddressModal()"
+                            style="padding: 0.5rem 1rem; background-color: #6c757d; color: white; border: none; border-radius: 0.25rem; cursor: pointer; font-size: 0.9rem;">
+                        내 주소 가져오기
+                    </button>
+                </div>
                 <div class="form-group">
                     <label for="recipientAddress">주소</label>
                     <div class="address-group">
@@ -768,6 +774,39 @@
         </div>
     </div>
 
+    <!-- 내 주소 선택 모달 -->
+    <div id="addressModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">내 주소 선택</h2>
+                <span class="close" onclick="closeAddressModal()">&times;</span>
+            </div>
+            <div id="addressList">
+                <div th:if="${addressList != null and !#lists.isEmpty(addressList)}">
+                    <div th:each="address : ${addressList}">
+                        <div class="coupon-item my-address-item"
+                             th:data-address="${address.streetAddress}"
+                             style="cursor: pointer;">
+                            <div class="coupon-name" th:text="${address.nickName}">주소명</div>
+                            <div class="coupon-condition" th:text="${address.streetAddress}">주소</div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${addressList == null or #lists.isEmpty(addressList)}">
+                    <div style="text-align:center;padding:2rem;color:#666;">내 주소가 존재하지 않습니다.</div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button"
+                        class="btn-modal btn-modal-secondary"
+                        onclick="closeAddressModal()">취소</button>
+                <button type="button"
+                        class="btn-modal btn-modal-primary"
+                        onclick="applyAddress()">적용</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 주문 쿠폰 선택 모달 -->
     <div id="orderCouponModal" class="modal">
         <div class="modal-content">
@@ -843,6 +882,7 @@
         let selectedOrderCoupon = null; // 선택된 주문 쿠폰 정보
         let availablePoints = 0; // 사용 가능한 포인트
         let selectedOrderCouponForModal = null; // 모달에서 선택된 주문 쿠폰
+        let selectedAddress = null;
 
         // Thymeleaf에서 전달된 사용자 정보
         const userInfo = {
@@ -1255,6 +1295,29 @@
             document.getElementById('finalPaymentAmount').textContent = finalAmount.toLocaleString() + '원';
         }
 
+        // 내 주소 모달 관련 함수들
+        function showAddressModal() {
+            document.getElementById('addressModal').style.display = 'block';
+        }
+
+        function closeAddressModal() {
+            document.getElementById('addressModal').style.display = 'none';
+            selectedOrderCouponForModal = null;
+            // 선택 상태 제거
+            document.querySelectorAll('.my-address-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+        }
+
+        function applyAddress() {
+            if (selectedAddress) {
+                document.getElementById("recipientAddress").value = selectedAddress.address;
+                closeAddressModal();
+            } else {
+                alert('주소를 선택해주세요.');
+            }
+        }
+
         // 주문 쿠폰 모달 관련 함수들
         function showOrderCouponModal() {
             document.getElementById('orderCouponModal').style.display = 'block';
@@ -1406,6 +1469,24 @@
                         discountAmount: this.dataset.discountAmount,
                         minOrderAmount: this.dataset.minOrderAmount,
                         maxDiscountAmount: this.dataset.maxDiscountAmount || 0
+                    };
+                });
+            });
+
+            // 내 주소 모달 내 아이템 클릭 이벤트
+            document.querySelectorAll('.my-address-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // 기존 선택 제거
+                    document.querySelectorAll('.my-address-item').forEach(el => {
+                        el.classList.remove('selected');
+                    });
+
+                    // 현재 아이템 선택
+                    this.classList.add('selected');
+
+                    // 선택된 쿠폰 정보 저장
+                    selectedAddress = {
+                        address: this.dataset.address
                     };
                 });
             });
