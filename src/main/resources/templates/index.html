@@ -32,15 +32,13 @@
                 <h2>독자들이 좋아하는 도서</h2>
                 <div class="slide-container" id="slideContainer">
                     <div class="slide-item" th:each="book, iterStat : ${mostLikedBooks}" th:classappend="${iterStat.index == 0} ? ' active'">
-                        <a th:href="@{'/book/detail/' + ${book.isbn}}" class="slide-link">
-                            <div class="slide-content">
-                                <img th:src="${book.imageUrl}" onerror="this.src='/image/logo.png'" th:alt="${book.title} + ' 책 이미지'"/>
-                                <div class="slide-book-title">
-                                    <span class="book-rank" th:text="${iterStat.index + 1}"></span>
-                                    <span th:text="${book.title}"></span>
-                                </div>
+                        <div class="slide-content">
+                            <img th:src="${book.imageUrl}" onerror="this.src='/image/logo.png'" th:alt="${book.title} + ' 책 이미지'"/>
+                            <div class="slide-book-title">
+                                <span class="book-rank" th:text="${iterStat.index + 1}"></span>
+                                <span th:text="${book.title}"></span>
                             </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
