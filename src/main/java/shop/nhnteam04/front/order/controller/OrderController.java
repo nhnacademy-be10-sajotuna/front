@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import shop.nhnteam04.front.account.address.dto.AddressForm;
+import shop.nhnteam04.front.account.service.AddressService;
 import shop.nhnteam04.front.account.user.dto.SecurityUser;
 import shop.nhnteam04.front.cart.dto.response.CartResponse;
 import shop.nhnteam04.front.cart.service.CartService;
@@ -27,6 +29,7 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final CartService cartService;
+    private final AddressService addressService;
 
     // 주문서 작성
     @GetMapping
@@ -49,6 +52,9 @@ public class OrderController {
         mav.addObject("deliveryPrice", orderFormResponse.getDeliveryPrice());
         mav.addObject("userId", user.getId());
         mav.addObject("user", user);
+
+        List<AddressForm> addressList = addressService.getAddresses(user.getId());
+        mav.addObject("addressList", addressList);
 
         return mav;
     }
