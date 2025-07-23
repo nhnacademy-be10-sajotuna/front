@@ -114,7 +114,7 @@
 }
 
 .popular-section h2, .newest-section h2 {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
     margin-bottom: 48px;
     color: #000000;
@@ -274,7 +274,7 @@
 
 .recommended-section h2 {
     color: #000000;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
     text-align: left;
     margin-bottom: 48px;
@@ -491,7 +491,7 @@
 
 .recommended-section h2 {
     color: #000000;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
     text-align: left;
     margin-bottom: 48px;
