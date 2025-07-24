@@ -1,0 +1,139 @@
+2025-07-24 17:20:32.746 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-07-24 17:20:32.761 [main] INFO  s.nhnteam04.front.FrontApplication - Starting FrontApplication using Java 22.0.2 with PID 67603 (/Users/chosun-nhn04/Desktop/brick/git/finalProject/front/target/classes started by chosun-nhn04 in /Users/chosun-nhn04/Desktop/brick/git/finalProject/front)
+2025-07-24 17:20:32.762 [main] INFO  s.nhnteam04.front.FrontApplication - The following 1 profile is active: "local"
+2025-07-24 17:20:33.473 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-07-24 17:20:33.474 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-07-24 17:20:33.491 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2025-07-24 17:20:33.612 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=b9248545-34e9-3189-ace7-3d51a01d322b
+2025-07-24 17:20:33.796 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 10360 (http)
+2025-07-24 17:20:33.802 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-10360"]
+2025-07-24 17:20:33.803 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-07-24 17:20:33.803 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.41]
+2025-07-24 17:20:33.823 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-07-24 17:20:33.823 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 970 ms
+2025-07-24 17:20:33.914 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/account-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:33.950 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/cart-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:34.046 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:34.060 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/book-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:34.076 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:34.109 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:34.118 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/review-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:34.249 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:34.261 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:34.269 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:20:34.443 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2025-07-24 17:20:34.557 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-07-24 17:20:34.791 [main] WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger - Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-07-24 17:20:34.970 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-10360"]
+2025-07-24 17:20:34.976 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 10360 (http) with context path '/'
+2025-07-24 17:20:34.985 [main] INFO  s.nhnteam04.front.FrontApplication - Started FrontApplication in 2.466 seconds (process running for 2.883)
+2025-07-24 17:20:36.608 [http-nio-10360-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-24 17:20:36.608 [http-nio-10360-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-07-24 17:20:36.610 [http-nio-10360-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-07-24 17:20:48.073 [http-nio-10360-exec-4] INFO  s.n.f.account.service.LoginService - login response: LoginResponse(accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMCIsImlhdCI6MTc1MzM0NTI0OCwiZXhwIjoxNzUzMzQ3MDQ4fQ.xSxR2DuP2qX9m7GIjL3nUvNIbsdyfwlqZwRVAeyRQJ8, refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMCIsImlhdCI6MTc1MzM0NTI0OCwiZXhwIjoxNzUzNDMxNjQ4fQ.GTSBIexnOjrCIjBkvfkPRYS9zLQRdBNS-auwwkr2XrU, email=qwer123@naver.com, name=관리자, id=20)
+2025-07-24 17:20:53.800 [http-nio-10360-exec-2] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'categoryIds': Failed to convert value of type 'java.lang.String' to required type 'java.util.Set'; For input string: "undefined"]
+2025-07-24 17:21:05.946 [http-nio-10360-exec-6] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'categoryIds': Failed to convert value of type 'java.lang.String' to required type 'java.util.Set'; For input string: "undefined"]
+2025-07-24 17:21:31.429 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-07-24 17:21:31.430 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-07-24 17:21:36.627 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-07-24 17:21:36.731 [main] INFO  s.nhnteam04.front.FrontApplication - Starting FrontApplication using Java 22.0.2 with PID 67653 (/Users/chosun-nhn04/Desktop/brick/git/finalProject/front/target/classes started by chosun-nhn04 in /Users/chosun-nhn04/Desktop/brick/git/finalProject/front)
+2025-07-24 17:21:36.731 [main] INFO  s.nhnteam04.front.FrontApplication - The following 1 profile is active: "local"
+2025-07-24 17:21:37.428 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-07-24 17:21:37.429 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-07-24 17:21:37.443 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2025-07-24 17:21:37.560 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=b9248545-34e9-3189-ace7-3d51a01d322b
+2025-07-24 17:21:37.749 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 10360 (http)
+2025-07-24 17:21:37.755 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-10360"]
+2025-07-24 17:21:37.755 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-07-24 17:21:37.755 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.41]
+2025-07-24 17:21:37.776 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-07-24 17:21:37.776 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 826 ms
+2025-07-24 17:21:37.870 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/account-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:37.901 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/cart-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:38.003 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:38.017 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/book-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:38.031 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:38.064 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:38.073 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/review-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:38.200 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:38.210 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:38.218 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:21:38.387 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2025-07-24 17:21:38.502 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-07-24 17:21:38.720 [main] WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger - Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-07-24 17:21:38.890 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-10360"]
+2025-07-24 17:21:38.896 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 10360 (http) with context path '/'
+2025-07-24 17:21:38.905 [main] INFO  s.nhnteam04.front.FrontApplication - Started FrontApplication in 2.875 seconds (process running for 3.341)
+2025-07-24 17:21:39.897 [http-nio-10360-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-24 17:21:39.897 [http-nio-10360-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-07-24 17:21:39.899 [http-nio-10360-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-07-24 17:21:43.190 [http-nio-10360-exec-6] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'categoryIds': Failed to convert value of type 'java.lang.String' to required type 'java.util.Set'; For input string: "undefined"]
+2025-07-24 17:29:00.687 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-07-24 17:29:00.689 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-07-24 17:29:05.884 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-07-24 17:29:05.899 [main] INFO  s.nhnteam04.front.FrontApplication - Starting FrontApplication using Java 22.0.2 with PID 67780 (/Users/chosun-nhn04/Desktop/brick/git/finalProject/front/target/classes started by chosun-nhn04 in /Users/chosun-nhn04/Desktop/brick/git/finalProject/front)
+2025-07-24 17:29:05.900 [main] INFO  s.nhnteam04.front.FrontApplication - The following 1 profile is active: "local"
+2025-07-24 17:29:06.441 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-07-24 17:29:06.442 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-07-24 17:29:06.456 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2025-07-24 17:29:06.572 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=b9248545-34e9-3189-ace7-3d51a01d322b
+2025-07-24 17:29:06.758 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 10360 (http)
+2025-07-24 17:29:06.764 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-10360"]
+2025-07-24 17:29:06.765 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-07-24 17:29:06.765 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.41]
+2025-07-24 17:29:06.785 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-07-24 17:29:06.785 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 796 ms
+2025-07-24 17:29:06.876 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/account-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:06.912 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/cart-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:07.006 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:07.019 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/book-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:07.033 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:07.063 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:07.071 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/review-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:07.197 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:07.207 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:07.225 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:29:07.396 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2025-07-24 17:29:07.512 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-07-24 17:29:07.724 [main] WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger - Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-07-24 17:29:07.896 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-10360"]
+2025-07-24 17:29:07.902 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 10360 (http) with context path '/'
+2025-07-24 17:29:07.911 [main] INFO  s.nhnteam04.front.FrontApplication - Started FrontApplication in 2.36 seconds (process running for 3.284)
+2025-07-24 17:29:08.076 [http-nio-10360-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-24 17:29:08.076 [http-nio-10360-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-07-24 17:29:08.077 [http-nio-10360-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-07-24 17:29:13.677 [http-nio-10360-exec-4] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'categoryIds': Failed to convert value of type 'java.lang.String' to required type 'java.util.Set'; For input string: "undefined"]
+2025-07-24 17:30:48.210 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-07-24 17:30:48.211 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-07-24 17:30:53.442 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-07-24 17:30:53.460 [main] INFO  s.nhnteam04.front.FrontApplication - Starting FrontApplication using Java 22.0.2 with PID 67822 (/Users/chosun-nhn04/Desktop/brick/git/finalProject/front/target/classes started by chosun-nhn04 in /Users/chosun-nhn04/Desktop/brick/git/finalProject/front)
+2025-07-24 17:30:53.460 [main] INFO  s.nhnteam04.front.FrontApplication - The following 1 profile is active: "local"
+2025-07-24 17:30:54.014 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-07-24 17:30:54.015 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-07-24 17:30:54.030 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2025-07-24 17:30:54.141 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=b9248545-34e9-3189-ace7-3d51a01d322b
+2025-07-24 17:30:54.327 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 10360 (http)
+2025-07-24 17:30:54.333 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-10360"]
+2025-07-24 17:30:54.334 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-07-24 17:30:54.334 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.41]
+2025-07-24 17:30:54.354 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-07-24 17:30:54.354 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 793 ms
+2025-07-24 17:30:54.444 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/account-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.474 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/cart-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.568 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.580 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/book-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.594 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.624 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.633 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/review-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.762 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.775 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.788 [main] INFO  o.s.c.o.FeignClientFactoryBean - For 'gateway/order-api' URL not provided. Will try picking an instance via load-balancing.
+2025-07-24 17:30:54.955 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2025-07-24 17:30:55.069 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-07-24 17:30:55.281 [main] WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger - Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-07-24 17:30:55.446 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-10360"]
+2025-07-24 17:30:55.453 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 10360 (http) with context path '/'
+2025-07-24 17:30:55.462 [main] INFO  s.nhnteam04.front.FrontApplication - Started FrontApplication in 2.643 seconds (process running for 3.336)
+2025-07-24 17:30:56.541 [http-nio-10360-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-24 17:30:56.541 [http-nio-10360-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-07-24 17:30:56.543 [http-nio-10360-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
