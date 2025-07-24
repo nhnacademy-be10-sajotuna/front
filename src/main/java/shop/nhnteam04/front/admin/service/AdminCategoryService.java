@@ -32,12 +32,12 @@ public class AdminCategoryService {
         return bookFeignClient.getParentCategories(id);
     }
 
-    @CacheEvict(value = "categories")
+    @CacheEvict(value = "categories", allEntries = true)
     public void createCategory(CategoryCreateRequest createRequest) {
         bookFeignClient.createCategory(createRequest);
     }
 
-    @CacheEvict(value = "categories")
+    @CacheEvict(value = "categories", allEntries = true)
     public void deleteCategory(String id) {
         bookFeignClient.deleteCategory(id);
     }
