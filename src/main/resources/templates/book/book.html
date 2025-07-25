@@ -770,7 +770,7 @@
         document.querySelectorAll('.btn-coupon').forEach(button => {
             button.addEventListener('click', function() {
                 const isbn = this.dataset.isbn;
-                const categoryIds = this.dataset.categoryIds;
+                const categoryIds = this.dataset.categoryIds ?? '';
                 showCouponModal(isbn, categoryIds);
             });
         });
