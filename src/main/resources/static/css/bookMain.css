@@ -1,8 +1,9 @@
+/* 메인 컨테이너 - 깔끔한 베이스 */
 .main-container {
     padding: 60px 40px;
     max-width: 1200px;
     margin: 0 auto;
-    background: #ffffff;
+    background: transparent;
     min-height: 100vh;
 }
 
@@ -98,321 +99,63 @@
     transform: translateY(-2px);
 }
 
-/* 도서 섹션 스타일 */
-.book-section {
-    width: 100%;
-    background: white;
-    border: 1px solid #e9ecef;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    padding: 30px;
-    margin-top: 20px;
-}
-
-/* 도서 섹션 스타일 */
-.popular-section, .newest-section {
-    margin-bottom: 80px;
-}
-
-.popular-section h2, .newest-section h2 {
-    font-size: 20px;
-    font-weight: 400;
-    margin-bottom: 48px;
-    color: #000000;
-    background: none;
-    -webkit-background-clip: unset;
-    -webkit-text-fill-color: unset;
-    background-clip: unset;
-    position: relative;
-    padding-bottom: 16px;
-}
-
-.popular-section h2::after, .newest-section h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 2px;
-    background: #3b82f6;
-    border-radius: 1px;
-}
-
-/* 캐러셀 스타일 */
-.book-carousel {
-    position: relative;
-    overflow: hidden;
-    margin: 0 50px;
-}
-
-.book-carousel-inner {
-    display: flex;
-    transition: transform 0.3s ease;
-    gap: 20px;
-}
-
-.book-item {
-    flex: 0 0 calc(25% - 40px); /* 4개씩 표시 */
-    min-width: 200px;
-    max-width: 300px;
-    overflow: hidden;
-    background: transparent;
-    backdrop-filter: none;
+/* 통합 도서 카드 - 미니멀 화이트 */
+.unified-book-card {
+    background: #ffffff;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    padding: 40px;
+    margin: 30px 0;
     border-radius: 0;
-    padding: 0;
-    transition: all 0.2s ease;
-    border: none;
-    margin: 0 20px;
 }
 
-.book-item:hover {
-    transform: translateY(-4px);
-    box-shadow: none;
-}
-
-.book-item a {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-.book-item img {
-    width: 100%;
-    height: 250px;
-    object-fit: contain;
-    border-radius: 0;
-    transition: transform 0.2s ease;
-}
-
-.book-item:hover img {
-    transform: none;
-}
-
-.book-title {
-    padding: 12px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-    line-height: 1.3;
-    height: 50px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-align: center;
-}
-
-/* 캐러셀 네비게이션 버튼 */
-.carousel-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    transition: background 0.2s ease;
-}
-
-.carousel-nav:hover {
-    background: rgba(0,0,0,0.7);
-}
-
-.carousel-nav.prev {
-    left: 10px;
-}
-
-.carousel-nav.next {
-    right: 10px;
-}
-
-.carousel-nav:disabled {
-    background: rgba(0,0,0,0.2);
-    cursor: not-allowed;
-}
-
-/* 반응형 */
-@media (max-width: 1024px) {
-    .book-item {
-        flex: 0 0 calc(33.333% - 14px); /* 3개씩 표시 */
-    }
-}
-
-@media (max-width: 768px) {
-    .main-container {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-    }
-
-    .book-item {
-        flex: 0 0 calc(50% - 10px); /* 2개씩 표시 */
-    }
-}
-
-@media (max-width: 480px) {
-    .book-item {
-        flex: 0 0 100%; /* 1개씩 표시 */
-    }
-}
-
-/* 독자 추천도서 섹션 스타일 */
-.recommended-section {
-    margin-top: 0;
-    margin-bottom: 80px;
-    padding: 0;
-}
-
+/* 섹션 제목들 - 깔끔한 타이포 + 컬러 포인트 */
+.popular-section h2,
+.newest-section h2,
 .recommended-section h2 {
-    color: #000000;
-    font-size: 20px;
-    font-weight: 400;
-    text-align: left;
-    margin-bottom: 48px;
-    background: none;
-    -webkit-background-clip: unset;
-    -webkit-text-fill-color: unset;
-    background-clip: unset;
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    color: #212529;
     position: relative;
-    padding-bottom: 16px;
+    text-align: left;
+    letter-spacing: -0.3px;
 }
 
+.popular-section h2::after,
+.newest-section h2::after,
 .recommended-section h2::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -12px;
     left: 0;
-    width: 60px;
+    width: 120px;
     height: 2px;
-    background: #3b82f6;
+    background: #007bff;
     border-radius: 1px;
 }
 
-.section-subtitle {
-    text-align: center;
-    color: #666;
-    font-size: 16px;
-    margin-bottom: 25px;
-    font-weight: 500;
+/* 베스트셀러는 골드 포인트 */
+.popular-section h2::after {
+    background: #007bff;
 }
 
-.recommended-carousel {
-    background: transparent;
+/* 신간 도서는 그린 포인트 */
+.newest-section h2::after {
+    background: #007bff;
 }
 
-.recommended-book {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(214, 51, 132, 0.15);
-    transition: all 0.3s ease;
-    border: 1px solid #ffcccb;
-}
-
-.recommended-book:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(214, 51, 132, 0.25);
-}
-
-.book-image-container {
-    position: relative;
-    padding: 15px;
-}
-
-.like-badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    box-shadow: 0 2px 8px rgba(238, 90, 36, 0.3);
-}
-
-.like-badge .heart {
-    font-size: 14px;
-    color: #fff;
-    animation: heartbeat 2s infinite;
-}
-
-@keyframes heartbeat {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.recommended-book .book-image-container {
-    padding: 0;
-}
-
-.recommended-book img {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    border-radius: 12px;
-    transition: transform 0.3s ease;
-}
-
-.recommended-book:hover img {
-    transform: scale(1.05);
-}
-
-/* 통합 도서 카드 스타일 */
-.unified-book-card {
-    background: #ffffff;
-    border-radius: 0;
-    box-shadow: none;
-    border: none;
-    margin: 60px 0;
-    padding: 0;
-    transition: none;
-}
-
-.unified-book-card:hover {
-    box-shadow: none;
-    transform: none;
-}
-
-.banner-title {
-    text-align: left;
-    font-size: 28px;
-    font-weight: 700;
-    color: #2d3748;
-    margin-bottom: 25px;
-    padding: 20px 30px 0;
-    position: relative;
-}
-
-.banner-title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 30px;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(to right, #ff6b6b, #ee5a24);
-    border-radius: 2px;
-}
-
+/* 독자 추천도서 슬라이드 - 미니멀 + 블루 포인트 */
 .slide-container {
     position: relative;
-    width: 100%;
-    height: 400px;
+    width: calc(100% + 80px);
+    height: 480px;
+    margin: 20px -40px 0;
+    background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+    border-radius: 0;
     overflow: hidden;
+    border: 1px solid #e3f2fd;
 }
 
 .slide-item {
@@ -422,7 +165,7 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 0.8s ease;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -434,124 +177,38 @@
 }
 
 .slide-content {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s ease;
-}
-
-.slide-content img {
-    width: 280px;
-    height: 350px;
-    object-fit: cover;
-    border-radius: 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
-}
-
-.slide-content:hover {
-    transform: translateY(-5px);
-}
-
-.slide-content:hover img {
-    transform: scale(1.03);
-}
-
-/* 추가 배너 스타일 */
-.banner-header {
-    padding: 0 0 15px 0;
-}
-
-.banner-subtitle {
-    color: #6b7280;
-    font-size: 16px;
-    font-weight: 400;
-    margin-left: 15px;
-}
-
-.highlight {
-    color: #ff6b6b;
-    font-weight: 700;
-}
-
-.slide-link {
-    display: block;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-
-/* 독자 추천도서 제목은 그대로 두고, 슬라이드 부분만 파란색 배경 */
-.recommended-section {
-    margin-top: 0;
-    margin-bottom: 80px;
-    padding: 0;
-}
-
-.recommended-section h2 {
-    color: #000000;
-    font-size: 20px;
-    font-weight: 400;
-    text-align: left;
-    margin-bottom: 48px;
-    background: none;
-    -webkit-background-clip: unset;
-    -webkit-text-fill-color: unset;
-    background-clip: unset;
-    position: relative;
-    padding-bottom: 16px;
-}
-
-.recommended-section h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 2px;
-    background: #3b82f6;
-    border-radius: 1px;
-}
-
-
-.slide-container {
-    position: relative;
-    width: calc(100% + 80px);
-    height: 500px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-    border-radius: 0;
-    margin: 0 -40px;
-}
-
-.slide-content {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: all 0.3s ease;
     text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.slide-content:hover {
+    transform: translateY(-4px);
 }
 
 .slide-content img {
-    width: 280px;
-    height: 350px;
+    width: 260px;
+    height: 330px;
     object-fit: cover;
     border-radius: 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+}
+
+.slide-content:hover img {
+    transform: scale(1.02);
 }
 
 .slide-book-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
-    color: #1e293b;
+    color: #495057;
     max-width: 400px;
     line-height: 1.4;
-    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -559,23 +216,209 @@
 }
 
 .book-rank {
-    background: #f1f5f9;
-    color: #1e293b;
-    font-size: 16px;
-    font-weight: 700;
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
+    background: #f1f3f4;
+    color: #5f6368;
+    font-size: 15px;
+    font-weight: 600;
+    width: 32px;
+    height: 32px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    border: 1px solid #e8eaed;
 }
 
-.slide-content:hover {
-    transform: translateY(-5px);
+/* 캐러셀 - 깔끔한 카드 + 호버 포인트 */
+.book-carousel {
+    position: relative;
+    overflow: hidden;
+    margin: 0 50px;
+    padding: 20px 0;
 }
 
-.slide-content:hover img {
-    transform: scale(1.03);
+.book-carousel-inner {
+    display: flex;
+    transition: transform 0.4s ease;
+    gap: 20px;
+}
+
+.book-item {
+    flex: 0 0 calc(25% - 15px);
+    min-width: 200px;
+    max-width: 280px;
+    background: #ffffff;
+    border-radius: 0;
+    padding: 16px;
+    transition: all 0.3s ease;
+    border: 1px solid #f1f3f5;
+    margin: 0 20px;
+    position: relative;
+}
+
+.book-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    border-color: #e1e5e9;
+}
+
+.book-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.book-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 0;
+    transition: transform 0.3s ease;
+    background: #f8f9fa;
+}
+
+.book-item:hover img {
+    transform: scale(1.02);
+}
+
+.book-title {
+    padding: 12px 0 0 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #495057;
+    line-height: 1.4;
+    height: 50px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: center;
+}
+
+/* 캐러셀 네비게이션 - 미니멀 버튼 */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #ffffff;
+    color: #6c757d;
+    border: 1px solid #e1e5e9;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.carousel-nav:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+.carousel-nav.prev {
+    left: 10px;
+}
+
+.carousel-nav.next {
+    right: 10px;
+}
+
+.carousel-nav:disabled {
+    background: #f8f9fa;
+    color: #adb5bd;
+    cursor: not-allowed;
+    border-color: #e1e5e9;
+}
+
+.carousel-nav:disabled:hover {
+    background: #f8f9fa;
+    color: #adb5bd;
+    border-color: #e1e5e9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 미묘한 포인트 애니메이션 */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.book-rank {
+    animation: pulse 2s infinite;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .book-item {
+        flex: 0 0 calc(33.333% - 14px);
+    }
+
+    .main-container {
+        padding: 40px 20px;
+    }
+
+    .unified-book-card {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        padding: 30px 15px;
+    }
+
+    .book-item {
+        flex: 0 0 calc(50% - 10px);
+    }
+
+    .slide-container {
+        height: 420px;
+        margin: 0 -15px;
+    }
+
+    .slide-content img {
+        width: 220px;
+        height: 280px;
+    }
+
+    .slide-book-title {
+        font-size: 16px;
+    }
+
+    .popular-section h2,
+    .newest-section h2,
+    .recommended-section h2 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .book-item {
+        flex: 0 0 100%;
+        margin: 0 10px;
+    }
+
+    .book-carousel {
+        margin: 0 30px;
+    }
+
+    .slide-content img {
+        width: 200px;
+        height: 260px;
+    }
+
+    .slide-book-title {
+        font-size: 14px;
+        flex-direction: column;
+        gap: 8px;
+    }
 }
